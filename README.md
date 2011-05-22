@@ -33,6 +33,19 @@ for (PersonIdent author : authors.getPersons())
      System.out.println(author);
 ```
 
+### Find the number of number of commits that occurred in master since a branch was created
+This example assumes two current branches,  _master_ and a  _release1_ branch that was created from master some time ago. Both branches have had subsequent commits since the _release1_ branch was created.
+
+```java
+CommitService service = new CommitService("/repos/productA/.git");
+RevCommit base = service.getBase("master", "release1");
+CommitCountFilter count = new CommitCountFilter();
+service.walkBetween("master", base, count);
+System.out.println("Commits in master since release1 branch created: " + count.getCount());
+service.walkBetween("release1", base, count);
+System.out.println("Commits in release1 since branched from master: " + count.getCount());
+```
+
 ## Dependencies
 
 JGit 1.0+
