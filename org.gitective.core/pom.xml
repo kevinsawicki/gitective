@@ -38,4 +38,13 @@
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<issueManagement>
+		<url>https://github.com/kevinsawicki/gitective/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+	<scm>
+		<url>https://github.com/kevinsawicki/gitective</url>
+		<connection>scm:git:git://github.com/kevinsawicki/gitective.git</connection>
+		<tag>v0.1</tag>
+	</scm>
 </project>
