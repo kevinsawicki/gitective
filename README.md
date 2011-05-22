@@ -53,4 +53,4 @@ JGit 1.0+
 
 ## License
 
-[Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html}
+[Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html)
