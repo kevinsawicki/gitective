@@ -6,6 +6,7 @@ gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit) 
 
 ### Find the number of commits you authored but weren't the committer of
 This case is common when doing peer code review or using a code review system.
+
 ```java
 PersonIdent person = new Person("Michael Bluth", "michael@sitwell.com");
 CommitCountFilter count = new CommitCountFilter();
