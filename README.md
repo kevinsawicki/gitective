@@ -29,8 +29,8 @@ AndCommitFilter filters = new AndCommitFilter();
 filters.add(new ParentCountFilter(10));
 filters.add(authors);
 service.walkFromHead(filters);
-for (PersonIdent author : authors.getPerson())
-     System.out.println(author.getName() + " <"+author.getEmailAddress()+">");
+for (PersonIdent author : authors.getPersons())
+     System.out.println(author);
 ```
 
 ## Dependencies
