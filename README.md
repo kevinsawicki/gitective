@@ -47,6 +47,22 @@ service.walkBetween("release1", base, count);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
 ```
 
+### What fraction of commits have a Gerrit Change-Id?
+This example finds the number of commits in a repository that contain a [Gerrit](http://code.google.com/p/gerrit/) Change-Id entry in the commit message.
+
+```java
+CommitService service = new CommitService("/repos/productA/.git");
+CommitCountFilter all = new CommitCountFilter();
+CommitCountFilter gerrit = new CommitCountFilter();
+AllCommitFilter filters = new AllCommitFilter();
+filters.add(new AndCommitFilter().add(new ChangeIdFilter()).add(gerrit));
+filters.add(all);
+service.walkFromHead(filters);
+System.out.println(MessageFormat.format(
+     "{0} out of {1} commits have gerrit change ids",
+     gerrit.getCount(),	all.getCount()));
+```
+
 ## Dependencies
 
 JGit 1.0+
