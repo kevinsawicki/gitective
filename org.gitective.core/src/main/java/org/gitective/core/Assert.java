@@ -25,8 +25,7 @@ public abstract class Assert {
 			throws IllegalArgumentException {
 		if (object == null)
 			throw new IllegalArgumentException(message != null
-					&& message.length() == 0 ? message
-					: "Object cannot be null");
+					&& message.length() > 0 ? message : "Object cannot be null");
 	}
 
 	/**
