@@ -18,7 +18,6 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
@@ -32,6 +31,18 @@ public abstract class GitTestCase extends TestCase {
 	 */
 	protected File testRepo;
 
+	/**
+	 * Author used for commits
+	 */
+	protected PersonIdent author = new PersonIdent("Test Author",
+			"author@test.com");
+
+	/**
+	 * Committer used for commits
+	 */
+	protected PersonIdent committer = new PersonIdent("Test Committer",
+			"committer@test.com");
+
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -43,21 +54,6 @@ public abstract class GitTestCase extends TestCase {
 
 		Git.init().setDirectory(dir).setBare(false).call();
 		testRepo = new File(dir, Constants.DOT_GIT);
-
-		setUser(new PersonIdent("Test User", "user@test.com"));
-	}
-
-	/**
-	 * Set user config
-	 * 
-	 * @param person
-	 * @throws Exception
-	 */
-	protected void setUser(PersonIdent person) throws Exception {
-		StoredConfig config = Git.open(testRepo).getRepository().getConfig();
-		config.setString("user", null, "email", person.getEmailAddress());
-		config.setString("user", null, "name", person.getName());
-		config.save();
 	}
 
 	/**
@@ -114,7 +110,7 @@ public abstract class GitTestCase extends TestCase {
 		Git git = Git.open(testRepo);
 		git.add().addFilepattern(path).call();
 		RevCommit commit = git.commit().setOnly(path).setMessage(message)
-				.call();
+				.setAuthor(author).setCommitter(committer).call();
 		assertNotNull(commit);
 		return commit;
 	}

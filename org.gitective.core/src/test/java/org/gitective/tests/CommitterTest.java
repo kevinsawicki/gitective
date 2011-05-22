@@ -11,50 +11,50 @@ import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
-import org.gitective.core.filter.commit.AuthorFilter;
-import org.gitective.core.filter.commit.AuthorSetFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
+import org.gitective.core.filter.commit.CommitterFilter;
+import org.gitective.core.filter.commit.CommitterSetFilter;
 import org.gitective.core.service.CommitService;
 
 /**
- * Unit tests of author filters
+ * Unit tests of committer filters
  */
-public class AuthorTest extends GitTestCase {
+public class CommitterTest extends GitTestCase {
 
 	/**
-	 * Test clone of {@link AuthorFilter}
+	 * Test clone of {@link CommitterFilter}
 	 */
 	public void testCloneAuthorFilter() {
-		AuthorFilter filter = new AuthorFilter(author);
+		CommitterFilter filter = new CommitterFilter(committer);
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
 		assertNotSame(filter, cloned);
-		assertTrue(filter instanceof AuthorFilter);
+		assertTrue(filter instanceof CommitterFilter);
 	}
 
 	/**
-	 * Test clone of {@link AuthorSetFilter}
+	 * Test clone of {@link CommitterSetFilter}
 	 */
-	public void testCloneAuthorSetFilter() {
-		AuthorSetFilter filter = new AuthorSetFilter();
+	public void testCloneCommitterSetFilter() {
+		CommitterSetFilter filter = new CommitterSetFilter();
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
 		assertNotSame(filter, cloned);
-		assertTrue(filter instanceof AuthorSetFilter);
+		assertTrue(filter instanceof CommitterSetFilter);
 	}
 
 	/**
-	 * Test of {@link AuthorFilter}
+	 * Test of {@link CommitterFilter}
 	 * 
 	 * @throws Exception
 	 */
-	public void testAuthorFilter() throws Exception {
+	public void testCommitterFilter() throws Exception {
 		add("file.txt", "a");
 		PersonIdent findUser = new PersonIdent("find user", "find@user.com");
-		author = findUser;
+		committer = findUser;
 		RevCommit commit1 = add("file.txt", "b");
 		RevCommit commit2 = add("file.txt", "c");
-		AuthorFilter filter = new AuthorFilter(findUser);
+		CommitterFilter filter = new CommitterFilter(findUser);
 		CommitListFilter commits = new CommitListFilter();
 		CommitService service = new CommitService(testRepo);
 		service.walkFromHead(new AndCommitFilter().add(filter).add(commits));
@@ -64,16 +64,16 @@ public class AuthorTest extends GitTestCase {
 	}
 
 	/**
-	 * Test of {@link AuthorSetFilter}
+	 * Test of {@link CommitterSetFilter}
 	 * 
 	 * @throws Exception
 	 */
-	public void testAuthorSetFilter() throws Exception {
+	public void testCommitterSetFilter() throws Exception {
 		add("file.txt", "a");
 		PersonIdent findUser = new PersonIdent("find user", "find@user.com");
-		author = findUser;
+		committer = findUser;
 		add("file.txt", "b");
-		AuthorSetFilter filter = new AuthorSetFilter();
+		CommitterSetFilter filter = new CommitterSetFilter();
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(findUser));
 		CommitService service = new CommitService(testRepo);
