@@ -51,7 +51,7 @@ System.out.println("Commits in release1 since branched from master: " + count.ge
 This example finds the number of commits in a repository that contain a [Gerrit](http://code.google.com/p/gerrit/) Change-Id entry in the commit message.
 
 ```java
-CommitService service = new CommitService("/repos/productA/.git");
+CommitService service = new CommitService("/repos/egit/.git");
 CommitCountFilter all = new CommitCountFilter();
 CommitCountFilter gerrit = new CommitCountFilter();
 AllCommitFilter filters = new AllCommitFilter();
