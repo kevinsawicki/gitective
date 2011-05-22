@@ -177,7 +177,7 @@ public class CommitService extends RepositoryService {
 	 */
 	public RevCommit getBase(String... revisions) {
 		Assert.notNull("Ref names cannot be null", revisions);
-		Assert.notEmpty("Ref names cannot be empty", (Object[]) revisions);
+		Assert.notEmpty("Ref names cannot be empty", revisions);
 		RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
 		walk.setRevFilter(RevFilter.MERGE_BASE);
@@ -205,7 +205,7 @@ public class CommitService extends RepositoryService {
 	 */
 	public RevCommit getBase(ObjectId... commits) {
 		Assert.notNull("Commits cannot be null", commits);
-		Assert.notEmpty("Commits cannot be empty", (Object[]) commits);
+		Assert.notEmpty("Commits cannot be empty", commits);
 		RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
 		walk.setRevFilter(RevFilter.MERGE_BASE);
