@@ -16,7 +16,9 @@ import junit.framework.TestCase;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
@@ -41,6 +43,21 @@ public abstract class GitTestCase extends TestCase {
 
 		Git.init().setDirectory(dir).setBare(false).call();
 		testRepo = new File(dir, Constants.DOT_GIT);
+
+		setUser(new PersonIdent("Test User", "user@test.com"));
+	}
+
+	/**
+	 * Set user config
+	 * 
+	 * @param person
+	 * @throws Exception
+	 */
+	protected void setUser(PersonIdent person) throws Exception {
+		StoredConfig config = Git.open(testRepo).getRepository().getConfig();
+		config.setString("user", null, "email", person.getEmailAddress());
+		config.setString("user", null, "name", person.getName());
+		config.save();
 	}
 
 	/**
