@@ -26,8 +26,7 @@ This example may seem uncommon but it will return 6 different users when run aga
 CommitService service = new CommitService("/repos/linux-2.6/.git"); 
 AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
-filters.add(new ParentCountFilter(10));
-filters.add(authors);
+filters.add(new ParentCountFilter(10)).add(authors);
 service.walkFromHead(filters);
 for (PersonIdent author : authors.getPersons())
      System.out.println(author);
