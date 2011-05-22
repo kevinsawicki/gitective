@@ -59,7 +59,7 @@ filters.add(new AndCommitFilter().add(new ChangeIdFilter()).add(gerrit));
 filters.add(all);
 service.walkFromHead(filters);
 System.out.println(MessageFormat.format(
-     "{0} out of {1} commits have gerrit change ids",
+     "{0} out of {1} commits have Gerrit change ids",
      gerrit.getCount(),	all.getCount()));
 ```
 
