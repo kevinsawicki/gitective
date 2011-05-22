@@ -42,6 +42,7 @@ RevCommit base = service.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
 service.walkBetween("master", base, count);
 System.out.println("Commits in master since release1 branch created: " + count.getCount());
+count = new CommitCountFilter();
 service.walkBetween("release1", base, count);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
 ```
