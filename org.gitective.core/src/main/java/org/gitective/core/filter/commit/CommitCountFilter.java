@@ -41,6 +41,12 @@ public class CommitCountFilter extends CommitFilter {
 	}
 
 	@Override
+	public void reset() {
+		super.reset();
+		this.count = 0L;
+	}
+
+	@Override
 	public RevFilter clone() {
 		return new CommitCountFilter();
 	}

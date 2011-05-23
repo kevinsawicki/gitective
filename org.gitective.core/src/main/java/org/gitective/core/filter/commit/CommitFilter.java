@@ -49,4 +49,10 @@ public abstract class CommitFilter extends RevFilter {
 		return object1 != null && object2 != null && object1.equals(object2);
 	}
 
+	/**
+	 * Resets the filter state
+	 */
+	public void reset() {
+		// Does nothing by default, sub-classes should override
+	}
 }

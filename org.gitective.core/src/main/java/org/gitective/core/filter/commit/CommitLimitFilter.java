@@ -18,17 +18,17 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  * considered. This class should be last in an {@link AndCommitFilter} if you
  * want to only limit matched commits and not just all visited commits.
  */
-public class LimitCommitFilter extends RevFilter {
+public class CommitLimitFilter extends CommitFilter {
 
-	private int limit;
-	private int count = 0;
+	private long limit;
+	private long count = 0L;
 
 	/**
 	 * Create a limit filter
 	 * 
 	 * @param limit
 	 */
-	public LimitCommitFilter(int limit) {
+	public CommitLimitFilter(long limit) {
 		this.limit = limit;
 	}
 
@@ -38,8 +38,14 @@ public class LimitCommitFilter extends RevFilter {
 	}
 
 	@Override
+	public void reset() {
+		super.reset();
+		count = 0L;
+	}
+
+	@Override
 	public RevFilter clone() {
-		return new LimitCommitFilter(limit);
+		return new CommitLimitFilter(limit);
 	}
 
 }
