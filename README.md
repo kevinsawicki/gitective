@@ -39,10 +39,10 @@ System.out.println(count.getCount()); //Prints the number of commits
 This example may seem uncommon but it will return 6 different users when run against the [linux kernel repository](http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=summary).
 
 ```java
-CommitService service = new CommitService("/repos/linux-2.6/.git");
 AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
 filters.add(new ParentCountFilter(10)).add(authors);
+CommitService service = new CommitService("/repos/linux-2.6/.git");
 service.walkFromHead(filters);
 for (PersonIdent author : authors.getPersons())
      System.out.println(author);
@@ -66,16 +66,24 @@ System.out.println("Commits in release1 since branched from master: " + count.ge
 This example finds the number of commits in a repository that contain a [Gerrit](http://code.google.com/p/gerrit/) Change-Id entry in the commit message.
 
 ```java
-CommitService service = new CommitService("/repos/egit/.git");
 CommitCountFilter all = new CommitCountFilter();
 CommitCountFilter gerrit = new CommitCountFilter();
 AllCommitFilter filters = new AllCommitFilter();
 filters.add(new AndCommitFilter().add(new ChangeIdFilter()).add(gerrit));
 filters.add(all);
+CommitService service = new CommitService("/repos/egit/.git");
 service.walkFromHead(filters);
 System.out.println(MessageFormat.format(
      "{0} out of {1} commits have Gerrit change ids",
      gerrit.getCount(),	all.getCount()));
+```
+
+## Building from source
+gitective can be built using [Maven](http://maven.apache.org/). The pom.xml to build the core plug-in is located at the root of the org.gitective.core folder.
+
+```
+cd gitective/org.gitective.core
+mvn clean install
 ```
 
 ## Dependencies
