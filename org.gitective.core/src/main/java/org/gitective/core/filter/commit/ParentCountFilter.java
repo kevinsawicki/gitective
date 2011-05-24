@@ -34,7 +34,7 @@ public class ParentCountFilter extends CommitFilter {
 	 * at least the number specified.
 	 * 
 	 * @param min
-	 *            minimum number of parents (inclusive)
+	 *            minimum number of parent commits (inclusive)
 	 */
 	public ParentCountFilter(int min) {
 		this(min, Integer.MAX_VALUE);
@@ -45,9 +45,9 @@ public class ParentCountFilter extends CommitFilter {
 	 * that falls inclusively in the specified range.
 	 * 
 	 * @param min
-	 *            minimum number of parents (inclusive)
+	 *            minimum number of parent commits (inclusive)
 	 * @param max
-	 *            maximum number of parent (inclusive)
+	 *            maximum number of parent commits (inclusive)
 	 */
 	public ParentCountFilter(int min, int max) {
 		this.min = min;
