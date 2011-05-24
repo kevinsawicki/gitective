@@ -11,6 +11,7 @@ gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit) 
   * You want to generate stats or reports based on the commit activity in Git repositories and are looking to use Java/JGit and want a head-start in writing the code that finds the commits needed.
 
 ## Examples
+Shown below are several examples of using the gitective filters and commit service classes, more examples can be found in the [unit tests](https://github.com/kevinsawicki/gitective/tree/master/org.gitective.core/src/test/java/org/gitective/tests).
 
 ### Get the latest commit in a repository
 
