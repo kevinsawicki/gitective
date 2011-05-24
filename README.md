@@ -1,6 +1,14 @@
 # gitective - Find the commits you're looking for
 
-gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit) that makes investigating Git repositories simpler and easier.
+gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit) that makes investigating Git repositories simpler and easier.  Gitective makes it straight-forward to find interesting commits in a Git repository through combining the included filters.
+
+## Why would you use gitective?
+
+  * You are new to git and/or JGit and need to write an application that uses revision history.  Gitective aims to be simple enough to not require a deep understanding of Git or JGit in order to construct a filter to locate the commits you are looking for in a Git Repository.
+
+  * You need to write an application that searches for commit information from multiple Git repositories.  Gitective supports re-using filters across repositories as well as multiple commit searches of the same repository.
+
+  * You want to generate stats or reports based on the commit activity in Git repositories and are looking to use Java/JGit and want a head-start in writing the code that finds the commits needed.
 
 ## Examples
 
