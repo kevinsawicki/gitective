@@ -4,7 +4,7 @@ gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit) 
 
 ## Why would you use gitective?
 
-  * You are new to git and/or JGit and need to write an application that uses revision history.  Gitective aims to be simple enough to not require a deep understanding of Git or JGit in order to construct a filter to locate the commits you are looking for in a Git Repository.
+  * You are new to Git and/or JGit and need to write an application that uses revision history.  Gitective aims to be simple enough to not require a deep understanding of Git or JGit in order to construct a filter to locate the commits you are looking for in a Git Repository.
 
   * You need to write an application that searches for commit information from multiple Git repositories.  Gitective supports re-using filters across repositories as well as multiple commit searches of the same repository.
 
