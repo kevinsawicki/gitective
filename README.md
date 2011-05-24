@@ -12,6 +12,14 @@ gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit) 
 
 ## Examples
 
+### Get the latest commit in a repository
+
+```java
+CommitService service = new CommitService("/repos/myrepo/.git");
+RevCommit latestCommit = service.getLatest();
+System.out.println("Latest commit is " + latestCommit.name());
+```
+
 ### Find the number of commits you authored but weren't the committer of
 This case is common when doing peer code review or using a code review system.
 
@@ -22,7 +30,7 @@ AndCommitFilter filters = new AndCommitFilter();
 filters.add(new AuthorFilter(person));
 filters.add(new CommitterFilter(person).negate());
 filters.add(count);
-CommitService service = new CommitService("/repos/myrepo/.git"); 
+CommitService service = new CommitService("/repos/myrepo/.git");
 service.walkFromHead(filters);
 System.out.println(count.getCount()); //Prints the number of commits
 ```
@@ -31,7 +39,7 @@ System.out.println(count.getCount()); //Prints the number of commits
 This example may seem uncommon but it will return 6 different users when run against the [linux kernel repository](http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=summary).
 
 ```java
-CommitService service = new CommitService("/repos/linux-2.6/.git"); 
+CommitService service = new CommitService("/repos/linux-2.6/.git");
 AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
 filters.add(new ParentCountFilter(10)).add(authors);
