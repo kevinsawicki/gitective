@@ -54,6 +54,7 @@ public abstract class GitTestCase extends TestCase {
 
 		Git.init().setDirectory(dir).setBare(false).call();
 		testRepo = new File(dir, Constants.DOT_GIT);
+		testRepo.deleteOnExit();
 	}
 
 	/**
@@ -102,6 +103,8 @@ public abstract class GitTestCase extends TestCase {
 		if (!file.exists())
 			assertTrue(file.createNewFile());
 		PrintWriter writer = new PrintWriter(file);
+		if (content == null)
+			content = "";
 		try {
 			writer.print(content);
 		} finally {

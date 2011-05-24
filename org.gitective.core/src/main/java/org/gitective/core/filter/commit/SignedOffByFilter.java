@@ -37,6 +37,7 @@ public class SignedOffByFilter extends CommitMessageFindFilter {
 	public SignedOffByFilter(PersonIdent person) {
 		super(Pattern.quote(MessageFormat.format(SIGNED_OFF_BY,
 				person.getName(), person.getEmailAddress())), Pattern.MULTILINE);
+		this.person = person;
 	}
 
 	@Override
