@@ -51,8 +51,11 @@ public abstract class CommitFilter extends RevFilter {
 
 	/**
 	 * Resets the filter state
+	 * 
+	 * @return this filter
 	 */
-	public void reset() {
+	public CommitFilter reset() {
 		// Does nothing by default, sub-classes should override
+		return this;
 	}
 }

@@ -51,6 +51,12 @@ public abstract class PersonSetFilter extends CommitFilter {
 		return true;
 	}
 
+	@Override
+	public CommitFilter reset() {
+		persons.clear();
+		return super.reset();
+	}
+
 	/**
 	 * Get persons encountered during commit visiting
 	 * 

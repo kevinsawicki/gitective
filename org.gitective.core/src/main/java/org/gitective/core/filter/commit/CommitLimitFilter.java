@@ -38,9 +38,9 @@ public class CommitLimitFilter extends CommitFilter {
 	}
 
 	@Override
-	public void reset() {
-		super.reset();
+	public CommitFilter reset() {
 		count = 0L;
+		return super.reset();
 	}
 
 	@Override

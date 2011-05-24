@@ -37,13 +37,13 @@ public class CommitCountFilter extends CommitFilter {
 	 * @return count
 	 */
 	public long getCount() {
-		return this.count;
+		return count;
 	}
 
 	@Override
-	public void reset() {
-		super.reset();
-		this.count = 0L;
+	public CommitFilter reset() {
+		count = 0L;
+		return super.reset();
 	}
 
 	@Override
