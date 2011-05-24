@@ -34,7 +34,13 @@ public class CommitListFilter extends CommitFilter {
 	 * @return non-null but possibly empty list of commits
 	 */
 	public List<RevCommit> getCommits() {
-		return this.commits;
+		return commits;
+	}
+
+	@Override
+	public CommitFilter reset() {
+		commits.clear();
+		return super.reset();
 	}
 
 	@Override

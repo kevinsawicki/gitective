@@ -20,6 +20,14 @@ import junit.framework.TestCase;
 public class AssertTest extends TestCase {
 
 	/**
+	 * Test constructor
+	 */
+	public void testConstructor() {
+		assertNotNull(new Assert() {
+		});
+	}
+
+	/**
 	 * Test {@link Assert#notNull(String, Object)}
 	 */
 	public void testNullWithMessage() {

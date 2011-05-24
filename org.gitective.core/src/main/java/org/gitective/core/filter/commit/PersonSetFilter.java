@@ -67,7 +67,7 @@ public abstract class PersonSetFilter extends CommitFilter {
 	}
 
 	/**
-	 * Get person from commit to include in set
+	 * Get the person from the commit to include in set
 	 * 
 	 * @param commit
 	 * @return person

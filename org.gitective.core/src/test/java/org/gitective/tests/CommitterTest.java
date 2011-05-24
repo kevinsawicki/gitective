@@ -24,7 +24,7 @@ public class CommitterTest extends GitTestCase {
 	/**
 	 * Test clone of {@link CommitterFilter}
 	 */
-	public void testCloneAuthorFilter() {
+	public void testCloneCommitterFilter() {
 		CommitterFilter filter = new CommitterFilter(committer);
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
