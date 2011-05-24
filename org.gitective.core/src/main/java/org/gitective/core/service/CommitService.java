@@ -9,6 +9,7 @@ package org.gitective.core.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
@@ -46,17 +47,65 @@ public class CommitService extends RepositoryService {
 	}
 
 	/**
+	 * Resolve a revision string to an object id. This method will return the
+	 * resolved object id for the first repository configured for this service.
+	 * 
+	 * @see #lookup(Repository, String)
+	 * @param revision
+	 * @return object id never null
+	 */
+	public ObjectId resolve(String revision) {
+		return lookup(repositories.get(0), revision);
+	}
+
+	/**
+	 * Resolve a revision string to an object id in the given repository. This
+	 * method will never return null and instead will throw a
+	 * {@link GitException} when the given revision does not resolve.
+	 * 
+	 * @param repository
+	 * @param revision
+	 * @return object id never null
+	 */
+	public ObjectId lookup(Repository repository, String revision) {
+		Assert.notNull("Repository cannot be null", repository);
+		Assert.notNull("Revision cannot be null", revision);
+		Assert.notEmpty("Revision cannot be empty", revision);
+		return resolve(repository, revision);
+	}
+
+	/**
+	 * Resolve revision string to object id
+	 * 
+	 * @param repository
+	 * @param revision
+	 * @return object id never null
+	 */
+	protected ObjectId resolve(Repository repository, String revision) {
+		try {
+			ObjectId id = repository.resolve(revision);
+			if (id == null)
+				throw new GitException(MessageFormat.format(
+						"Revision ''{0}'' could not be resolved", revision));
+			return id;
+		} catch (IOException e) {
+			throw new GitException(e);
+		}
+	}
+
+	/**
 	 * Walk commits between the start commit id and end commit id. Starting
 	 * commit and filter cannot be null.
 	 * 
+	 * @param repository
 	 * @param walk
 	 * @param start
 	 * @param end
 	 * @param filter
 	 * @return this service
 	 */
-	protected CommitService walk(RevWalk walk, ObjectId start, ObjectId end,
-			RevFilter filter) {
+	protected CommitService walk(Repository repository, RevWalk walk,
+			ObjectId start, ObjectId end, RevFilter filter) {
 		Assert.notNull("Starting commit id cannot be null", start);
 		Assert.notNull("Filter cannot be null", filter);
 		boolean release = walk == null;
@@ -102,11 +151,8 @@ public class CommitService extends RepositoryService {
 	 * @return this service
 	 */
 	public CommitService walkFrom(String start, RevFilter filter) {
-		try {
-			walkFrom(repository.resolve(start), filter);
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
+		for (Repository repository : repositories)
+			walkFrom(resolve(repository, start), filter);
 		return this;
 	}
 
@@ -132,7 +178,9 @@ public class CommitService extends RepositoryService {
 	 */
 	public CommitService walkBetween(ObjectId start, ObjectId end,
 			RevFilter filter) {
-		return walk(null, start, end, filter);
+		for (Repository repository : repositories)
+			walk(repository, null, start, end, filter);
+		return this;
 	}
 
 	/**
@@ -146,49 +194,56 @@ public class CommitService extends RepositoryService {
 	 */
 	public CommitService walkBetween(String start, ObjectId end,
 			RevFilter filter) {
-		try {
-			return walkBetween(repository.resolve(start), end, filter);
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
+		for (Repository repository : repositories)
+			walkBetween(resolve(repository, start), end, filter);
+		return this;
 	}
 
 	/**
-	 * Walk commits betwee the given start and end revisions string that also
+	 * Walk commits between the given start and end revisions string that also
 	 * match the filter.
 	 * 
 	 * @param start
 	 * @param end
 	 * @param filter
+	 * @return this service
 	 */
-	public void walkBetween(ObjectId start, String end, RevFilter filter) {
-		try {
-			walkBetween(start, repository.resolve(end), filter);
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
+	public CommitService walkBetween(ObjectId start, String end,
+			RevFilter filter) {
+		for (Repository repository : repositories)
+			walkBetween(start, lookup(repository, end), filter);
+		return this;
 	}
 
 	/**
 	 * Get the base commit between revisions.
 	 * 
+	 * @see #getBase(Repository, String...)
 	 * @param revisions
 	 * @return base commit or null if none
 	 */
 	public RevCommit getBase(String... revisions) {
+		return getBase(repositories.get(0), revisions);
+	}
+
+	/**
+	 * Get the base commit between revisions. This method will return the commit
+	 * base for the first repository configured for this service.
+	 * 
+	 * @param repository
+	 * @param revisions
+	 * @return base commit or null if none
+	 */
+	public RevCommit getBase(Repository repository, String... revisions) {
+		Assert.notNull("Repository cannot be null", repository);
 		Assert.notNull("Ref names cannot be null", revisions);
 		Assert.notEmpty("Ref names cannot be empty", revisions);
 		RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
 		walk.setRevFilter(RevFilter.MERGE_BASE);
 		try {
-			for (String revision : revisions) {
-				ObjectId id = repository.resolve(revision);
-				if (id == null)
-					throw new GitException(
-							"Revision string could not be resolved to commit id");
-				walk.markStart(walk.parseCommit(id));
-			}
+			for (String revision : revisions)
+				walk.markStart(walk.parseCommit(resolve(repository, revision)));
 			return walk.next();
 		} catch (IOException e) {
 			throw new GitException(e);
@@ -198,12 +253,25 @@ public class CommitService extends RepositoryService {
 	}
 
 	/**
-	 * Get the base commit between commits.
+	 * Get the base commit between commits. This method will return the commit
+	 * base for the first repository configured for this service.
 	 * 
 	 * @param commits
 	 * @return base commit or null if none
 	 */
 	public RevCommit getBase(ObjectId... commits) {
+		return getBase(repositories.get(0), commits);
+	}
+
+	/**
+	 * Get the base commit between commits.
+	 * 
+	 * @param repository
+	 * @param commits
+	 * @return base commit or null if none
+	 */
+	public RevCommit getBase(Repository repository, ObjectId... commits) {
+		Assert.notNull("Repository cannot be null", repository);
 		Assert.notNull("Commits cannot be null", commits);
 		Assert.notEmpty("Commits cannot be empty", commits);
 		RevWalk walk = new RevWalk(repository);
@@ -220,4 +288,34 @@ public class CommitService extends RepositoryService {
 		}
 	}
 
+	/**
+	 * Get latest commit. This method will return the latest commit base for the
+	 * first repository configured for this service.
+	 * 
+	 * @see #getLatest(Repository)
+	 * @return commit never null
+	 */
+	public RevCommit getLatest() {
+		return getLatest(repositories.get(0));
+	}
+
+	/**
+	 * Get latest commit. This will be the commit that {@link Constants#HEAD} is
+	 * pointing to.
+	 * 
+	 * @param repository
+	 * @return commit never null
+	 */
+	public RevCommit getLatest(Repository repository) {
+		Assert.notNull("Repository cannot be null", repository);
+		RevWalk walk = new RevWalk(repository);
+		walk.setRetainBody(true);
+		try {
+			return walk.parseCommit(resolve(repository, Constants.HEAD));
+		} catch (IOException e) {
+			throw new GitException(e);
+		} finally {
+			walk.release();
+		}
+	}
 }

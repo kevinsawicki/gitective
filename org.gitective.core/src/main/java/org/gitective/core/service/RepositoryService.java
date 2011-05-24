@@ -9,6 +9,9 @@ package org.gitective.core.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepository;
@@ -18,47 +21,59 @@ import org.gitective.core.GitException;
 /**
  * Base service class for working with a {@link Repository}
  */
-public class RepositoryService {
+public class RepositoryService implements Iterable<Repository> {
 
 	/**
 	 * Repository
 	 */
-	protected final Repository repository;
+	protected final List<Repository> repositories = new LinkedList<Repository>();
 
 	/**
-	 * Create a service for the repository at the specified directory path.
+	 * Create a service for the repositories at the specified directory paths.
 	 * 
-	 * @param gitDir
+	 * @param gitDirs
 	 */
-	public RepositoryService(String gitDir) {
-		try {
-			this.repository = new FileRepository(gitDir);
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
+	public RepositoryService(String... gitDirs) {
+		Assert.notNull("Directories cannot be null", gitDirs);
+		Assert.notEmpty("Directories cannot be empty", gitDirs);
+		for (String gitDir : gitDirs)
+			try {
+				repositories.add(new FileRepository(gitDir));
+			} catch (IOException e) {
+				throw new GitException(e);
+			}
 	}
 
 	/**
-	 * Create a service for the repository at the specified directory file.
+	 * Create a service for the repositories at the specified directory files.
 	 * 
-	 * @param gitDir
+	 * @param gitDirs
 	 */
-	public RepositoryService(File gitDir) {
-		try {
-			this.repository = new FileRepository(gitDir);
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
+	public RepositoryService(File... gitDirs) {
+		Assert.notNull("Directories cannot be null", gitDirs);
+		Assert.notEmpty("Directories cannot be empty", gitDirs);
+		for (File gitDir : gitDirs)
+			try {
+				repositories.add(new FileRepository(gitDir));
+			} catch (IOException e) {
+				throw new GitException(e);
+			}
 	}
 
 	/**
-	 * Create a service for the specified repository
+	 * Create a service for the specified repositories
 	 * 
-	 * @param repository
+	 * @param repositories
 	 */
-	public RepositoryService(Repository repository) {
-		Assert.notNull("Repository cannot be null", repository);
-		this.repository = repository;
+	public RepositoryService(Repository... repositories) {
+		Assert.notNull("Repositories cannot be null", repositories);
+		Assert.notEmpty("Repositories cannot be empty", repositories);
+		for (Repository repository : repositories)
+			this.repositories.add(repository);
+	}
+
+	public Iterator<Repository> iterator() {
+		return this.repositories.iterator();
 	}
 
 }
