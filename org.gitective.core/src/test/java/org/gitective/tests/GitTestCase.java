@@ -46,15 +46,25 @@ public abstract class GitTestCase extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		testRepo = initRepo();
+	}
 
+	/**
+	 * Initialize a new repo in a new directory
+	 * 
+	 * @return created .git folder
+	 */
+	protected File initRepo() {
 		String tmpDir = System.getProperty("java.io.tmpdir");
 		assertNotNull("java.io.tmpdir was null", tmpDir);
 		File dir = new File(tmpDir, "git-test-case-" + System.nanoTime());
 		assertTrue(dir.mkdir());
 
 		Git.init().setDirectory(dir).setBare(false).call();
-		testRepo = new File(dir, Constants.DOT_GIT);
-		testRepo.deleteOnExit();
+		File repo = new File(dir, Constants.DOT_GIT);
+		assertTrue(repo.exists());
+		repo.deleteOnExit();
+		return repo;
 	}
 
 	/**
@@ -65,7 +75,19 @@ public abstract class GitTestCase extends TestCase {
 	 * @throws Exception
 	 */
 	protected Ref branch(String name) throws Exception {
-		Git git = Git.open(testRepo);
+		return branch(testRepo, name);
+	}
+
+	/**
+	 * Create branch with name and checkout
+	 * 
+	 * @param repo
+	 * @param name
+	 * @return branch ref
+	 * @throws Exception
+	 */
+	protected Ref branch(File repo, String name) throws Exception {
+		Git git = Git.open(repo);
 		git.branchCreate().setName(name).call();
 		Ref ref = git.checkout().setName(name).call();
 		assertNotNull(ref);
@@ -81,9 +103,24 @@ public abstract class GitTestCase extends TestCase {
 	 * @throws Exception
 	 */
 	protected RevCommit add(String path, String content) throws Exception {
+		return add(testRepo, path, content);
+	}
+
+	/**
+	 * Add file to test repository
+	 * 
+	 * @param repo
+	 * 
+	 * @param path
+	 * @param content
+	 * @return commit
+	 * @throws Exception
+	 */
+	protected RevCommit add(File repo, String path, String content)
+			throws Exception {
 		String message = MessageFormat.format("Committing {0} at {1}", path,
 				new Date());
-		return add(path, content, message);
+		return add(repo, path, content, message);
 	}
 
 	/**
@@ -97,7 +134,22 @@ public abstract class GitTestCase extends TestCase {
 	 */
 	protected RevCommit add(String path, String content, String message)
 			throws Exception {
-		File file = new File(testRepo.getParentFile(), path);
+		return add(testRepo, path, content, message);
+	}
+
+	/**
+	 * Add file to test repository
+	 * 
+	 * @param repo
+	 * @param path
+	 * @param content
+	 * @param message
+	 * @return commit
+	 * @throws Exception
+	 */
+	protected RevCommit add(File repo, String path, String content,
+			String message) throws Exception {
+		File file = new File(repo.getParentFile(), path);
 		if (!file.getParentFile().exists())
 			assertTrue(file.getParentFile().mkdirs());
 		if (!file.exists())
@@ -110,7 +162,7 @@ public abstract class GitTestCase extends TestCase {
 		} finally {
 			writer.close();
 		}
-		Git git = Git.open(testRepo);
+		Git git = Git.open(repo);
 		git.add().addFilepattern(path).call();
 		RevCommit commit = git.commit().setOnly(path).setMessage(message)
 				.setAuthor(author).setCommitter(committer).call();

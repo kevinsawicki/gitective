@@ -26,24 +26,24 @@ import org.gitective.core.GitException;
 public class CommitService extends RepositoryService {
 
 	/**
-	 * @param gitDir
+	 * @param gitDirs
 	 */
-	public CommitService(File gitDir) {
-		super(gitDir);
+	public CommitService(File... gitDirs) {
+		super(gitDirs);
 	}
 
 	/**
-	 * @param repository
+	 * @param repositories
 	 */
-	public CommitService(Repository repository) {
-		super(repository);
+	public CommitService(Repository... repositories) {
+		super(repositories);
 	}
 
 	/**
-	 * @param gitDir
+	 * @param gitDirs
 	 */
-	public CommitService(String gitDir) {
-		super(gitDir);
+	public CommitService(String... gitDirs) {
+		super(gitDirs);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class CommitService extends RepositoryService {
 	 * @return object id never null
 	 */
 	public ObjectId resolve(String revision) {
-		return lookup(repositories.peek(), revision);
+		return lookup(first(), revision);
 	}
 
 	/**
@@ -151,8 +151,8 @@ public class CommitService extends RepositoryService {
 	 * @return this service
 	 */
 	public CommitService searchFrom(String start, RevFilter filter) {
-		for (Repository repository : repositories)
-			searchFrom(lookup(repository, start), filter);
+		for (Repository repository : this)
+			walk(repository, null, lookup(repository, start), null, filter);
 		return this;
 	}
 
@@ -177,7 +177,7 @@ public class CommitService extends RepositoryService {
 	 */
 	public CommitService searchBetween(ObjectId start, ObjectId end,
 			RevFilter filter) {
-		for (Repository repository : repositories)
+		for (Repository repository : this)
 			walk(repository, null, start, end, filter);
 		return this;
 	}
@@ -193,7 +193,7 @@ public class CommitService extends RepositoryService {
 	 */
 	public CommitService searchBetween(String start, ObjectId end,
 			RevFilter filter) {
-		for (Repository repository : repositories)
+		for (Repository repository : this)
 			searchBetween(lookup(repository, start), end, filter);
 		return this;
 	}
@@ -209,7 +209,7 @@ public class CommitService extends RepositoryService {
 	 */
 	public CommitService searchBetween(ObjectId start, String end,
 			RevFilter filter) {
-		for (Repository repository : repositories)
+		for (Repository repository : this)
 			searchBetween(start, lookup(repository, end), filter);
 		return this;
 	}
@@ -225,7 +225,7 @@ public class CommitService extends RepositoryService {
 	 */
 	public CommitService searchBetween(String start, String end,
 			RevFilter filter) {
-		for (Repository repository : repositories)
+		for (Repository repository : this)
 			searchBetween(lookup(repository, start), lookup(repository, end),
 					filter);
 		return this;
@@ -241,7 +241,7 @@ public class CommitService extends RepositoryService {
 	 */
 	public CommitService walkBetween(ObjectId start, String end,
 			RevFilter filter) {
-		for (Repository repository : repositories)
+		for (Repository repository : this)
 			searchBetween(start, lookup(repository, end), filter);
 		return this;
 	}
@@ -254,7 +254,7 @@ public class CommitService extends RepositoryService {
 	 * @return base commit or null if none
 	 */
 	public RevCommit getBase(String... revisions) {
-		return getBase(repositories.peek(), revisions);
+		return getBase(first(), revisions);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class CommitService extends RepositoryService {
 	 * @return base commit or null if none
 	 */
 	public RevCommit getBase(ObjectId... commits) {
-		return getBase(repositories.peek(), commits);
+		return getBase(first(), commits);
 	}
 
 	/**
@@ -327,7 +327,7 @@ public class CommitService extends RepositoryService {
 	 * @return commit never null
 	 */
 	public RevCommit getLatest() {
-		return getLatest(repositories.peek());
+		return getLatest(first());
 	}
 
 	/**

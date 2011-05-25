@@ -8,6 +8,7 @@
 package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.OrCommitFilter;
@@ -45,6 +46,24 @@ public class OrTest extends GitTestCase {
 		CommitService service = new CommitService(testRepo);
 		service.search(new OrCommitFilter().add(limit).add(count));
 		assertEquals(1, count.getCount());
+	}
+
+	/**
+	 * Test no matches of the filters in an {@link OrCommitFilter}
+	 * 
+	 * @throws Exception
+	 */
+	public void testNoMatches() throws Exception {
+		add("file.txt", "test");
+		add("file.txt", "testa");
+		add("file.txt", "testb");
+
+		CommitLimitFilter limit = new CommitLimitFilter(2);
+		CommitCountFilter count = new CommitCountFilter();
+		CommitService service = new CommitService(testRepo);
+		service.search(new AndCommitFilter().add(
+				new OrCommitFilter().add(limit)).add(count));
+		assertEquals(2, count.getCount());
 	}
 
 }

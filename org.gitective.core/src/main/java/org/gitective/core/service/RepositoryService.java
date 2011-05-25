@@ -23,10 +23,7 @@ import org.gitective.core.GitException;
  */
 public class RepositoryService implements Iterable<Repository> {
 
-	/**
-	 * Repository
-	 */
-	protected final Deque<Repository> repositories = new LinkedList<Repository>();
+	private final Deque<Repository> repositories = new LinkedList<Repository>();
 
 	/**
 	 * Add non-null repository to this service
@@ -86,8 +83,17 @@ public class RepositoryService implements Iterable<Repository> {
 	 * Get an iterator over all repositories configured for this service. This
 	 * iterator will always have at least one element.
 	 */
-	public Iterator<Repository> iterator() {
+	public final Iterator<Repository> iterator() {
 		return this.repositories.iterator();
+	}
+
+	/**
+	 * Get first repository
+	 * 
+	 * @return non-null repository
+	 */
+	protected final Repository first() {
+		return this.repositories.peekFirst();
 	}
 
 }

@@ -82,4 +82,23 @@ public class AuthorTest extends GitTestCase {
 		assertTrue(filter.getPersons().contains(findUser));
 	}
 
+	/**
+	 * Test of {@link AuthorSetFilter#reset()}
+	 * 
+	 * @throws Exception
+	 */
+	public void testAuthorSetFilterReset() throws Exception {
+		add("file.txt", "a");
+		AuthorSetFilter filter = new AuthorSetFilter();
+		assertTrue(filter.getPersons().isEmpty());
+		assertFalse(filter.getPersons().contains(author));
+		CommitService service = new CommitService(testRepo);
+		service.search(filter);
+		assertEquals(1, filter.getPersons().size());
+		assertTrue(filter.getPersons().contains(author));
+		filter.reset();
+		assertTrue(filter.getPersons().isEmpty());
+		assertFalse(filter.getPersons().contains(author));
+	}
+
 }
