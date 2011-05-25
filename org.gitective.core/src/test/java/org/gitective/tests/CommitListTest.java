@@ -40,7 +40,7 @@ public class CommitListTest extends GitTestCase {
 
 		CommitListFilter filter = new CommitListFilter();
 		CommitService service = new CommitService(testRepo);
-		service.walkFromHead(filter);
+		service.search(filter);
 
 		assertFalse(filter.getCommits().isEmpty());
 		assertEquals(1, filter.getCommits().size());
@@ -50,7 +50,7 @@ public class CommitListTest extends GitTestCase {
 
 		assertTrue(filter.getCommits().isEmpty());
 
-		service.walkFromHead(filter);
+		service.search(filter);
 
 		assertFalse(filter.getCommits().isEmpty());
 		assertEquals(1, filter.getCommits().size());

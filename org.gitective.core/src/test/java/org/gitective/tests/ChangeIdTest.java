@@ -28,11 +28,11 @@ public class ChangeIdTest extends GitTestCase {
 
 		CommitService service = new CommitService(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.walkFromHead(new AndCommitFilter().add(new ChangeIdFilter())
+		service.search(new AndCommitFilter().add(new ChangeIdFilter())
 				.add(count));
 		assertEquals(1, count.getCount());
 
-		service.walkFromHead(new AndCommitFilter().add(
+		service.search(new AndCommitFilter().add(
 				new ChangeIdFilter().clone()).add(count));
 		assertEquals(2, count.getCount());
 	}
@@ -48,7 +48,7 @@ public class ChangeIdTest extends GitTestCase {
 
 		CommitService service = new CommitService(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.walkFromHead(new AndCommitFilter().add(new ChangeIdFilter())
+		service.search(new AndCommitFilter().add(new ChangeIdFilter())
 				.add(count));
 		assertEquals(0, count.getCount());
 	}

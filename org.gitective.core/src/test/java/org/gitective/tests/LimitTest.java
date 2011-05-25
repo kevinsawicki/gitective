@@ -30,13 +30,13 @@ public class LimitTest extends GitTestCase {
 		CommitService service = new CommitService(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(2);
-		service.walkFromHead(new AndCommitFilter().add(limit).add(count));
+		service.search(new AndCommitFilter().add(limit).add(count));
 		assertEquals(2, count.getCount());
 		count.reset();
 		RevFilter clone = limit.clone();
 		assertNotNull(clone);
 		assertNotSame(limit, clone);
-		service.walkFromHead(new AndCommitFilter().add(clone).add(count));
+		service.search(new AndCommitFilter().add(clone).add(count));
 		assertEquals(2, count.getCount());
 	}
 
@@ -50,14 +50,14 @@ public class LimitTest extends GitTestCase {
 		CommitService service = new CommitService(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(2);
-		service.walkFromHead(new AndCommitFilter().add(limit).add(count));
+		service.search(new AndCommitFilter().add(limit).add(count));
 		assertEquals(1, count.getCount());
-		service.walkFromHead(new AndCommitFilter().add(limit).add(count));
+		service.search(new AndCommitFilter().add(limit).add(count));
 		assertEquals(2, count.getCount());
-		service.walkFromHead(new AndCommitFilter().add(limit).add(count));
+		service.search(new AndCommitFilter().add(limit).add(count));
 		assertEquals(2, count.getCount());
 		limit.reset();
-		service.walkFromHead(new AndCommitFilter().add(limit).add(count));
+		service.search(new AndCommitFilter().add(limit).add(count));
 		assertEquals(3, count.getCount());
 	}
 
@@ -72,11 +72,11 @@ public class LimitTest extends GitTestCase {
 		add("file3.txt", "c");
 		CommitService service = new CommitService(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.walkFromHead(new AndCommitFilter()
+		service.search(new AndCommitFilter()
 				.add(new CommitLimitFilter(1)).add(count));
 		assertEquals(1, count.getCount());
 		count.reset();
-		service.walkFromHead(new AndCommitFilter()
+		service.search(new AndCommitFilter()
 				.add(new CommitLimitFilter(3)).add(count));
 		assertEquals(3, count.getCount());
 	}

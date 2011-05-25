@@ -132,51 +132,50 @@ public class CommitService extends RepositoryService {
 	}
 
 	/**
-	 * Walk commits matching the filter starting at a given commit.
+	 * Search commits starting from the given commit id.
 	 * 
 	 * @param start
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitService walkFrom(ObjectId start, RevFilter filter) {
-		walkBetween(start, (ObjectId) null, filter);
+	public CommitService searchFrom(ObjectId start, RevFilter filter) {
+		searchBetween(start, (ObjectId) null, filter);
 		return this;
 	}
 
 	/**
-	 * Walk commits matching the filter start at a given revision string.
+	 * Search commits starting from the given revision string.
 	 * 
 	 * @param start
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitService walkFrom(String start, RevFilter filter) {
+	public CommitService searchFrom(String start, RevFilter filter) {
 		for (Repository repository : repositories)
-			walkFrom(resolve(repository, start), filter);
+			searchFrom(resolve(repository, start), filter);
 		return this;
 	}
 
 	/**
-	 * Walk commits matching the filter starting at the commit that
-	 * {@link Constants#HEAD} is currently pointing at.
+	 * Search commits starting at the commit that {@link Constants#HEAD}
+	 * currently points to.
 	 * 
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitService walkFromHead(RevFilter filter) {
-		return walkFrom(Constants.HEAD, filter);
+	public CommitService search(RevFilter filter) {
+		return searchFrom(Constants.HEAD, filter);
 	}
 
 	/**
-	 * Walk commits between the given start and end commits that also match the
-	 * filter.
+	 * Search commits between the given start and end commits.
 	 * 
 	 * @param start
 	 * @param end
 	 * @param filter
 	 * @return this srevice
 	 */
-	public CommitService walkBetween(ObjectId start, ObjectId end,
+	public CommitService searchBetween(ObjectId start, ObjectId end,
 			RevFilter filter) {
 		for (Repository repository : repositories)
 			walk(repository, null, start, end, filter);
@@ -184,24 +183,23 @@ public class CommitService extends RepositoryService {
 	}
 
 	/**
-	 * Walk commits between the given start revision string and end commit that
-	 * also match the filter.
+	 * Search commits between the given start revision string and the given end
+	 * commit id.
 	 * 
 	 * @param start
 	 * @param end
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitService walkBetween(String start, ObjectId end,
+	public CommitService searchBetween(String start, ObjectId end,
 			RevFilter filter) {
 		for (Repository repository : repositories)
-			walkBetween(resolve(repository, start), end, filter);
+			searchBetween(resolve(repository, start), end, filter);
 		return this;
 	}
 
 	/**
-	 * Walk commits between the given start and end revisions string that also
-	 * match the filter.
+	 * Search commits between the given start commit id and end revision string.
 	 * 
 	 * @param start
 	 * @param end
@@ -211,7 +209,7 @@ public class CommitService extends RepositoryService {
 	public CommitService walkBetween(ObjectId start, String end,
 			RevFilter filter) {
 		for (Repository repository : repositories)
-			walkBetween(start, lookup(repository, end), filter);
+			searchBetween(start, lookup(repository, end), filter);
 		return this;
 	}
 

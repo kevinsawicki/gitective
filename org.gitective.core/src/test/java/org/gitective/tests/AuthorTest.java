@@ -57,7 +57,7 @@ public class AuthorTest extends GitTestCase {
 		AuthorFilter filter = new AuthorFilter(findUser);
 		CommitListFilter commits = new CommitListFilter();
 		CommitService service = new CommitService(testRepo);
-		service.walkFromHead(new AndCommitFilter().add(filter).add(commits));
+		service.search(new AndCommitFilter().add(filter).add(commits));
 		assertEquals(2, commits.getCommits().size());
 		assertEquals(commit2, commits.getCommits().get(0));
 		assertEquals(commit1, commits.getCommits().get(1));
@@ -77,7 +77,7 @@ public class AuthorTest extends GitTestCase {
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(findUser));
 		CommitService service = new CommitService(testRepo);
-		service.walkFromHead(filter);
+		service.search(filter);
 		assertEquals(2, filter.getPersons().size());
 		assertTrue(filter.getPersons().contains(findUser));
 	}
