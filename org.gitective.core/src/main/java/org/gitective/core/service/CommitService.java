@@ -55,7 +55,7 @@ public class CommitService extends RepositoryService {
 	 * @return object id never null
 	 */
 	public ObjectId resolve(String revision) {
-		return lookup(repositories.get(0), revision);
+		return lookup(repositories.peek(), revision);
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class CommitService extends RepositoryService {
 	 * @return base commit or null if none
 	 */
 	public RevCommit getBase(String... revisions) {
-		return getBase(repositories.get(0), revisions);
+		return getBase(repositories.peek(), revisions);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class CommitService extends RepositoryService {
 	 * @return base commit or null if none
 	 */
 	public RevCommit getBase(ObjectId... commits) {
-		return getBase(repositories.get(0), commits);
+		return getBase(repositories.peek(), commits);
 	}
 
 	/**
@@ -327,7 +327,7 @@ public class CommitService extends RepositoryService {
 	 * @return commit never null
 	 */
 	public RevCommit getLatest() {
-		return getLatest(repositories.get(0));
+		return getLatest(repositories.peek());
 	}
 
 	/**

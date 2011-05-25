@@ -9,9 +9,9 @@ package org.gitective.core.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepository;
@@ -26,7 +26,17 @@ public class RepositoryService implements Iterable<Repository> {
 	/**
 	 * Repository
 	 */
-	protected final List<Repository> repositories = new LinkedList<Repository>();
+	protected final Deque<Repository> repositories = new LinkedList<Repository>();
+
+	/**
+	 * Add non-null repository to this service
+	 * 
+	 * @param repository
+	 */
+	protected void add(Repository repository) {
+		Assert.notNull("Repository cannot be null", repository);
+		repositories.addLast(repository);
+	}
 
 	/**
 	 * Create a service for the repositories at the specified directory paths.
@@ -38,7 +48,7 @@ public class RepositoryService implements Iterable<Repository> {
 		Assert.notEmpty("Directories cannot be empty", gitDirs);
 		for (String gitDir : gitDirs)
 			try {
-				repositories.add(new FileRepository(gitDir));
+				add(new FileRepository(gitDir));
 			} catch (IOException e) {
 				throw new GitException(e);
 			}
@@ -54,7 +64,7 @@ public class RepositoryService implements Iterable<Repository> {
 		Assert.notEmpty("Directories cannot be empty", gitDirs);
 		for (File gitDir : gitDirs)
 			try {
-				repositories.add(new FileRepository(gitDir));
+				add(new FileRepository(gitDir));
 			} catch (IOException e) {
 				throw new GitException(e);
 			}
@@ -69,9 +79,13 @@ public class RepositoryService implements Iterable<Repository> {
 		Assert.notNull("Repositories cannot be null", repositories);
 		Assert.notEmpty("Repositories cannot be empty", repositories);
 		for (Repository repository : repositories)
-			this.repositories.add(repository);
+			add(repository);
 	}
 
+	/**
+	 * Get an iterator over all repositories configured for this service. This
+	 * iterator will always have at least one element.
+	 */
 	public Iterator<Repository> iterator() {
 		return this.repositories.iterator();
 	}
