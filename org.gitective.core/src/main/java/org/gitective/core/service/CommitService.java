@@ -108,8 +108,8 @@ public class CommitService extends RepositoryService {
 			ObjectId start, ObjectId end, RevFilter filter) {
 		Assert.notNull("Starting commit id cannot be null", start);
 		Assert.notNull("Filter cannot be null", filter);
-		boolean release = walk == null;
 
+		boolean release = walk == null;
 		if (release)
 			walk = new RevWalk(repository);
 		else
@@ -152,7 +152,7 @@ public class CommitService extends RepositoryService {
 	 */
 	public CommitService searchFrom(String start, RevFilter filter) {
 		for (Repository repository : repositories)
-			searchFrom(resolve(repository, start), filter);
+			searchFrom(lookup(repository, start), filter);
 		return this;
 	}
 
@@ -194,7 +194,40 @@ public class CommitService extends RepositoryService {
 	public CommitService searchBetween(String start, ObjectId end,
 			RevFilter filter) {
 		for (Repository repository : repositories)
-			searchBetween(resolve(repository, start), end, filter);
+			searchBetween(lookup(repository, start), end, filter);
+		return this;
+	}
+
+	/**
+	 * Search commits between the given start commid id and the given end
+	 * revision string.
+	 * 
+	 * @param start
+	 * @param end
+	 * @param filter
+	 * @return this service
+	 */
+	public CommitService searchBetween(ObjectId start, String end,
+			RevFilter filter) {
+		for (Repository repository : repositories)
+			searchBetween(start, lookup(repository, end), filter);
+		return this;
+	}
+
+	/**
+	 * Search commits between the given start revision string and the given end
+	 * revision string.
+	 * 
+	 * @param start
+	 * @param end
+	 * @param filter
+	 * @return this service
+	 */
+	public CommitService searchBetween(String start, String end,
+			RevFilter filter) {
+		for (Repository repository : repositories)
+			searchBetween(lookup(repository, start), lookup(repository, end),
+					filter);
 		return this;
 	}
 
@@ -241,7 +274,7 @@ public class CommitService extends RepositoryService {
 		walk.setRevFilter(RevFilter.MERGE_BASE);
 		try {
 			for (String revision : revisions)
-				walk.markStart(walk.parseCommit(resolve(repository, revision)));
+				walk.markStart(walk.parseCommit(lookup(repository, revision)));
 			return walk.next();
 		} catch (IOException e) {
 			throw new GitException(e);
@@ -309,7 +342,7 @@ public class CommitService extends RepositoryService {
 		RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
 		try {
-			return walk.parseCommit(resolve(repository, Constants.HEAD));
+			return walk.parseCommit(lookup(repository, Constants.HEAD));
 		} catch (IOException e) {
 			throw new GitException(e);
 		} finally {
