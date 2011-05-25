@@ -7,6 +7,7 @@
  *****************************************************************************/
 package org.gitective.tests;
 
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.OrCommitFilter;
@@ -16,6 +17,19 @@ import org.gitective.core.service.CommitService;
  * Unit tests of {@link OrCommitFilter}
  */
 public class OrTest extends GitTestCase {
+
+	/**
+	 * Test of {@link OrCommitFilter#clone()}
+	 */
+	public void testClone() {
+		CommitCountFilter count = new CommitCountFilter();
+		OrCommitFilter or = new OrCommitFilter();
+		or.add(count);
+		RevFilter clone = or.clone();
+		assertNotNull(clone);
+		assertNotSame(or, clone);
+		assertTrue(clone instanceof OrCommitFilter);
+	}
 
 	/**
 	 * Test second filter in a {@link OrCommitFilter} not being called when the
