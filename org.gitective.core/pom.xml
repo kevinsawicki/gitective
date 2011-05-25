@@ -16,6 +16,13 @@
 		<connection>scm:git:git://github.com/kevinsawicki/gitective.git</connection>
 		<tag>v0.2</tag>
 	</scm>
+	<developers>
+		<developer>
+			<email>kevinsawicki@gmail.com</email>
+			<name>Kevin Sawicki</name>
+			<url>https://github.com/kevinsawicki</url>
+		</developer>
+	</developers>
 	<build>
 		<plugins>
 			<plugin>
