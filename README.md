@@ -32,7 +32,7 @@ filters.add(new AuthorFilter(person));
 filters.add(new CommitterFilter(person).negate());
 filters.add(count);
 CommitService service = new CommitService("/repos/myrepo/.git");
-service.walkFromHead(filters);
+service.search(filters);
 System.out.println(count.getCount()); //Prints the number of commits
 ```
 
@@ -44,7 +44,7 @@ AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
 filters.add(new ParentCountFilter(10)).add(authors);
 CommitService service = new CommitService("/repos/linux-2.6/.git");
-service.walkFromHead(filters);
+service.search(filters);
 for (PersonIdent author : authors.getPersons())
      System.out.println(author);
 ```
@@ -56,10 +56,10 @@ This example assumes two current branches,  _master_ and a  _release1_ branch th
 CommitService service = new CommitService("/repos/productA/.git");
 RevCommit base = service.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
-service.walkBetween("master", base, count);
+service.searchBetween("master", base, count);
 System.out.println("Commits in master since release1 branch created: " + count.getCount());
 count = new CommitCountFilter();
-service.walkBetween("release1", base, count);
+service.searchBetween("release1", base, count);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
 ```
 
@@ -73,7 +73,7 @@ AllCommitFilter filters = new AllCommitFilter();
 filters.add(new AndCommitFilter().add(new ChangeIdFilter()).add(gerrit));
 filters.add(all);
 CommitService service = new CommitService("/repos/egit/.git");
-service.walkFromHead(filters);
+service.search(filters);
 System.out.println(MessageFormat.format(
      "{0} out of {1} commits have Gerrit change ids",
      gerrit.getCount(),	all.getCount()));
