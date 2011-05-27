@@ -17,6 +17,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.AllCommitFilter;
+import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitFilter;
 import org.gitective.core.service.CommitService;
 
@@ -24,6 +25,20 @@ import org.gitective.core.service.CommitService;
  * Unit tests of {@link AllCommitFilter}
  */
 public class AllTest extends GitTestCase {
+
+	/**
+	 * Test {@link AllCommitFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	public void testClone() throws Exception {
+		CommitCountFilter count = new CommitCountFilter();
+		AllCommitFilter filter = new AllCommitFilter(count);
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof AllCommitFilter);
+	}
 
 	/**
 	 * Test always matching despite child filter not-including

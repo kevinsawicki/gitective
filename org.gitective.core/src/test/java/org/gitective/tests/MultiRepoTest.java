@@ -10,13 +10,28 @@ package org.gitective.tests;
 import java.io.File;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.service.CommitService;
 
 /**
- * 
+ * Unit tests of using multiple repositories from the same service class.
  */
 public class MultiRepoTest extends GitTestCase {
+
+	/**
+	 * Test service constructors
+	 * 
+	 * @throws Exception
+	 */
+	public void testConstructors() throws Exception {
+		CommitService service1 = new CommitService(testRepo);
+		CommitService service2 = new CommitService(new FileRepository(testRepo));
+		CommitService service3 = new CommitService(testRepo.getAbsolutePath());
+		assertEquals(testRepo, service1.iterator().next().getDirectory());
+		assertEquals(testRepo, service2.iterator().next().getDirectory());
+		assertEquals(testRepo, service3.iterator().next().getDirectory());
+	}
 
 	/**
 	 * Test search two repos from same service
