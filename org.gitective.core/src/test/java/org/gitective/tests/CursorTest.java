@@ -38,8 +38,8 @@ public class CursorTest extends GitTestCase {
 		CommitLimitFilter limit = new CommitLimitFilter(10);
 		limit.setStop(true);
 
-		CommitCursorFilter cursor = new CommitCursorFilter(
-				new AndCommitFilter().add(limit).add(bucket));
+		CommitCursorFilter cursor = new CommitCursorFilter(new AndCommitFilter(
+				limit, bucket));
 		int chunks = 0;
 		RevCommit commit = service.getLatest();
 		while (commit != null) {

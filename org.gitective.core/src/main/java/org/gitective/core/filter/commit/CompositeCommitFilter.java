@@ -11,9 +11,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.Assert;
 
 /**
- * 
+ * Filter container other filters
  */
 public abstract class CompositeCommitFilter extends CommitFilter {
 
@@ -21,6 +22,24 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * Child filters
 	 */
 	protected final List<RevFilter> filters = new LinkedList<RevFilter>();
+
+	/**
+	 * Create empty composite filter
+	 */
+	public CompositeCommitFilter() {
+
+	}
+
+	/**
+	 * Create composite filter with given child filters
+	 * 
+	 * @param filters
+	 */
+	public CompositeCommitFilter(RevFilter... filters) {
+		Assert.notNull("Filter cannot be null", filters);
+		for (RevFilter filter : filters)
+			add(filter);
+	}
 
 	/**
 	 * Add a non-null child filter to this filter.

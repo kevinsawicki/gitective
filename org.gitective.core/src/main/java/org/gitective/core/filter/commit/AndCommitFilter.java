@@ -19,6 +19,22 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public class AndCommitFilter extends CompositeCommitFilter {
 
+	/**
+	 * Create empty and commit filter
+	 */
+	public AndCommitFilter() {
+		super();
+	}
+
+	/**
+	 * Create and commit filter with given child filters
+	 * 
+	 * @param filters
+	 */
+	public AndCommitFilter(RevFilter... filters) {
+		super(filters);
+	}
+
 	@Override
 	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
 		for (RevFilter filter : filters)
