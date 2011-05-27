@@ -70,13 +70,33 @@ This example finds the number of commits in a repository that contain a [Gerrit]
 CommitCountFilter all = new CommitCountFilter();
 CommitCountFilter gerrit = new CommitCountFilter();
 AllCommitFilter filters = new AllCommitFilter();
-filters.add(new AndCommitFilter().add(new ChangeIdFilter()).add(gerrit));
+filters.add(new AndCommitFilter(new ChangeIdFilter(), gerrit));
 filters.add(all);
 CommitService service = new CommitService("/repos/egit/.git");
 service.search(filters);
 System.out.println(MessageFormat.format(
      "{0} out of {1} commits have Gerrit change ids",
      gerrit.getCount(),	all.getCount()));
+```
+
+### Get commits in blocks of 100
+This example processes commits by filling a list with a configured amount and iteratively processing the remainig commits.
+
+```java
+CommitListFilter block = new CommitListFilter();
+CommitFilter limit = new CommitLimitFilter(100).setStop(true);
+AndCommitFilter filters = new AndCommitFilter(limit, block)
+CommitCursorFilter cursor = new CommitCursorFilter(filters);
+CommitService service = new CommitService("/repos/jgit/.git");
+RevCommit commit = service.getLatest();
+while (commit != null) {
+     service.searchFrom(commit, cursor);
+
+     // Do something with the current commits contained in the block filter
+
+     commit = cursor.getLast();
+     cursor.reset();
+}
 ```
 
 ## Building from source
