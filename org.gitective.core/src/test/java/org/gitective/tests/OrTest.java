@@ -44,7 +44,7 @@ public class OrTest extends GitTestCase {
 		CommitLimitFilter limit = new CommitLimitFilter(1);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitService service = new CommitService(testRepo);
-		service.search(new OrCommitFilter().add(limit).add(count));
+		service.search(new OrCommitFilter(limit).add(count));
 		assertEquals(1, count.getCount());
 	}
 

@@ -8,6 +8,7 @@
 package org.gitective.tests;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -30,13 +31,13 @@ public class AllTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	public void testMatch() throws Exception {
-		final RevCommit[] visited = new RevCommit[] { null };
+		final AtomicReference<RevCommit> visited = new AtomicReference<RevCommit>();
 		CommitFilter filter = new CommitFilter() {
 
 			public boolean include(RevWalk walker, RevCommit cmit)
 					throws StopWalkException, MissingObjectException,
 					IncorrectObjectTypeException, IOException {
-				visited[0] = cmit;
+				visited.set(cmit);
 				return false;
 			}
 
@@ -47,6 +48,47 @@ public class AllTest extends GitTestCase {
 		RevCommit commit = add("file.txt", "content");
 		CommitService service = new CommitService(testRepo);
 		service.search(new AllCommitFilter().add(filter));
-		assertEquals(commit, visited[0]);
+		assertEquals(commit, visited.get());
+	}
+
+	/**
+	 * Test always matching despite children filters not-including
+	 * 
+	 * @throws Exception
+	 */
+	public void testMultiMatch() throws Exception {
+		final AtomicReference<RevCommit> visited1 = new AtomicReference<RevCommit>();
+		CommitFilter filter1 = new CommitFilter() {
+
+			public boolean include(RevWalk walker, RevCommit cmit)
+					throws StopWalkException, MissingObjectException,
+					IncorrectObjectTypeException, IOException {
+				visited1.set(cmit);
+				return false;
+			}
+
+			public RevFilter clone() {
+				return this;
+			}
+		};
+		final AtomicReference<RevCommit> visited2 = new AtomicReference<RevCommit>();
+		CommitFilter filter2 = new CommitFilter() {
+
+			public boolean include(RevWalk walker, RevCommit cmit)
+					throws StopWalkException, MissingObjectException,
+					IncorrectObjectTypeException, IOException {
+				visited2.set(cmit);
+				return false;
+			}
+
+			public RevFilter clone() {
+				return this;
+			}
+		};
+		RevCommit commit = add("file.txt", "content");
+		CommitService service = new CommitService(testRepo);
+		service.search(new AllCommitFilter(filter1, filter2));
+		assertEquals(commit, visited1.get());
+		assertEquals(commit, visited2.get());
 	}
 }

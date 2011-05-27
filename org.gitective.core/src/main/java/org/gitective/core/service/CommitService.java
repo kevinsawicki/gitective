@@ -4,7 +4,7 @@
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
  *  http://www.eclipse.org/legal/epl-v10.html
- ******************************************************************************/
+ *****************************************************************************/
 package org.gitective.core.service;
 
 import java.io.File;
@@ -47,14 +47,17 @@ public class CommitService extends RepositoryService {
 	}
 
 	/**
-	 * Resolve a revision string to an object id. This method will return the
-	 * resolved object id for the first repository configured for this service.
+	 * Resolve a revision string to an object id. This method will never return
+	 * null and instead will throw a {@link GitException} when the given
+	 * revision does not resolve.
 	 * 
-	 * @see #lookup(Repository, String)
+	 * This method uses the first repository configured for this service for
+	 * lookup.
+	 * 
 	 * @param revision
 	 * @return object id never null
 	 */
-	public ObjectId resolve(String revision) {
+	public ObjectId lookup(String revision) {
 		return lookup(first(), revision);
 	}
 
@@ -305,7 +308,7 @@ public class CommitService extends RepositoryService {
 	}
 
 	/**
-	 * Get latest commit. This method will return the latest commit base for the
+	 * Get latest commit. This method will return the latest commit for the
 	 * first repository configured for this service.
 	 * 
 	 * @see #getLatest(Repository)

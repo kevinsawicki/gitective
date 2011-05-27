@@ -64,6 +64,21 @@ public class CommitterTest extends GitTestCase {
 	}
 
 	/**
+	 * Test non-match of {@link CommitterFilter}
+	 * 
+	 * @throws Exception
+	 */
+	public void testNonMatch() throws Exception {
+		add("file.txt", "a");
+		CommitterFilter filter = new CommitterFilter("not the committer",
+				"not@committer.org");
+		CommitListFilter commits = new CommitListFilter();
+		CommitService service = new CommitService(testRepo);
+		service.search(new AndCommitFilter(filter, commits));
+		assertEquals(0, commits.getCommits().size());
+	}
+
+	/**
 	 * Test of {@link CommitterSetFilter}
 	 * 
 	 * @throws Exception

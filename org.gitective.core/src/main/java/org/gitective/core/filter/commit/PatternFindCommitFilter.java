@@ -27,9 +27,14 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 	protected final String pattern;
 
 	/**
+	 * Flags
+	 */
+	protected final int flags;
+
+	/**
 	 * Pattern matcher
 	 */
-	protected Matcher matcher;
+	protected final Matcher matcher;
 
 	/**
 	 * Create a pattern find commit filter
@@ -50,6 +55,7 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 		Assert.notNull("Pattern cannot be null", pattern);
 		Assert.notEmpty("Pattern cannot be empty", pattern);
 		this.pattern = pattern;
+		this.flags = flags;
 		this.matcher = Pattern.compile(pattern, flags).matcher("");
 	}
 

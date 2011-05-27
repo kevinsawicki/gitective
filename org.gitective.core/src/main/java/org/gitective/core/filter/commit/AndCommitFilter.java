@@ -20,7 +20,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class AndCommitFilter extends CompositeCommitFilter {
 
 	/**
-	 * Create empty and commit filter
+	 * Create an empty and commit filter
 	 */
 	public AndCommitFilter() {
 		super();

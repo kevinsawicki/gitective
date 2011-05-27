@@ -24,14 +24,14 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	protected final List<RevFilter> filters = new LinkedList<RevFilter>();
 
 	/**
-	 * Create empty composite filter
+	 * Create an empty composite filter
 	 */
 	public CompositeCommitFilter() {
 
 	}
 
 	/**
-	 * Create composite filter with given child filters
+	 * Create a composite filter with given child filters
 	 * 
 	 * @param filters
 	 */

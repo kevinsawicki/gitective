@@ -64,6 +64,21 @@ public class AuthorTest extends GitTestCase {
 	}
 
 	/**
+	 * Test non-match of {@link AuthorFilter}
+	 * 
+	 * @throws Exception
+	 */
+	public void testNonMatch() throws Exception {
+		add("file.txt", "a");
+		AuthorFilter filter = new AuthorFilter("not the author",
+				"not@author.org");
+		CommitListFilter commits = new CommitListFilter();
+		CommitService service = new CommitService(testRepo);
+		service.search(new AndCommitFilter(filter, commits));
+		assertEquals(0, commits.getCommits().size());
+	}
+
+	/**
 	 * Test of {@link AuthorSetFilter}
 	 * 
 	 * @throws Exception

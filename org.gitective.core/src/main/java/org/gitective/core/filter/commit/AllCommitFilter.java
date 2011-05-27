@@ -23,14 +23,14 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class AllCommitFilter extends CompositeCommitFilter {
 
 	/**
-	 * Create empty all commit filter
+	 * Create an empty all commit filter
 	 */
 	public AllCommitFilter() {
 		super();
 	}
 
 	/**
-	 * Create all comit filter with given child filters
+	 * Create an all commit filter with given child filters
 	 * 
 	 * @param filters
 	 */

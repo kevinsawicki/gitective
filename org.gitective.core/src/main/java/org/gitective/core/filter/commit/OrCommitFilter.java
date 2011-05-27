@@ -21,14 +21,14 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class OrCommitFilter extends CompositeCommitFilter {
 
 	/**
-	 * Create empty or commit filter
+	 * Create an empty or commit filter
 	 */
 	public OrCommitFilter() {
 		super();
 	}
 
 	/**
-	 * Create or commit filter with given child filters
+	 * Create an or commit filter with given child filters
 	 * 
 	 * @param filters
 	 */
