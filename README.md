@@ -57,7 +57,7 @@ CommitService service = new CommitService("/repos/productA/.git");
 RevCommit base = service.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
 service.searchBetween("master", base, count);
-System.out.println("Commits in master since release1 branch created: " + count.getCount());
+System.out.println("Commits in master since release1 was branched: " + count.getCount());
 count = new CommitCountFilter();
 service.searchBetween("release1", base, count);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
@@ -80,7 +80,7 @@ System.out.println(MessageFormat.format(
 ```
 
 ### Get commits in blocks of 100
-This example processes commits by filling a list with a configured amount and iteratively processing the remainig commits.
+This example collects commits into a list of a configured size and iteratively processes subsequent commit blocks.
 
 ```java
 CommitListFilter block = new CommitListFilter();
