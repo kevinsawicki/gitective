@@ -9,8 +9,6 @@ package org.gitective.core.filter.commit;
 
 import java.io.IOException;
 
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
-import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
@@ -22,12 +20,10 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class AndCommitFilter extends CompositeCommitFilter {
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit)
-			throws MissingObjectException, IncorrectObjectTypeException,
-			IOException {
+	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
 		for (RevFilter filter : filters)
 			if (!filter.include(walker, commit))
-				return false;
+				return include(false);
 		return true;
 	}
 

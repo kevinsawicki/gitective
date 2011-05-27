@@ -24,7 +24,7 @@ public class MultiRepoTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	public void testTwoRepos() throws Exception {
-		RevCommit repo1Commit = add("repo1file.txt", "content");
+		add("repo1file.txt", "content");
 		File repo2 = initRepo();
 		RevCommit repo2Commit = add(repo2, "repo2file.txt", "test");
 		assertEquals(0, repo2Commit.getParentCount());

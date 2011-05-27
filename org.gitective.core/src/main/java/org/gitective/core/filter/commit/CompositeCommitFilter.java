@@ -34,6 +34,13 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 		return this;
 	}
 
+	public CommitFilter reset() {
+		for (RevFilter filter : filters)
+			if (filter instanceof CommitFilter)
+				((CommitFilter) filter).reset();
+		return super.reset();
+	}
+
 	/**
 	 * Clone each filter and add to the specified list.
 	 * 

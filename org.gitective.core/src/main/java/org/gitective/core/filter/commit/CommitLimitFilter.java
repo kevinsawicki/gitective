@@ -32,9 +32,18 @@ public class CommitLimitFilter extends CommitFilter {
 		this.limit = limit;
 	}
 
+	/**
+	 * Get configured limit
+	 * 
+	 * @return limit
+	 */
+	public long getLimit() {
+		return limit;
+	}
+
 	@Override
 	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
-		return count++ < limit;
+		return include(count++ < limit);
 	}
 
 	@Override

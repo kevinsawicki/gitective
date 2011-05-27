@@ -56,7 +56,7 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
-		return matcher.reset(getText(commit)).find();
+		return include(matcher.reset(getText(commit)).find());
 	}
 
 	/**

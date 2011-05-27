@@ -232,21 +232,6 @@ public class CommitService extends RepositoryService {
 	}
 
 	/**
-	 * Search commits between the given start commit id and end revision string.
-	 * 
-	 * @param start
-	 * @param end
-	 * @param filter
-	 * @return this service
-	 */
-	public CommitService walkBetween(ObjectId start, String end,
-			RevFilter filter) {
-		for (Repository repository : this)
-			searchBetween(start, lookup(repository, end), filter);
-		return this;
-	}
-
-	/**
 	 * Get the base commit between revisions.
 	 * 
 	 * @see #getBase(Repository, String...)
