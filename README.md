@@ -58,7 +58,7 @@ RevCommit base = CommitUtils.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
 finder.findBetween("master", base, count);
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
-count = new CommitCountFilter();
+count.reset();
 CommitFinder finder = new CommitFinder(repo);
 finder.findBetween("release1", base, count);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
