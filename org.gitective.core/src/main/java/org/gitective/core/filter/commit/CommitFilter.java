@@ -15,7 +15,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public abstract class CommitFilter extends RevFilter {
 
-	private boolean stop = false;
+	private boolean stop;
 
 	/**
 	 * Set whether the search should be stopped when a commit visited is not

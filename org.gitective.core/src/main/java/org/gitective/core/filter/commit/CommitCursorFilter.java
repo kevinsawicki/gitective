@@ -22,7 +22,7 @@ import org.gitective.core.Assert;
  */
 public class CommitCursorFilter extends CommitFilter {
 
-	private RevCommit last = null;
+	private RevCommit last;
 
 	private RevFilter filter;
 
@@ -37,14 +37,12 @@ public class CommitCursorFilter extends CommitFilter {
 		this.filter = filter;
 	}
 
+	@Override
 	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
 		try {
 			boolean include = filter.include(walker, commit);
 			last = include ? null : commit;
 			return include;
-		} catch (IOException e) {
-			last = commit;
-			throw e;
 		} catch (StopWalkException e) {
 			last = commit;
 			throw e;

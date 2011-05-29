@@ -21,7 +21,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class CommitLimitFilter extends CommitFilter {
 
 	private long limit;
-	private long count = 0L;
+	private long count;
 
 	/**
 	 * Create a limit filter

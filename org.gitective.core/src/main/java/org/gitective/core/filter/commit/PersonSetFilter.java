@@ -63,7 +63,7 @@ public abstract class PersonSetFilter extends CommitFilter {
 	 * @return non-null but possibly empty set of persons
 	 */
 	public Set<PersonIdent> getPersons() {
-		return this.persons;
+		return persons;
 	}
 
 	/**

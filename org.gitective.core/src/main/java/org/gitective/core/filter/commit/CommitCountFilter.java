@@ -21,12 +21,10 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public class CommitCountFilter extends CommitFilter {
 
-	private long count = 0L;
+	private long count;
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit cmit)
-			throws StopWalkException, MissingObjectException,
-			IncorrectObjectTypeException, IOException {
+	public boolean include(RevWalk walker, RevCommit cmit) throws IOException {
 		count++;
 		return true;
 	}
