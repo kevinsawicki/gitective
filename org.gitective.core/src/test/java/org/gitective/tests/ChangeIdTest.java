@@ -10,7 +10,7 @@ package org.gitective.tests;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.ChangeIdFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link ChangeIdFilter}
@@ -26,13 +26,13 @@ public class ChangeIdTest extends GitTestCase {
 		add("file.txt", "patch",
 				"fixes a bug\nChange-Id: I12345abcde12345abcde12345abcde12345abcde");
 
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.search(new AndCommitFilter().add(new ChangeIdFilter())
+		service.find(new AndCommitFilter().add(new ChangeIdFilter())
 				.add(count));
 		assertEquals(1, count.getCount());
 
-		service.search(new AndCommitFilter().add(
+		service.find(new AndCommitFilter().add(
 				new ChangeIdFilter().clone()).add(count));
 		assertEquals(2, count.getCount());
 	}
@@ -46,9 +46,9 @@ public class ChangeIdTest extends GitTestCase {
 		add("file.txt", "patch",
 				"fixes a bug\nChange-Id: I12345abcde12345abxyz12345abcde12345abcde");
 
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.search(new AndCommitFilter().add(new ChangeIdFilter())
+		service.find(new AndCommitFilter().add(new ChangeIdFilter())
 				.add(count));
 		assertEquals(0, count.getCount());
 	}

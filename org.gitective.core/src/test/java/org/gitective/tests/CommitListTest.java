@@ -10,7 +10,7 @@ package org.gitective.tests;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link CommitListFilter}
@@ -39,8 +39,8 @@ public class CommitListTest extends GitTestCase {
 		RevCommit commit = add("file.txt", "content");
 
 		CommitListFilter filter = new CommitListFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(filter);
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(filter);
 
 		assertFalse(filter.getCommits().isEmpty());
 		assertEquals(1, filter.getCommits().size());
@@ -50,7 +50,7 @@ public class CommitListTest extends GitTestCase {
 
 		assertTrue(filter.getCommits().isEmpty());
 
-		service.search(filter);
+		service.find(filter);
 
 		assertFalse(filter.getCommits().isEmpty());
 		assertEquals(1, filter.getCommits().size());

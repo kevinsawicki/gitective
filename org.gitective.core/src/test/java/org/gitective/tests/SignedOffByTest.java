@@ -12,7 +12,7 @@ import org.eclipse.jgit.lib.PersonIdent;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.SignedOffByFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link SignedOffByFilter}
@@ -29,13 +29,13 @@ public class SignedOffByTest extends GitTestCase {
 		add("file.txt", "patch", Constants.SIGNED_OFF_BY_TAG + person.getName()
 				+ " <" + person.getEmailAddress() + ">");
 
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.search(new AndCommitFilter().add(
+		service.find(new AndCommitFilter().add(
 				new SignedOffByFilter(person)).add(count));
 		assertEquals(1, count.getCount());
 
-		service.search(new AndCommitFilter().add(
+		service.find(new AndCommitFilter().add(
 				new SignedOffByFilter(person).clone()).add(count));
 		assertEquals(2, count.getCount());
 	}
@@ -49,9 +49,9 @@ public class SignedOffByTest extends GitTestCase {
 		PersonIdent person = new PersonIdent("Test user", "test@user.com");
 		add("file.txt", "patch", Constants.SIGNED_OFF_BY_TAG + "person");
 
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.search(new AndCommitFilter().add(
+		service.find(new AndCommitFilter().add(
 				new SignedOffByFilter(person)).add(count));
 		assertEquals(0, count.getCount());
 	}

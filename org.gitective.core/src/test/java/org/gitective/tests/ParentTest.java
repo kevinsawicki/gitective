@@ -13,7 +13,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.filter.commit.ParentCountFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link ParentCountFilter}
@@ -30,8 +30,8 @@ public class ParentTest extends GitTestCase {
 		add("file.txt", "abcd");
 
 		CommitCountFilter count = new CommitCountFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter().add(new ParentCountFilter(1)).add(
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter().add(new ParentCountFilter(1)).add(
 				count));
 		assertEquals(1, count.getCount());
 	}
@@ -45,8 +45,8 @@ public class ParentTest extends GitTestCase {
 		add("file.txt", "abc");
 
 		CommitCountFilter count = new CommitCountFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter().add(new ParentCountFilter()).add(
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter().add(new ParentCountFilter()).add(
 				count));
 		assertEquals(0, count.getCount());
 	}
@@ -61,9 +61,9 @@ public class ParentTest extends GitTestCase {
 		RevCommit commit2 = add("file.txt", "abcd");
 
 		CommitListFilter commits = new CommitListFilter();
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		ParentCountFilter parents = new ParentCountFilter(1);
-		service.search(new AndCommitFilter().add(parents).add(commits));
+		service.find(new AndCommitFilter().add(parents).add(commits));
 		assertEquals(commit2, commits.getCommits().get(0));
 
 		RevFilter clone = parents.clone();
@@ -71,7 +71,7 @@ public class ParentTest extends GitTestCase {
 		assertNotSame(parents, clone);
 
 		commits = new CommitListFilter();
-		service.search(new AndCommitFilter().add(clone).add(commits));
+		service.find(new AndCommitFilter().add(clone).add(commits));
 		assertEquals(commit2, commits.getCommits().get(0));
 
 	}

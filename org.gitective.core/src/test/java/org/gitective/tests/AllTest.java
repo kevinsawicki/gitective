@@ -19,7 +19,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.AllCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link AllCommitFilter}
@@ -61,8 +61,8 @@ public class AllTest extends GitTestCase {
 			}
 		};
 		RevCommit commit = add("file.txt", "content");
-		CommitService service = new CommitService(testRepo);
-		service.search(new AllCommitFilter().add(filter));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AllCommitFilter().add(filter));
 		assertEquals(commit, visited.get());
 	}
 
@@ -101,8 +101,8 @@ public class AllTest extends GitTestCase {
 			}
 		};
 		RevCommit commit = add("file.txt", "content");
-		CommitService service = new CommitService(testRepo);
-		service.search(new AllCommitFilter(filter1, filter2));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AllCommitFilter(filter1, filter2));
 		assertEquals(commit, visited1.get());
 		assertEquals(commit, visited2.get());
 	}

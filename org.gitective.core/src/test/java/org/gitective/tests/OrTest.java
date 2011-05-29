@@ -12,7 +12,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.OrCommitFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link OrCommitFilter}
@@ -43,8 +43,8 @@ public class OrTest extends GitTestCase {
 		add("file.txt", "testa");
 		CommitLimitFilter limit = new CommitLimitFilter(1);
 		CommitCountFilter count = new CommitCountFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new OrCommitFilter(limit).add(count));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new OrCommitFilter(limit).add(count));
 		assertEquals(1, count.getCount());
 	}
 
@@ -60,8 +60,8 @@ public class OrTest extends GitTestCase {
 
 		CommitLimitFilter limit = new CommitLimitFilter(2);
 		CommitCountFilter count = new CommitCountFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter().add(
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter().add(
 				new OrCommitFilter().add(limit)).add(count));
 		assertEquals(2, count.getCount());
 	}

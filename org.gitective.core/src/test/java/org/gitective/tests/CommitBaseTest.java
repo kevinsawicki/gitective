@@ -8,13 +8,17 @@
 package org.gitective.tests;
 
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepository;
+import org.gitective.core.CommitUtils;
 import org.gitective.core.filter.commit.CommitListFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
- * Tests of {@link CommitService#getBase(org.eclipse.jgit.lib.ObjectId...)} and
- * {@link CommitService#getBase(String...)}
+ * Tests of
+ * {@link CommitUtils#getBase(Repository, org.eclipse.jgit.lib.ObjectId...)} and
+ * {@link CommitUtils#getBase(Repository, String...)}
  */
 public class CommitBaseTest extends GitTestCase {
 
@@ -30,12 +34,18 @@ public class CommitBaseTest extends GitTestCase {
 		RevCommit commit2 = add("file.txt", "edit 1");
 		RevCommit commit3 = add("file.txt", "edit 2");
 
-		CommitService service = new CommitService(testRepo);
-		RevCommit base = service.getBase(Constants.MASTER, "release1");
+		Repository repo = new FileRepository(testRepo);
+		RevCommit base = CommitUtils
+				.getBase(repo, Constants.MASTER, "release1");
 		assertEquals(commit1, base);
 
+		RevCommit base2 = CommitUtils.getBase(repo,
+				CommitUtils.getCommit(repo, Constants.MASTER),
+				CommitUtils.getCommit(repo, "release1"));
+		assertEquals(base, base2);
+
 		CommitListFilter filter = new CommitListFilter();
-		service.searchBetween(commit3, base, filter);
+		new CommitFinder(testRepo).findBetween(commit3, base, filter);
 		assertEquals(2, filter.getCommits().size());
 		assertEquals(commit3, filter.getCommits().get(0));
 		assertEquals(commit2, filter.getCommits().get(1));

@@ -12,7 +12,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitMessageFindFilter;
 import org.gitective.core.filter.commit.PatternFindCommitFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link PatternFindCommitFilter}
@@ -28,8 +28,8 @@ public class FindTest extends GitTestCase {
 		add("file.txt", "content", "matchmiddlehere");
 		CommitMessageFindFilter find = new CommitMessageFindFilter("middle");
 		CommitCountFilter count = new CommitCountFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter(find, count));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter(find, count));
 		assertEquals(1, count.getCount());
 	}
 
@@ -42,8 +42,8 @@ public class FindTest extends GitTestCase {
 		add("file.txt", "content", "matchmiddlehere");
 		CommitMessageFindFilter find = new CommitMessageFindFilter("nomatch");
 		CommitCountFilter count = new CommitCountFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter(find, count));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter(find, count));
 		assertEquals(0, count.getCount());
 	}
 

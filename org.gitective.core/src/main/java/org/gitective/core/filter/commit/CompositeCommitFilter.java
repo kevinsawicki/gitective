@@ -7,7 +7,7 @@
  *****************************************************************************/
 package org.gitective.core.filter.commit;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jgit.revwalk.filter.RevFilter;
@@ -21,7 +21,7 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	/**
 	 * Child filters
 	 */
-	protected final List<RevFilter> filters = new LinkedList<RevFilter>();
+	protected final List<RevFilter> filters = new ArrayList<RevFilter>();
 
 	/**
 	 * Create an empty composite filter
@@ -48,8 +48,8 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * @return this filter
 	 */
 	public CompositeCommitFilter add(RevFilter filter) {
-		if (filter != null && filter != this)
-			this.filters.add(filter);
+		Assert.notNull("Filter cannot be null", filter);
+		filters.add(filter);
 		return this;
 	}
 

@@ -14,7 +14,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.filter.commit.CommitterFilter;
 import org.gitective.core.filter.commit.CommitterSetFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of committer filters
@@ -56,8 +56,8 @@ public class CommitterTest extends GitTestCase {
 		RevCommit commit2 = add("file.txt", "c");
 		CommitterFilter filter = new CommitterFilter(findUser);
 		CommitListFilter commits = new CommitListFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter().add(filter).add(commits));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter().add(filter).add(commits));
 		assertEquals(2, commits.getCommits().size());
 		assertEquals(commit2, commits.getCommits().get(0));
 		assertEquals(commit1, commits.getCommits().get(1));
@@ -73,8 +73,8 @@ public class CommitterTest extends GitTestCase {
 		CommitterFilter filter = new CommitterFilter("not the committer",
 				"not@committer.org");
 		CommitListFilter commits = new CommitListFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter(filter, commits));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter(filter, commits));
 		assertEquals(0, commits.getCommits().size());
 	}
 
@@ -91,8 +91,8 @@ public class CommitterTest extends GitTestCase {
 		CommitterSetFilter filter = new CommitterSetFilter();
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(findUser));
-		CommitService service = new CommitService(testRepo);
-		service.search(filter);
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(filter);
 		assertEquals(2, filter.getPersons().size());
 		assertTrue(filter.getPersons().contains(findUser));
 	}

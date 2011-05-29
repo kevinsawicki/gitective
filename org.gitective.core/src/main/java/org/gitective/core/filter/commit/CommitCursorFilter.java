@@ -57,7 +57,7 @@ public class CommitCursorFilter extends CommitFilter {
 	 * @return commit
 	 */
 	public RevCommit getLast() {
-		return this.last;
+		return last;
 	}
 
 	@Override
@@ -68,6 +68,7 @@ public class CommitCursorFilter extends CommitFilter {
 		return super.reset();
 	}
 
+	@Override
 	public RevFilter clone() {
 		return new CommitCursorFilter(filter);
 	}

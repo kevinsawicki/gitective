@@ -14,7 +14,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.AuthorFilter;
 import org.gitective.core.filter.commit.AuthorSetFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of author filters
@@ -56,8 +56,8 @@ public class AuthorTest extends GitTestCase {
 		RevCommit commit2 = add("file.txt", "c");
 		AuthorFilter filter = new AuthorFilter(findUser);
 		CommitListFilter commits = new CommitListFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter().add(filter).add(commits));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter().add(filter).add(commits));
 		assertEquals(2, commits.getCommits().size());
 		assertEquals(commit2, commits.getCommits().get(0));
 		assertEquals(commit1, commits.getCommits().get(1));
@@ -73,8 +73,8 @@ public class AuthorTest extends GitTestCase {
 		AuthorFilter filter = new AuthorFilter("not the author",
 				"not@author.org");
 		CommitListFilter commits = new CommitListFilter();
-		CommitService service = new CommitService(testRepo);
-		service.search(new AndCommitFilter(filter, commits));
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(new AndCommitFilter(filter, commits));
 		assertEquals(0, commits.getCommits().size());
 	}
 
@@ -91,8 +91,8 @@ public class AuthorTest extends GitTestCase {
 		AuthorSetFilter filter = new AuthorSetFilter();
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(findUser));
-		CommitService service = new CommitService(testRepo);
-		service.search(filter);
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(filter);
 		assertEquals(2, filter.getPersons().size());
 		assertTrue(filter.getPersons().contains(findUser));
 	}
@@ -107,8 +107,8 @@ public class AuthorTest extends GitTestCase {
 		AuthorSetFilter filter = new AuthorSetFilter();
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(author));
-		CommitService service = new CommitService(testRepo);
-		service.search(filter);
+		CommitFinder service = new CommitFinder(testRepo);
+		service.find(filter);
 		assertEquals(1, filter.getPersons().size());
 		assertTrue(filter.getPersons().contains(author));
 		filter.reset();

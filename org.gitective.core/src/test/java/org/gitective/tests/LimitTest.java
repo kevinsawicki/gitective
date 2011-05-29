@@ -11,7 +11,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link CommitLimitFilter}
@@ -27,16 +27,16 @@ public class LimitTest extends GitTestCase {
 		add("file1.txt", "a");
 		add("file1.txt", "b");
 		add("file1.txt", "c");
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(2);
-		service.search(new AndCommitFilter().add(limit).add(count));
+		service.find(new AndCommitFilter().add(limit).add(count));
 		assertEquals(2, count.getCount());
 		count.reset();
 		RevFilter clone = limit.clone();
 		assertNotNull(clone);
 		assertNotSame(limit, clone);
-		service.search(new AndCommitFilter().add(clone).add(count));
+		service.find(new AndCommitFilter().add(clone).add(count));
 		assertEquals(2, count.getCount());
 	}
 
@@ -47,17 +47,17 @@ public class LimitTest extends GitTestCase {
 	 */
 	public void testReset() throws Exception {
 		add("file1.txt", "a");
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(2);
-		service.search(new AndCommitFilter().add(limit).add(count));
+		service.find(new AndCommitFilter().add(limit).add(count));
 		assertEquals(1, count.getCount());
-		service.search(new AndCommitFilter().add(limit).add(count));
+		service.find(new AndCommitFilter().add(limit).add(count));
 		assertEquals(2, count.getCount());
-		service.search(new AndCommitFilter().add(limit).add(count));
+		service.find(new AndCommitFilter().add(limit).add(count));
 		assertEquals(2, count.getCount());
 		limit.reset();
-		service.search(new AndCommitFilter().add(limit).add(count));
+		service.find(new AndCommitFilter().add(limit).add(count));
 		assertEquals(3, count.getCount());
 	}
 
@@ -70,13 +70,13 @@ public class LimitTest extends GitTestCase {
 		add("file1.txt", "a");
 		add("file2.txt", "b");
 		add("file3.txt", "c");
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.search(new AndCommitFilter()
+		service.find(new AndCommitFilter()
 				.add(new CommitLimitFilter(1)).add(count));
 		assertEquals(1, count.getCount());
 		count.reset();
-		service.search(new AndCommitFilter()
+		service.find(new AndCommitFilter()
 				.add(new CommitLimitFilter(3)).add(count));
 		assertEquals(3, count.getCount());
 	}

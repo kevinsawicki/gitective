@@ -8,11 +8,12 @@
 package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepository;
+import org.gitective.core.CommitUtils;
 import org.gitective.core.GitException;
-import org.gitective.core.service.CommitService;
 
 /**
- * Unit tests of {@link CommitService#getLatest()}
+ * Unit tests of {@link CommitUtils#getLatest(org.eclipse.jgit.lib.Repository)}
  */
 public class LatestTest extends GitTestCase {
 
@@ -23,8 +24,8 @@ public class LatestTest extends GitTestCase {
 	 */
 	public void testLatest() throws Exception {
 		RevCommit commit = add("file.txt", "content");
-		CommitService service = new CommitService(testRepo);
-		assertEquals(commit, service.getLatest());
+		assertEquals(commit,
+				CommitUtils.getLatest(new FileRepository(testRepo)));
 	}
 
 	/**
@@ -33,12 +34,22 @@ public class LatestTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	public void testLatestOnEmptyRepository() throws Exception {
-		CommitService service = new CommitService(testRepo);
 		try {
-			service.getLatest();
+			CommitUtils.getLatest(new FileRepository(testRepo));
 			fail("Exception not thrown");
 		} catch (GitException e) {
-			assertNotNull(e);
+			assertNotNull(e.getMessage());
 		}
+	}
+
+	/**
+	 * Test lookup of commit by id
+	 * 
+	 * @throws Exception
+	 */
+	public void testById() throws Exception {
+		RevCommit commit = add("file.txt", "content");
+		assertEquals(commit,
+				CommitUtils.getCommit(new FileRepository(testRepo), commit));
 	}
 }

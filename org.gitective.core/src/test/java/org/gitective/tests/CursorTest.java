@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepository;
+import org.gitective.core.CommitUtils;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCursorFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
-import org.gitective.core.service.CommitService;
+import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of {@link CommitCursorFilter}
@@ -33,7 +35,7 @@ public class CursorTest extends GitTestCase {
 		for (int i = 0; i < commitCount; i++)
 			commits.add(add("file.txt", "revision " + i));
 
-		CommitService service = new CommitService(testRepo);
+		CommitFinder service = new CommitFinder(testRepo);
 		CommitListFilter bucket = new CommitListFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(10);
 		limit.setStop(true);
@@ -41,9 +43,9 @@ public class CursorTest extends GitTestCase {
 		CommitCursorFilter cursor = new CommitCursorFilter(new AndCommitFilter(
 				limit, bucket));
 		int chunks = 0;
-		RevCommit commit = service.getLatest();
+		RevCommit commit = CommitUtils.getLatest(new FileRepository(testRepo));
 		while (commit != null) {
-			service.searchFrom(commit, cursor);
+			service.findFrom(commit, cursor);
 			assertEquals(limit.getLimit(), bucket.getCommits().size());
 			commits.removeAll(bucket.getCommits());
 			commit = cursor.getLast();

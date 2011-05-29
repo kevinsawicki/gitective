@@ -4,14 +4,11 @@
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
  *  http://www.eclipse.org/legal/epl-v10.html
- ******************************************************************************/
+ *****************************************************************************/
 package org.gitective.core.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepository;
@@ -19,21 +16,14 @@ import org.gitective.core.Assert;
 import org.gitective.core.GitException;
 
 /**
- * Base service class for working with a {@link Repository}
+ * Base service class for working with one or more {@link Repository} instances.
  */
-public class RepositoryService implements Iterable<Repository> {
-
-	private final Deque<Repository> repositories = new LinkedList<Repository>();
+public class RepositoryService {
 
 	/**
-	 * Add non-null repository to this service
-	 * 
-	 * @param repository
+	 * Repositories
 	 */
-	protected void add(Repository repository) {
-		Assert.notNull("Repository cannot be null", repository);
-		repositories.addLast(repository);
-	}
+	protected final Repository[] repositories;
 
 	/**
 	 * Create a service for the repositories at the specified directory paths.
@@ -43,12 +33,13 @@ public class RepositoryService implements Iterable<Repository> {
 	public RepositoryService(String... gitDirs) {
 		Assert.notNull("Directories cannot be null", gitDirs);
 		Assert.notEmpty("Directories cannot be empty", gitDirs);
-		for (String gitDir : gitDirs)
-			try {
-				add(new FileRepository(gitDir));
-			} catch (IOException e) {
-				throw new GitException(e);
-			}
+		repositories = new Repository[gitDirs.length];
+		try {
+			for (int i = 0; i < gitDirs.length; i++)
+				repositories[i] = new FileRepository(gitDirs[i]);
+		} catch (IOException e) {
+			throw new GitException(e);
+		}
 	}
 
 	/**
@@ -59,12 +50,13 @@ public class RepositoryService implements Iterable<Repository> {
 	public RepositoryService(File... gitDirs) {
 		Assert.notNull("Directories cannot be null", gitDirs);
 		Assert.notEmpty("Directories cannot be empty", gitDirs);
-		for (File gitDir : gitDirs)
-			try {
-				add(new FileRepository(gitDir));
-			} catch (IOException e) {
-				throw new GitException(e);
-			}
+		repositories = new Repository[gitDirs.length];
+		try {
+			for (int i = 0; i < gitDirs.length; i++)
+				repositories[i] = new FileRepository(gitDirs[i]);
+		} catch (IOException e) {
+			throw new GitException(e);
+		}
 	}
 
 	/**
@@ -75,25 +67,8 @@ public class RepositoryService implements Iterable<Repository> {
 	public RepositoryService(Repository... repositories) {
 		Assert.notNull("Repositories cannot be null", repositories);
 		Assert.notEmpty("Repositories cannot be empty", repositories);
-		for (Repository repository : repositories)
-			add(repository);
+		this.repositories = new Repository[repositories.length];
+		System.arraycopy(repositories, 0, this.repositories, 0,
+				repositories.length);
 	}
-
-	/**
-	 * Get an iterator over all repositories configured for this service. This
-	 * iterator will always have at least one element.
-	 */
-	public final Iterator<Repository> iterator() {
-		return this.repositories.iterator();
-	}
-
-	/**
-	 * Get first repository
-	 * 
-	 * @return non-null repository
-	 */
-	protected final Repository first() {
-		return this.repositories.peekFirst();
-	}
-
 }
