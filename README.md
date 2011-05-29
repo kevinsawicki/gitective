@@ -16,8 +16,8 @@ Shown below are several examples of using the gitective filters and commit servi
 ### Get the latest commit in a repository
 
 ```java
-CommitService service = new CommitService("/repos/myrepo/.git");
-RevCommit latestCommit = service.getLatest();
+Repository repo = new FileRepository("/repos/myrepo/.git");
+RevCommit latestCommit = CommitUtils.getLatest(repo);
 System.out.println("Latest commit is " + latestCommit.name());
 ```
 
@@ -31,9 +31,9 @@ AndCommitFilter filters = new AndCommitFilter();
 filters.add(new AuthorFilter(person));
 filters.add(new CommitterFilter(person).negate());
 filters.add(count);
-CommitService service = new CommitService("/repos/myrepo/.git");
-service.search(filters);
-System.out.println(count.getCount()); //Prints the number of commits
+CommitFinder finder = new CommitFinder("/repos/myrepo/.git");
+finder.find(filters);
+System.out.println(count.getCount());
 ```
 
 ### Find everyone who has authored commits that were 10-way merges
@@ -43,8 +43,8 @@ This example may seem uncommon but it will return 6 different users when run aga
 AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
 filters.add(new ParentCountFilter(10)).add(authors);
-CommitService service = new CommitService("/repos/linux-2.6/.git");
-service.search(filters);
+CommitFinder finder = new CommitFinder("/repos/linux-2.6/.git");
+finder.find(filters);
 for (PersonIdent author : authors.getPersons())
      System.out.println(author);
 ```
@@ -53,13 +53,14 @@ for (PersonIdent author : authors.getPersons())
 This example assumes two current branches,  _master_ and a  _release1_ branch that was created from master some time ago. Both branches have had subsequent commits since the _release1_ branch was created.
 
 ```java
-CommitService service = new CommitService("/repos/productA/.git");
-RevCommit base = service.getBase("master", "release1");
+Repository repo = new FileRepository("/repos/productA/.git");
+CommitFinder finder = new CommitFinder(repo);
+RevCommit base = CommitUtils.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
-service.searchBetween("master", base, count);
+finder.findBetween("master", base, count);
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
 count = new CommitCountFilter();
-service.searchBetween("release1", base, count);
+finder.findBetween("release1", base, count);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
 ```
 
@@ -72,8 +73,8 @@ CommitCountFilter gerrit = new CommitCountFilter();
 AllCommitFilter filters = new AllCommitFilter();
 filters.add(new AndCommitFilter(new ChangeIdFilter(), gerrit));
 filters.add(all);
-CommitService service = new CommitService("/repos/egit/.git");
-service.search(filters);
+CommitFinder finder = new CommitFinder("/repos/egit/.git");
+finder.find(filters);
 System.out.println(MessageFormat.format(
      "{0} out of {1} commits have Gerrit change ids",
      gerrit.getCount(),	all.getCount()));
@@ -87,10 +88,11 @@ CommitListFilter block = new CommitListFilter();
 CommitFilter limit = new CommitLimitFilter(100).setStop(true);
 AndCommitFilter filters = new AndCommitFilter(limit, block)
 CommitCursorFilter cursor = new CommitCursorFilter(filters);
-CommitService service = new CommitService("/repos/jgit/.git");
-RevCommit commit = service.getLatest();
+Repository repo = new FileRepository("/repos/jgit/.git");
+CommitFinder finder = new CommitFinder(repo);
+RevCommit commit = CommitUtils.getLatest(repo);
 while (commit != null) {
-     service.searchFrom(commit, cursor);
+     finder.findFrom(commit, cursor);
 
      // Do something with the current commits contained in the block filter
 
