@@ -54,12 +54,12 @@ This example assumes two current branches,  _master_ and a  _release1_ branch th
 
 ```java
 Repository repo = new FileRepository("/repos/productA/.git");
-CommitFinder finder = new CommitFinder(repo);
 RevCommit base = CommitUtils.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
 finder.findBetween("master", base, count);
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
 count = new CommitCountFilter();
+CommitFinder finder = new CommitFinder(repo);
 finder.findBetween("release1", base, count);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
 ```
@@ -94,7 +94,7 @@ RevCommit commit = CommitUtils.getLatest(repo);
 while (commit != null) {
      finder.findFrom(commit, cursor);
 
-     // Do something with the current commits contained in the block filter
+     // block filter now contains a new block of commits
 
      commit = cursor.getLast();
      cursor.reset();
