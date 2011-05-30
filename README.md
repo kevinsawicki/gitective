@@ -42,7 +42,7 @@ This example may seem uncommon but it will return 6 different users when run aga
 ```java
 AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
-filters.add(new ParentCountFilter(10)).add(authors);
+filters.add(new ParentCountFilter(10), authors);
 CommitFinder finder = new CommitFinder("/repos/linux-2.6/.git");
 finder.setFilter(filters).find();
 for (PersonIdent author : authors.getPersons())
@@ -57,10 +57,10 @@ Repository repo = new FileRepository("/repos/productA/.git");
 RevCommit base = CommitUtils.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
 count.setFilter(count);
+CommitFinder finder = new CommitFinder(repo);
 finder.findBetween("master", base);
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
 count.reset();
-CommitFinder finder = new CommitFinder(repo);
 finder.findBetween("release1", base);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
 ```
@@ -102,6 +102,17 @@ while (commit != null) {
      commit = cursor.getLast();
      cursor.reset();
 }
+```
+
+### Find commits referencing bugs
+This example collects all the commits that have a 'Bug: XXXXXXX' line in the commit message.
+
+```java
+CommitListFilter commits = new CommitListFilter();
+AndCommitFilter filter = new AndCommitFilter(new BugFilter(), commits)
+Repository repo = new FileRepository("/repos/jgit/.git");
+CommitFinder finder = new CommitFinder(repo);
+finder.setFilter(filter).find();
 ```
 
 ## Building from source
