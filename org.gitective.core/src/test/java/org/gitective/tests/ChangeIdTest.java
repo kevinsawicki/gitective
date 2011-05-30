@@ -28,11 +28,11 @@ public class ChangeIdTest extends GitTestCase {
 
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.setRevFilter(new AndCommitFilter(new ChangeIdFilter(), count));
+		service.setFilter(new AndCommitFilter(new ChangeIdFilter(), count));
 		service.find();
 		assertEquals(1, count.getCount());
 
-		service.setRevFilter(new AndCommitFilter(new ChangeIdFilter().clone(),
+		service.setFilter(new AndCommitFilter(new ChangeIdFilter().clone(),
 				count));
 		service.find();
 		assertEquals(2, count.getCount());
@@ -49,7 +49,7 @@ public class ChangeIdTest extends GitTestCase {
 
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.setRevFilter(new AndCommitFilter(new ChangeIdFilter(), count));
+		service.setFilter(new AndCommitFilter(new ChangeIdFilter(), count));
 		service.find();
 		assertEquals(0, count.getCount());
 	}

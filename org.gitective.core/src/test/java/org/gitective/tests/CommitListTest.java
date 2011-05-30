@@ -40,7 +40,7 @@ public class CommitListTest extends GitTestCase {
 
 		CommitListFilter filter = new CommitListFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(filter);
+		service.setFilter(filter);
 		service.find();
 
 		assertFalse(filter.getCommits().isEmpty());

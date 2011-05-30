@@ -57,23 +57,23 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Set {@link RevFilter} to use to capture commits during searches.
+	 * Set the {@link RevFilter} to use to capture commits during searches.
 	 * 
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder setRevFilter(RevFilter filter) {
+	public CommitFinder setFilter(RevFilter filter) {
 		revFilter = filter;
 		return this;
 	}
 
 	/**
-	 * Set tree filter to use to limit commits searched.
+	 * Set the {@link TreeFilter} to use to limit commits visited.
 	 * 
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder setTreeFilter(TreeFilter filter) {
+	public CommitFinder setFilter(TreeFilter filter) {
 		this.treeFilter = filter;
 		return this;
 	}

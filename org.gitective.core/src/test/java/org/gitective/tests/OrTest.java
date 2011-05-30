@@ -43,7 +43,7 @@ public class OrTest extends GitTestCase {
 		CommitLimitFilter limit = new CommitLimitFilter(1);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(new OrCommitFilter(limit, count)).find();
+		service.setFilter(new OrCommitFilter(limit, count)).find();
 		assertEquals(1, count.getCount());
 	}
 
@@ -60,7 +60,7 @@ public class OrTest extends GitTestCase {
 		CommitLimitFilter limit = new CommitLimitFilter(2);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(new AndCommitFilter(new OrCommitFilter(limit),
+		service.setFilter(new AndCommitFilter(new OrCommitFilter(limit),
 				count));
 		service.find();
 		assertEquals(2, count.getCount());

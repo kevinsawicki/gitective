@@ -31,7 +31,7 @@ public class ParentTest extends GitTestCase {
 
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(new AndCommitFilter(new ParentCountFilter(1),
+		service.setFilter(new AndCommitFilter(new ParentCountFilter(1),
 				count));
 		service.find();
 		assertEquals(1, count.getCount());
@@ -47,7 +47,7 @@ public class ParentTest extends GitTestCase {
 
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(new AndCommitFilter(new ParentCountFilter(), count));
+		service.setFilter(new AndCommitFilter(new ParentCountFilter(), count));
 		service.find();
 		assertEquals(0, count.getCount());
 	}
@@ -64,7 +64,7 @@ public class ParentTest extends GitTestCase {
 		CommitListFilter commits = new CommitListFilter();
 		CommitFinder service = new CommitFinder(testRepo);
 		ParentCountFilter parents = new ParentCountFilter(1);
-		service.setRevFilter(new AndCommitFilter(parents, commits));
+		service.setFilter(new AndCommitFilter(parents, commits));
 		service.find();
 		assertEquals(commit2, commits.getCommits().get(0));
 
@@ -73,7 +73,7 @@ public class ParentTest extends GitTestCase {
 		assertNotSame(parents, clone);
 
 		commits = new CommitListFilter();
-		service.setRevFilter(new AndCommitFilter(clone, commits));
+		service.setFilter(new AndCommitFilter(clone, commits));
 		service.find();
 		assertEquals(commit2, commits.getCommits().get(0));
 

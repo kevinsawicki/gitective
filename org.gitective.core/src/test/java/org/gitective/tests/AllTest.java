@@ -62,7 +62,7 @@ public class AllTest extends GitTestCase {
 		};
 		RevCommit commit = add("file.txt", "content");
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(new AllCommitFilter(filter));
+		service.setFilter(new AllCommitFilter(filter));
 		service.find();
 		assertEquals(commit, visited.get());
 	}
@@ -103,7 +103,7 @@ public class AllTest extends GitTestCase {
 		};
 		RevCommit commit = add("file.txt", "content");
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(new AllCommitFilter(filter1, filter2));
+		service.setFilter(new AllCommitFilter(filter1, filter2));
 		service.find();
 		assertEquals(commit, visited1.get());
 		assertEquals(commit, visited2.get());

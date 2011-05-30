@@ -30,13 +30,13 @@ public class LimitTest extends GitTestCase {
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(2);
-		service.setRevFilter(new AndCommitFilter(limit, count)).find();
+		service.setFilter(new AndCommitFilter(limit, count)).find();
 		assertEquals(2, count.getCount());
 		count.reset();
 		RevFilter clone = limit.clone();
 		assertNotNull(clone);
 		assertNotSame(limit, clone);
-		service.setRevFilter(new AndCommitFilter(clone, count)).find();
+		service.setFilter(new AndCommitFilter(clone, count)).find();
 		assertEquals(2, count.getCount());
 	}
 
@@ -50,7 +50,7 @@ public class LimitTest extends GitTestCase {
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(2);
-		service.setRevFilter(new AndCommitFilter(limit, count));
+		service.setFilter(new AndCommitFilter(limit, count));
 		service.find();
 		assertEquals(1, count.getCount());
 		service.find();
@@ -73,12 +73,12 @@ public class LimitTest extends GitTestCase {
 		add("file3.txt", "c");
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.setRevFilter(new AndCommitFilter(new CommitLimitFilter(1),
+		service.setFilter(new AndCommitFilter(new CommitLimitFilter(1),
 				count));
 		service.find();
 		assertEquals(1, count.getCount());
 		count.reset();
-		service.setRevFilter(new AndCommitFilter(new CommitLimitFilter(3),
+		service.setFilter(new AndCommitFilter(new CommitLimitFilter(3),
 				count));
 		service.find();
 		assertEquals(3, count.getCount());

@@ -29,7 +29,7 @@ public class FindTest extends GitTestCase {
 		CommitMessageFindFilter find = new CommitMessageFindFilter("middle");
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(new AndCommitFilter(find, count)).find();
+		service.setFilter(new AndCommitFilter(find, count)).find();
 		assertEquals(1, count.getCount());
 	}
 
@@ -43,7 +43,7 @@ public class FindTest extends GitTestCase {
 		CommitMessageFindFilter find = new CommitMessageFindFilter("nomatch");
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setRevFilter(new AndCommitFilter(find, count)).find();
+		service.setFilter(new AndCommitFilter(find, count)).find();
 		assertEquals(0, count.getCount());
 	}
 
