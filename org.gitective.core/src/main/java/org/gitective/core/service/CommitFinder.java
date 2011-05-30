@@ -9,7 +9,6 @@ package org.gitective.core.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
@@ -18,6 +17,7 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.Assert;
+import org.gitective.core.CommitUtils;
 import org.gitective.core.GitException;
 
 /**
@@ -79,30 +79,6 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Resolve a revision string to an object id in the given repository. This
-	 * method will never return null and instead will throw a
-	 * {@link GitException} when the given revision does not resolve.
-	 * 
-	 * @param repository
-	 * @param revision
-	 * @return object id that is never null
-	 */
-	protected ObjectId lookup(Repository repository, String revision) {
-		Assert.notNull("Repository cannot be null", repository);
-		Assert.notNull("Revision cannot be null", revision);
-		Assert.notEmpty("Revision cannot be empty", revision);
-		try {
-			ObjectId id = repository.resolve(revision);
-			if (id == null)
-				throw new GitException(MessageFormat.format(
-						"Revision ''{0}'' could not be resolved", revision));
-			return id;
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
-	}
-
-	/**
 	 * Walk commits between the start commit id and end commit id. Starting
 	 * commit and filter cannot be null.
 	 * 
@@ -156,7 +132,7 @@ public class CommitFinder extends RepositoryService {
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			walk(repo, lookup(repo, start), null);
+			walk(repo, CommitUtils.getCommit(repo, start), null);
 		}
 		return this;
 	}
@@ -200,7 +176,7 @@ public class CommitFinder extends RepositoryService {
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			walk(repo, lookup(repo, start), end);
+			walk(repo, CommitUtils.getCommit(repo, start), end);
 		}
 		return this;
 	}
@@ -219,7 +195,7 @@ public class CommitFinder extends RepositoryService {
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			walk(repo, start, lookup(repo, end));
+			walk(repo, start, CommitUtils.getCommit(repo, end));
 		}
 		return this;
 	}
@@ -238,7 +214,8 @@ public class CommitFinder extends RepositoryService {
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			walk(repo, lookup(repo, start), lookup(repo, end));
+			walk(repo, CommitUtils.getCommit(repo, start),
+					CommitUtils.getCommit(repo, end));
 		}
 		return this;
 	}
