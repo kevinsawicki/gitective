@@ -71,11 +71,9 @@ This example finds the number of commits in a repository that contain a [Gerrit]
 CommitCountFilter all = new CommitCountFilter();
 CommitCountFilter gerrit = new CommitCountFilter();
 AllCommitFilter filters = new AllCommitFilter();
-filters.add(new AndCommitFilter(new ChangeIdFilter(), gerrit));
-filters.add(all);
+filters.add(new AndCommitFilter(new ChangeIdFilter(), gerrit), all);
 CommitFinder finder = new CommitFinder("/repos/egit/.git");
-finder.setFilter(filters);
-finder.find();
+finder.setFilter(filters).find();
 System.out.println(MessageFormat.format(
      "{0} out of {1} commits have Gerrit change ids",
      gerrit.getCount(),	all.getCount()));
