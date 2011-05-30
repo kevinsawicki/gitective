@@ -32,7 +32,7 @@ filters.add(new AuthorFilter(person));
 filters.add(new CommitterFilter(person).negate());
 filters.add(count);
 CommitFinder finder = new CommitFinder("/repos/myrepo/.git");
-finder.setRevFilter(filters).find();
+finder.setFilter(filters).find();
 System.out.println(count.getCount());
 ```
 
@@ -44,7 +44,7 @@ AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
 filters.add(new ParentCountFilter(10)).add(authors);
 CommitFinder finder = new CommitFinder("/repos/linux-2.6/.git");
-finder.setRevFilter(filters).find();
+finder.setFilter(filters).find();
 for (PersonIdent author : authors.getPersons())
      System.out.println(author);
 ```
@@ -56,7 +56,7 @@ This example assumes two current branches,  _master_ and a  _release1_ branch th
 Repository repo = new FileRepository("/repos/productA/.git");
 RevCommit base = CommitUtils.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
-count.setRevFilter(count);
+count.setFilter(count);
 finder.findBetween("master", base, );
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
 count.reset();
@@ -75,7 +75,7 @@ AllCommitFilter filters = new AllCommitFilter();
 filters.add(new AndCommitFilter(new ChangeIdFilter(), gerrit));
 filters.add(all);
 CommitFinder finder = new CommitFinder("/repos/egit/.git");
-finder.setRevFilter(filters);
+finder.setFilter(filters);
 finder.find();
 System.out.println(MessageFormat.format(
      "{0} out of {1} commits have Gerrit change ids",
@@ -92,7 +92,7 @@ AndCommitFilter filters = new AndCommitFilter(limit, block)
 CommitCursorFilter cursor = new CommitCursorFilter(filters);
 Repository repo = new FileRepository("/repos/jgit/.git");
 CommitFinder finder = new CommitFinder(repo);
-finder.setRevFilter(cursor);
+finder.setFilter(cursor);
 RevCommit commit = CommitUtils.getLatest(repo);
 while (commit != null) {
      finder.findFrom(commit);
