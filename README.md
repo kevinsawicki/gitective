@@ -57,7 +57,7 @@ Repository repo = new FileRepository("/repos/productA/.git");
 RevCommit base = CommitUtils.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
 count.setFilter(count);
-finder.findBetween("master", base, );
+finder.findBetween("master", base);
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
 count.reset();
 CommitFinder finder = new CommitFinder(repo);
