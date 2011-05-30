@@ -31,8 +31,7 @@ public class ParentTest extends GitTestCase {
 
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.setFilter(new AndCommitFilter(new ParentCountFilter(1),
-				count));
+		service.setFilter(new AndCommitFilter(new ParentCountFilter(1), count));
 		service.find();
 		assertEquals(1, count.getCount());
 	}

@@ -73,13 +73,11 @@ public class LimitTest extends GitTestCase {
 		add("file3.txt", "c");
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.setFilter(new AndCommitFilter(new CommitLimitFilter(1),
-				count));
+		service.setFilter(new AndCommitFilter(new CommitLimitFilter(1), count));
 		service.find();
 		assertEquals(1, count.getCount());
 		count.reset();
-		service.setFilter(new AndCommitFilter(new CommitLimitFilter(3),
-				count));
+		service.setFilter(new AndCommitFilter(new CommitLimitFilter(3), count));
 		service.find();
 		assertEquals(3, count.getCount());
 	}

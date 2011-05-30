@@ -45,8 +45,7 @@ public class CommitBaseTest extends GitTestCase {
 		assertEquals(base, base2);
 
 		CommitListFilter filter = new CommitListFilter();
-		new CommitFinder(testRepo).setFilter(filter).findBetween(commit3,
-				base);
+		new CommitFinder(testRepo).setFilter(filter).findBetween(commit3, base);
 		assertEquals(2, filter.getCommits().size());
 		assertEquals(commit3, filter.getCommits().get(0));
 		assertEquals(commit2, filter.getCommits().get(1));
