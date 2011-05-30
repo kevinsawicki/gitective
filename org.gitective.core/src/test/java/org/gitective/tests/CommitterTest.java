@@ -57,7 +57,8 @@ public class CommitterTest extends GitTestCase {
 		CommitterFilter filter = new CommitterFilter(findUser);
 		CommitListFilter commits = new CommitListFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.find(new AndCommitFilter().add(filter).add(commits));
+		service.setRevFilter(new AndCommitFilter(filter, commits));
+		service.find();
 		assertEquals(2, commits.getCommits().size());
 		assertEquals(commit2, commits.getCommits().get(0));
 		assertEquals(commit1, commits.getCommits().get(1));
@@ -74,7 +75,8 @@ public class CommitterTest extends GitTestCase {
 				"not@committer.org");
 		CommitListFilter commits = new CommitListFilter();
 		CommitFinder service = new CommitFinder(testRepo);
-		service.find(new AndCommitFilter(filter, commits));
+		service.setRevFilter(new AndCommitFilter(filter, commits));
+		service.find();
 		assertEquals(0, commits.getCommits().size());
 	}
 
@@ -92,7 +94,7 @@ public class CommitterTest extends GitTestCase {
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(findUser));
 		CommitFinder service = new CommitFinder(testRepo);
-		service.find(filter);
+		service.setRevFilter(filter).find();
 		assertEquals(2, filter.getPersons().size());
 		assertTrue(filter.getPersons().contains(findUser));
 	}

@@ -29,7 +29,8 @@ public abstract class CommitUtils {
 	 * @param revision
 	 * @return commit
 	 */
-	public static RevCommit getCommit(Repository repository, String revision) {
+	public static RevCommit getCommit(final Repository repository,
+			final String revision) {
 		Assert.notNull("Repository cannot be null", repository);
 		Assert.notNull("Revision cannot be null", revision);
 		Assert.notNull("Revision cannot be empty", revision);
@@ -43,7 +44,8 @@ public abstract class CommitUtils {
 	 * @param commitId
 	 * @return commit
 	 */
-	public static RevCommit getCommit(Repository repository, ObjectId commitId) {
+	public static RevCommit getCommit(final Repository repository,
+			final ObjectId commitId) {
 		Assert.notNull("Repository cannot be null", repository);
 		Assert.notNull("Commit id cannot be null", commitId);
 		return parse(repository, commitId);
@@ -56,7 +58,7 @@ public abstract class CommitUtils {
 	 * @param repository
 	 * @return commit never null
 	 */
-	public static RevCommit getLatest(Repository repository) {
+	public static RevCommit getLatest(final Repository repository) {
 		return getCommit(repository, Constants.HEAD);
 	}
 
@@ -67,7 +69,8 @@ public abstract class CommitUtils {
 	 * @param commits
 	 * @return base commit or null if none
 	 */
-	public static RevCommit getBase(Repository repository, ObjectId... commits) {
+	public static RevCommit getBase(final Repository repository,
+			final ObjectId... commits) {
 		Assert.notNull("Repository cannot be null", repository);
 		Assert.notNull("Commits cannot be null", commits);
 		Assert.notEmpty("Commits cannot be empty", commits);
@@ -81,18 +84,20 @@ public abstract class CommitUtils {
 	 * @param revisions
 	 * @return base commit or null if none
 	 */
-	public static RevCommit getBase(Repository repository, String... revisions) {
+	public static RevCommit getBase(final Repository repository,
+			final String... revisions) {
 		Assert.notNull("Repository cannot be null", repository);
 		Assert.notNull("Ref names cannot be null", revisions);
 		Assert.notEmpty("Ref names cannot be empty", revisions);
 
-		ObjectId[] commits = new ObjectId[revisions.length];
+		final ObjectId[] commits = new ObjectId[revisions.length];
 		for (int i = 0; i < revisions.length; i++)
 			commits[i] = resolve(repository, revisions[i]);
 		return walkToBase(repository, commits);
 	}
 
-	private static ObjectId resolve(Repository repository, String revision) {
+	private static ObjectId resolve(final Repository repository,
+			final String revision) {
 		try {
 			ObjectId id = repository.resolve(revision);
 			if (id == null)
@@ -104,8 +109,8 @@ public abstract class CommitUtils {
 		}
 	}
 
-	private static RevCommit walkToBase(Repository repository,
-			ObjectId... commits) {
+	private static RevCommit walkToBase(final Repository repository,
+			final ObjectId... commits) {
 		RevWalk walk = new RevWalk(repository);
 		try {
 			walk.setRetainBody(true);

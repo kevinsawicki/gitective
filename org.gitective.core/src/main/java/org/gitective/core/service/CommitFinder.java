@@ -16,6 +16,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.Assert;
 import org.gitective.core.GitException;
 
@@ -23,6 +24,16 @@ import org.gitective.core.GitException;
  * Commit locator class
  */
 public class CommitFinder extends RepositoryService {
+
+	/**
+	 * Rev filter
+	 */
+	protected RevFilter revFilter;
+
+	/**
+	 * Tree filter
+	 */
+	protected TreeFilter treeFilter;
 
 	/**
 	 * @param gitDirs
@@ -43,6 +54,28 @@ public class CommitFinder extends RepositoryService {
 	 */
 	public CommitFinder(String... gitDirs) {
 		super(gitDirs);
+	}
+
+	/**
+	 * Set {@link RevFilter} to use to capture commits during searches.
+	 * 
+	 * @param filter
+	 * @return this service
+	 */
+	public CommitFinder setRevFilter(RevFilter filter) {
+		revFilter = filter;
+		return this;
+	}
+
+	/**
+	 * Set tree filter to use to limit commits searched.
+	 * 
+	 * @param filter
+	 * @return this service
+	 */
+	public CommitFinder setTreeFilter(TreeFilter filter) {
+		this.treeFilter = filter;
+		return this;
 	}
 
 	/**
@@ -76,18 +109,17 @@ public class CommitFinder extends RepositoryService {
 	 * @param repository
 	 * @param start
 	 * @param end
-	 * @param filter
 	 * @return this service
 	 */
 	protected CommitFinder walk(Repository repository, ObjectId start,
-			ObjectId end, RevFilter filter) {
+			ObjectId end) {
 		Assert.notNull("Starting commit id cannot be null", start);
-		Assert.notNull("Filter cannot be null", filter);
 
-		RevWalk walk = new RevWalk(repository);
+		final RevWalk walk = new RevWalk(repository);
 		try {
 			walk.setRetainBody(true);
-			walk.setRevFilter(filter);
+			walk.setRevFilter(revFilter);
+			walk.setTreeFilter(treeFilter);
 			walk.markStart(walk.parseCommit(start));
 			if (end != null)
 				walk.markUninteresting(walk.parseCommit(end));
@@ -105,11 +137,10 @@ public class CommitFinder extends RepositoryService {
 	 * Search commits starting from the given commit id.
 	 * 
 	 * @param start
-	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder findFrom(ObjectId start, RevFilter filter) {
-		findBetween(start, (ObjectId) null, filter);
+	public CommitFinder findFrom(ObjectId start) {
+		findBetween(start, (ObjectId) null);
 		return this;
 	}
 
@@ -117,16 +148,15 @@ public class CommitFinder extends RepositoryService {
 	 * Search commits starting from the given revision string.
 	 * 
 	 * @param start
-	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder findBetween(String start, RevFilter filter) {
-		Repository[] repos = repositories;
-		int repoCount = repositories.length;
+	public CommitFinder findBetween(String start) {
+		final Repository[] repos = repositories;
+		final int repoCount = repositories.length;
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			walk(repo, lookup(repo, start), null, filter);
+			walk(repo, lookup(repo, start), null);
 		}
 		return this;
 	}
@@ -135,11 +165,10 @@ public class CommitFinder extends RepositoryService {
 	 * Search commits starting at the commit that {@link Constants#HEAD}
 	 * currently points to.
 	 * 
-	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder find(RevFilter filter) {
-		return findBetween(Constants.HEAD, filter);
+	public CommitFinder find() {
+		return findBetween(Constants.HEAD);
 	}
 
 	/**
@@ -147,15 +176,13 @@ public class CommitFinder extends RepositoryService {
 	 * 
 	 * @param start
 	 * @param end
-	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder findBetween(ObjectId start, ObjectId end,
-			RevFilter filter) {
-		Repository[] repos = repositories;
-		int repoCount = repositories.length;
+	public CommitFinder findBetween(ObjectId start, ObjectId end) {
+		final Repository[] repos = repositories;
+		final int repoCount = repositories.length;
 		for (int i = 0; i < repoCount; i++)
-			walk(repos[i], start, end, filter);
+			walk(repos[i], start, end);
 		return this;
 	}
 
@@ -165,16 +192,15 @@ public class CommitFinder extends RepositoryService {
 	 * 
 	 * @param start
 	 * @param end
-	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder findBetween(String start, ObjectId end, RevFilter filter) {
-		Repository[] repos = repositories;
-		int repoCount = repositories.length;
+	public CommitFinder findBetween(String start, ObjectId end) {
+		final Repository[] repos = repositories;
+		final int repoCount = repositories.length;
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			walk(repo, lookup(repo, start), end, filter);
+			walk(repo, lookup(repo, start), end);
 		}
 		return this;
 	}
@@ -185,16 +211,15 @@ public class CommitFinder extends RepositoryService {
 	 * 
 	 * @param start
 	 * @param end
-	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder findBetween(ObjectId start, String end, RevFilter filter) {
-		Repository[] repos = repositories;
-		int repoCount = repositories.length;
+	public CommitFinder findBetween(ObjectId start, String end) {
+		final Repository[] repos = repositories;
+		final int repoCount = repositories.length;
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			walk(repo, start, lookup(repo, end), filter);
+			walk(repo, start, lookup(repo, end));
 		}
 		return this;
 	}
@@ -205,16 +230,15 @@ public class CommitFinder extends RepositoryService {
 	 * 
 	 * @param start
 	 * @param end
-	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder findBetween(String start, String end, RevFilter filter) {
-		Repository[] repos = repositories;
-		int repoCount = repositories.length;
+	public CommitFinder findBetween(String start, String end) {
+		final Repository[] repos = repositories;
+		final int repoCount = repositories.length;
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			walk(repo, lookup(repo, start), lookup(repo, end), filter);
+			walk(repo, lookup(repo, start), lookup(repo, end));
 		}
 		return this;
 	}

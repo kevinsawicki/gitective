@@ -37,17 +37,16 @@ public class AndCommitFilter extends CompositeCommitFilter {
 
 	@Override
 	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
-		for (RevFilter filter : filters)
-			if (!filter.include(walker, commit))
+		final int length = filters.length;
+		for (int i = 0; i < length; i++)
+			if (!filters[i].include(walker, commit))
 				return include(false);
 		return true;
 	}
 
 	@Override
 	public RevFilter clone() {
-		AndCommitFilter clone = new AndCommitFilter();
-		cloneFilters(clone.filters);
-		return clone;
+		return new AndCommitFilter(cloneFilters());
 	}
 
 }

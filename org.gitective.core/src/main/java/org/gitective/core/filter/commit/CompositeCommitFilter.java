@@ -7,11 +7,7 @@
  *****************************************************************************/
 package org.gitective.core.filter.commit;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.gitective.core.Assert;
 
 /**
  * Filter container other filters
@@ -21,14 +17,7 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	/**
 	 * Child filters
 	 */
-	protected final List<RevFilter> filters = new ArrayList<RevFilter>();
-
-	/**
-	 * Create an empty composite filter
-	 */
-	public CompositeCommitFilter() {
-
-	}
+	protected RevFilter[] filters;
 
 	/**
 	 * Create a composite filter with given child filters
@@ -36,23 +25,34 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * @param filters
 	 */
 	public CompositeCommitFilter(RevFilter... filters) {
-		Assert.notNull("Filter cannot be null", filters);
-		for (RevFilter filter : filters)
-			add(filter);
+		if (filters != null && filters.length > 0) {
+			this.filters = new RevFilter[filters.length];
+			System.arraycopy(filters, 0, this.filters, 0, filters.length);
+		} else
+			this.filters = new RevFilter[0];
 	}
 
 	/**
-	 * Add a non-null child filter to this filter.
+	 * Add child filters to this filter. This method resizes an internal array
+	 * on each call so it should be called with as many child filters at once
+	 * instead of once per child filter.
 	 * 
-	 * @param filter
+	 * @param addedFilters
 	 * @return this filter
 	 */
-	public CompositeCommitFilter add(RevFilter filter) {
-		Assert.notNull("Filter cannot be null", filter);
-		filters.add(filter);
+	public CompositeCommitFilter add(RevFilter... addedFilters) {
+		if (addedFilters != null && addedFilters.length > 0) {
+			RevFilter[] resized = new RevFilter[addedFilters.length
+					+ filters.length];
+			System.arraycopy(filters, 0, resized, 0, filters.length);
+			System.arraycopy(addedFilters, 0, resized, filters.length,
+					addedFilters.length);
+			filters = resized;
+		}
 		return this;
 	}
 
+	@Override
 	public CommitFilter reset() {
 		for (RevFilter filter : filters)
 			if (filter instanceof CommitFilter)
@@ -63,13 +63,12 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	/**
 	 * Clone each filter and add to the specified list.
 	 * 
-	 * @param cloned
 	 * @return non-null but possibly empty list of child filters
 	 */
-	protected List<RevFilter> cloneFilters(List<RevFilter> cloned) {
-		for (RevFilter filter : filters)
-			cloned.add(filter.clone());
-		return cloned;
+	protected RevFilter[] cloneFilters() {
+		RevFilter[] clone = new RevFilter[filters.length];
+		System.arraycopy(this.filters, 0, clone, 0, clone.length);
+		return clone;
 	}
 
 }

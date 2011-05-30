@@ -21,13 +21,6 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class OrCommitFilter extends CompositeCommitFilter {
 
 	/**
-	 * Create an empty or commit filter
-	 */
-	public OrCommitFilter() {
-		super();
-	}
-
-	/**
 	 * Create an or commit filter with given child filters
 	 * 
 	 * @param filters
@@ -38,17 +31,15 @@ public class OrCommitFilter extends CompositeCommitFilter {
 
 	@Override
 	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
-		for (RevFilter filter : filters)
-			if (filter.include(walker, commit))
+		final int length = filters.length;
+		for (int i = 0; i < length; i++)
+			if (filters[i].include(walker, commit))
 				return true;
 		return include(false);
 	}
 
 	@Override
 	public RevFilter clone() {
-		OrCommitFilter clone = new OrCommitFilter();
-		cloneFilters(clone.filters);
-		return clone;
+		return new OrCommitFilter(cloneFilters());
 	}
-
 }

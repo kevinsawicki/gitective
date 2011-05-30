@@ -42,10 +42,11 @@ public class CursorTest extends GitTestCase {
 
 		CommitCursorFilter cursor = new CommitCursorFilter(new AndCommitFilter(
 				limit, bucket));
+		service.setRevFilter(cursor);
 		int chunks = 0;
 		RevCommit commit = CommitUtils.getLatest(new FileRepository(testRepo));
 		while (commit != null) {
-			service.findFrom(commit, cursor);
+			service.findFrom(commit);
 			assertEquals(limit.getLimit(), bucket.getCommits().size());
 			commits.removeAll(bucket.getCommits());
 			commit = cursor.getLast();

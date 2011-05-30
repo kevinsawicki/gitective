@@ -30,13 +30,13 @@ public class LimitTest extends GitTestCase {
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(2);
-		service.find(new AndCommitFilter().add(limit).add(count));
+		service.setRevFilter(new AndCommitFilter(limit, count)).find();
 		assertEquals(2, count.getCount());
 		count.reset();
 		RevFilter clone = limit.clone();
 		assertNotNull(clone);
 		assertNotSame(limit, clone);
-		service.find(new AndCommitFilter().add(clone).add(count));
+		service.setRevFilter(new AndCommitFilter(clone, count)).find();
 		assertEquals(2, count.getCount());
 	}
 
@@ -50,14 +50,15 @@ public class LimitTest extends GitTestCase {
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
 		CommitLimitFilter limit = new CommitLimitFilter(2);
-		service.find(new AndCommitFilter().add(limit).add(count));
+		service.setRevFilter(new AndCommitFilter(limit, count));
+		service.find();
 		assertEquals(1, count.getCount());
-		service.find(new AndCommitFilter().add(limit).add(count));
+		service.find();
 		assertEquals(2, count.getCount());
-		service.find(new AndCommitFilter().add(limit).add(count));
+		service.find();
 		assertEquals(2, count.getCount());
 		limit.reset();
-		service.find(new AndCommitFilter().add(limit).add(count));
+		service.find();
 		assertEquals(3, count.getCount());
 	}
 
@@ -72,12 +73,14 @@ public class LimitTest extends GitTestCase {
 		add("file3.txt", "c");
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.find(new AndCommitFilter()
-				.add(new CommitLimitFilter(1)).add(count));
+		service.setRevFilter(new AndCommitFilter(new CommitLimitFilter(1),
+				count));
+		service.find();
 		assertEquals(1, count.getCount());
 		count.reset();
-		service.find(new AndCommitFilter()
-				.add(new CommitLimitFilter(3)).add(count));
+		service.setRevFilter(new AndCommitFilter(new CommitLimitFilter(3),
+				count));
+		service.find();
 		assertEquals(3, count.getCount());
 	}
 

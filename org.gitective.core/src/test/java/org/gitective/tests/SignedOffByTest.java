@@ -31,12 +31,14 @@ public class SignedOffByTest extends GitTestCase {
 
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.find(new AndCommitFilter().add(
-				new SignedOffByFilter(person)).add(count));
+		service.setRevFilter(new AndCommitFilter(new SignedOffByFilter(person),
+				count));
+		service.find();
 		assertEquals(1, count.getCount());
 
-		service.find(new AndCommitFilter().add(
-				new SignedOffByFilter(person).clone()).add(count));
+		service.setRevFilter(new AndCommitFilter(new SignedOffByFilter(person)
+				.clone(), count));
+		service.find();
 		assertEquals(2, count.getCount());
 	}
 
@@ -51,8 +53,9 @@ public class SignedOffByTest extends GitTestCase {
 
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		service.find(new AndCommitFilter().add(
-				new SignedOffByFilter(person)).add(count));
+		service.setRevFilter(new AndCommitFilter(new SignedOffByFilter(person),
+				count));
+		service.find();
 		assertEquals(0, count.getCount());
 	}
 

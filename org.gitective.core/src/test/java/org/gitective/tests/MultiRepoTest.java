@@ -43,7 +43,7 @@ public class MultiRepoTest extends GitTestCase {
 
 		CommitFinder service = new CommitFinder(testRepo, repo2);
 		CommitCountFilter count = new CommitCountFilter();
-		service.find(count);
+		service.setRevFilter(count).find();
 		assertEquals(2, count.getCount());
 	}
 

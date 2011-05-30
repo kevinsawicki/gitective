@@ -23,13 +23,6 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class AllCommitFilter extends CompositeCommitFilter {
 
 	/**
-	 * Create an empty all commit filter
-	 */
-	public AllCommitFilter() {
-		super();
-	}
-
-	/**
 	 * Create an all commit filter with given child filters
 	 * 
 	 * @param filters
@@ -40,16 +33,15 @@ public class AllCommitFilter extends CompositeCommitFilter {
 
 	@Override
 	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
-		for (RevFilter filter : filters)
-			filter.include(walker, commit);
+		final int length = filters.length;
+		for (int i = 0; i < length; i++)
+			filters[i].include(walker, commit);
 		return true;
 	}
 
 	@Override
 	public RevFilter clone() {
-		AllCommitFilter filter = new AllCommitFilter();
-		cloneFilters(filter.filters);
-		return filter;
+		return new AllCommitFilter(cloneFilters());
 	}
 
 }

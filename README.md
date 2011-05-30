@@ -32,7 +32,7 @@ filters.add(new AuthorFilter(person));
 filters.add(new CommitterFilter(person).negate());
 filters.add(count);
 CommitFinder finder = new CommitFinder("/repos/myrepo/.git");
-finder.find(filters);
+finder.setRevFilter(filters).find();
 System.out.println(count.getCount());
 ```
 
@@ -44,7 +44,7 @@ AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
 filters.add(new ParentCountFilter(10)).add(authors);
 CommitFinder finder = new CommitFinder("/repos/linux-2.6/.git");
-finder.find(filters);
+finder.setRevFilter(filters).find();
 for (PersonIdent author : authors.getPersons())
      System.out.println(author);
 ```
@@ -56,11 +56,12 @@ This example assumes two current branches,  _master_ and a  _release1_ branch th
 Repository repo = new FileRepository("/repos/productA/.git");
 RevCommit base = CommitUtils.getBase("master", "release1");
 CommitCountFilter count = new CommitCountFilter();
-finder.findBetween("master", base, count);
+count.setRevFilter(count);
+finder.findBetween("master", base, );
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
 count.reset();
 CommitFinder finder = new CommitFinder(repo);
-finder.findBetween("release1", base, count);
+finder.findBetween("release1", base);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
 ```
 
@@ -74,7 +75,8 @@ AllCommitFilter filters = new AllCommitFilter();
 filters.add(new AndCommitFilter(new ChangeIdFilter(), gerrit));
 filters.add(all);
 CommitFinder finder = new CommitFinder("/repos/egit/.git");
-finder.find(filters);
+finder.setRevFilter(filters);
+finder.find();
 System.out.println(MessageFormat.format(
      "{0} out of {1} commits have Gerrit change ids",
      gerrit.getCount(),	all.getCount()));
@@ -90,9 +92,10 @@ AndCommitFilter filters = new AndCommitFilter(limit, block)
 CommitCursorFilter cursor = new CommitCursorFilter(filters);
 Repository repo = new FileRepository("/repos/jgit/.git");
 CommitFinder finder = new CommitFinder(repo);
+finder.setRevFilter(cursor);
 RevCommit commit = CommitUtils.getLatest(repo);
 while (commit != null) {
-     finder.findFrom(commit, cursor);
+     finder.findFrom(commit);
 
      // block filter now contains a new block of commits
 
