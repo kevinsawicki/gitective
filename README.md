@@ -54,10 +54,9 @@ This example assumes two current branches,  _master_ and a  _release1_ branch th
 
 ```java
 Repository repo = new FileRepository("/repos/productA/.git");
-RevCommit base = CommitUtils.getBase("master", "release1");
+RevCommit base = CommitUtils.getBase(repo, "master", "release1");
 CommitCountFilter count = new CommitCountFilter();
-count.setFilter(count);
-CommitFinder finder = new CommitFinder(repo);
+CommitFinder finder = new CommitFinder(repo).setFilter(count);
 finder.findBetween("master", base);
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
 count.reset();
