@@ -107,8 +107,7 @@ This example collects all the commits that have a 'Bug: XXXXXXX' line in the com
 ```java
 CommitListFilter commits = new CommitListFilter();
 AndCommitFilter filter = new AndCommitFilter(new BugFilter(), commits)
-Repository repo = new FileRepository("/repos/jgit/.git");
-CommitFinder finder = new CommitFinder(repo);
+CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(filter).find();
 ```
 
