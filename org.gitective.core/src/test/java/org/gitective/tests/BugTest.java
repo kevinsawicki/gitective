@@ -7,6 +7,7 @@
  *****************************************************************************/
 package org.gitective.tests;
 
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.BugFilter;
 import org.gitective.core.filter.commit.BugSetFilter;
@@ -29,7 +30,7 @@ public class BugTest extends GitTestCase {
 		CommitCountFilter count = new CommitCountFilter();
 
 		new CommitFinder(testRepo).setFilter(
-				new AndCommitFilter(new BugFilter(), count)).find();
+				new AndCommitFilter().add(new BugFilter(), count)).find();
 
 		assertEquals(1, count.getCount());
 	}
@@ -83,4 +84,61 @@ public class BugTest extends GitTestCase {
 		assertTrue(bugs.getBugs().contains("456"));
 	}
 
+	/**
+	 * Test of {@link BugFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	public void testCloneBugFilter() throws Exception {
+		add("file.txt", "content", "fixes NPE\nBug: abcd");
+
+		CommitCountFilter count = new CommitCountFilter();
+		BugFilter filter = new BugFilter();
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		new CommitFinder(testRepo).setFilter(
+				new AndCommitFilter(filter, clone, count)).find();
+
+		assertEquals(1, count.getCount());
+	}
+
+	/**
+	 * Test of {@link BugSetFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	public void testCloneBugSetFilter() throws Exception {
+		add("file.txt", "content", "fixes NPE\nBug: abcd");
+
+		BugSetFilter filter = new BugSetFilter();
+		BugSetFilter clone = (BugSetFilter) filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		new CommitFinder(testRepo)
+				.setFilter(new AndCommitFilter(filter, clone)).find();
+
+		assertEquals(1, filter.getBugs().size());
+		assertEquals(1, clone.getBugs().size());
+		assertEquals("abcd", filter.getBugs().iterator().next());
+		assertEquals("abcd", clone.getBugs().iterator().next());
+	}
+
+	/**
+	 * Test of {@link BugSetFilter#reset()}
+	 * 
+	 * @throws Exception
+	 */
+	public void testReset() throws Exception {
+		add("file.txt", "content", "fixes NPE\nBug: abcd");
+
+		BugSetFilter filter = new BugSetFilter();
+		assertEquals(0, filter.getBugs().size());
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertEquals(1, filter.getBugs().size());
+		filter.reset();
+		assertEquals(0, filter.getBugs().size());
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertEquals(1, filter.getBugs().size());
+	}
 }

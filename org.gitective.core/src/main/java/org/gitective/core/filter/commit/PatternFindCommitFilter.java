@@ -56,7 +56,7 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 		Assert.notEmpty("Pattern cannot be empty", pattern);
 		this.pattern = pattern;
 		this.flags = flags;
-		this.matcher = Pattern.compile(pattern, flags).matcher("");
+		matcher = Pattern.compile(pattern, flags).matcher("");
 	}
 
 	@Override
