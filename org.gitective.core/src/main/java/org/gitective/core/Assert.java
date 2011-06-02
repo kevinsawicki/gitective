@@ -19,13 +19,15 @@ public abstract class Assert {
 	 * 
 	 * @param message
 	 * @param object
+	 * @return object
 	 * @throws IllegalArgumentException
 	 */
-	public static void notNull(String message, Object object)
+	public static <V> V notNull(String message, V object)
 			throws IllegalArgumentException {
 		if (object == null)
 			throw new IllegalArgumentException(message != null
 					&& message.length() > 0 ? message : "Object cannot be null");
+		return object;
 	}
 
 	/**
@@ -33,10 +35,11 @@ public abstract class Assert {
 	 * object is null.
 	 * 
 	 * @param object
+	 * @return object
 	 * @throws IllegalArgumentException
 	 */
-	public static void notNull(Object object) throws IllegalArgumentException {
-		notNull(null, object);
+	public static <V> V notNull(V object) throws IllegalArgumentException {
+		return notNull(null, object);
 	}
 
 	/**
@@ -45,14 +48,16 @@ public abstract class Assert {
 	 * 
 	 * @param message
 	 * @param objects
+	 * @return objects
 	 * @throws IllegalArgumentException
 	 */
-	public static void notEmpty(String message, Object[] objects)
+	public static <V> V[] notEmpty(String message, V[] objects)
 			throws IllegalArgumentException {
 		if (objects.length == 0)
 			throw new IllegalArgumentException(message != null
 					&& message.length() > 0 ? message
 					: "Objects cannot be empty");
+		return objects;
 	}
 
 	/**
@@ -60,11 +65,11 @@ public abstract class Assert {
 	 * {@link Object} array has a length of zero.
 	 * 
 	 * @param objects
+	 * @return objects
 	 * @throws IllegalArgumentException
 	 */
-	public static void notEmpty(Object[] objects)
-			throws IllegalArgumentException {
-		notEmpty(null, objects);
+	public static <V> V[] notEmpty(V[] objects) throws IllegalArgumentException {
+		return notEmpty(null, objects);
 	}
 
 	/**
@@ -73,14 +78,16 @@ public abstract class Assert {
 	 * 
 	 * @param message
 	 * @param string
+	 * @return string
 	 * @throws IllegalArgumentException
 	 */
-	public static void notEmpty(String message, String string)
+	public static String notEmpty(String message, String string)
 			throws IllegalArgumentException {
 		if (string.length() == 0)
 			throw new IllegalArgumentException(message != null
 					&& message.length() > 0 ? message
 					: "String cannot be empty");
+		return string;
 	}
 
 	/**
@@ -88,10 +95,12 @@ public abstract class Assert {
 	 * string has a length of zero.
 	 * 
 	 * @param string
+	 * @return string
 	 * @throws IllegalArgumentException
 	 */
-	public static void notEmpty(String string) throws IllegalArgumentException {
-		notEmpty(null, string);
+	public static String notEmpty(String string)
+			throws IllegalArgumentException {
+		return notEmpty(null, string);
 	}
 
 }
