@@ -13,10 +13,13 @@ import org.eclipse.jgit.lib.PersonIdent;
 
 /**
  * {@link PersonIdent} comparator that compares the name and email address.
+ * 
+ * This class compares {@link PersonIdent#getName()	} first and if they are
+ * identical it will compare {@link PersonIdent#getEmailAddress()} next.
  */
 public class PersonComparator implements Comparator<PersonIdent> {
 
-	public int compare(PersonIdent p1, PersonIdent p2) {
+	public int compare(final PersonIdent p1, final PersonIdent p2) {
 		int compare = p1.getName().compareTo(p2.getName());
 		if (compare == 0)
 			compare = p1.getEmailAddress().compareTo(p2.getEmailAddress());
