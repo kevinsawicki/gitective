@@ -41,14 +41,14 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * @return this filter
 	 */
 	public CompositeCommitFilter add(RevFilter... addedFilters) {
-		if (addedFilters != null && addedFilters.length > 0) {
-			RevFilter[] resized = new RevFilter[addedFilters.length
-					+ filters.length];
-			System.arraycopy(filters, 0, resized, 0, filters.length);
-			System.arraycopy(addedFilters, 0, resized, filters.length,
-					addedFilters.length);
-			filters = resized;
-		}
+		if (addedFilters == null || addedFilters.length == 0)
+			return this;
+		RevFilter[] resized = new RevFilter[addedFilters.length
+				+ filters.length];
+		System.arraycopy(filters, 0, resized, 0, filters.length);
+		System.arraycopy(addedFilters, 0, resized, filters.length,
+				addedFilters.length);
+		filters = resized;
 		return this;
 	}
 
@@ -61,14 +61,13 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	}
 
 	/**
-	 * Clone each filter and add to the specified list.
+	 * Clone each filter into a new array.
 	 * 
-	 * @return non-null but possibly empty list of child filters
+	 * @return non-null but possibly empty array of child filters
 	 */
 	protected RevFilter[] cloneFilters() {
 		RevFilter[] clone = new RevFilter[filters.length];
-		System.arraycopy(this.filters, 0, clone, 0, clone.length);
+		System.arraycopy(filters, 0, clone, 0, clone.length);
 		return clone;
 	}
-
 }
