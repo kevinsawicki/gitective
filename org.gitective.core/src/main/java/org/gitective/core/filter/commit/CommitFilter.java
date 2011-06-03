@@ -79,7 +79,7 @@ public abstract class CommitFilter extends RevFilter {
 	 * configured to stop the search when a commit is not included.
 	 * 
 	 * @param include
-	 * @return include paramter value
+	 * @return include parameter value
 	 */
 	protected boolean include(boolean include) {
 		if (!include && stop)
