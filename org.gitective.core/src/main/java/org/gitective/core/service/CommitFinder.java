@@ -10,9 +10,11 @@ package org.gitective.core.service;
 import java.io.File;
 import java.io.IOException;
 
+import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
@@ -26,14 +28,19 @@ import org.gitective.core.GitException;
 public class CommitFinder extends RepositoryService {
 
 	/**
-	 * Rev filter
+	 * Filter for selecting commits to match
 	 */
-	protected RevFilter revFilter;
+	protected RevFilter preFilter;
 
 	/**
 	 * Tree filter
 	 */
 	protected TreeFilter treeFilter;
+
+	/**
+	 * Filter for matches
+	 */
+	protected RevFilter postFilter;
 
 	/**
 	 * @param gitDirs
@@ -57,13 +64,24 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Set the {@link RevFilter} to use to capture commits during searches.
+	 * Set the {@link RevFilter} to use to filter commits during searches.
 	 * 
 	 * @param filter
 	 * @return this service
 	 */
 	public CommitFinder setFilter(RevFilter filter) {
-		revFilter = filter;
+		preFilter = filter;
+		return this;
+	}
+
+	/**
+	 * Set the {@link RevFilter} to use to match filtered commits.
+	 * 
+	 * @param filter
+	 * @return this service
+	 */
+	public CommitFinder setMatcher(RevFilter filter) {
+		postFilter = filter;
 		return this;
 	}
 
@@ -74,7 +92,7 @@ public class CommitFinder extends RepositoryService {
 	 * @return this service
 	 */
 	public CommitFinder setFilter(TreeFilter filter) {
-		this.treeFilter = filter;
+		treeFilter = filter;
 		return this;
 	}
 
@@ -90,19 +108,26 @@ public class CommitFinder extends RepositoryService {
 	protected CommitFinder walk(Repository repository, ObjectId start,
 			ObjectId end) {
 		Assert.notNull("Starting commit id cannot be null", start);
-
 		final RevWalk walk = new RevWalk(repository);
+		walk.setRetainBody(true);
+		walk.setRevFilter(preFilter);
+		walk.setTreeFilter(treeFilter);
 		try {
-			walk.setRetainBody(true);
-			walk.setRevFilter(revFilter);
-			walk.setTreeFilter(treeFilter);
 			walk.markStart(walk.parseCommit(start));
 			if (end != null)
 				walk.markUninteresting(walk.parseCommit(end));
-			while (walk.next() != null)
-				;
+			if (postFilter != null) {
+				RevCommit commit;
+				while ((commit = walk.next()) != null)
+					if (!postFilter.include(walk, commit))
+						return this;
+			} else
+				while (walk.next() != null)
+					;
 		} catch (IOException e) {
 			throw new GitException(e);
+		} catch (StopWalkException ignored) {
+			// Ignored
 		} finally {
 			walk.release();
 		}
@@ -126,15 +151,8 @@ public class CommitFinder extends RepositoryService {
 	 * @param start
 	 * @return this service
 	 */
-	public CommitFinder findBetween(String start) {
-		final Repository[] repos = repositories;
-		final int repoCount = repositories.length;
-		Repository repo;
-		for (int i = 0; i < repoCount; i++) {
-			repo = repos[i];
-			walk(repo, CommitUtils.getCommit(repo, start), null);
-		}
-		return this;
+	public CommitFinder findFrom(String start) {
+		return findBetween(start, (ObjectId) null);
 	}
 
 	/**
@@ -144,7 +162,7 @@ public class CommitFinder extends RepositoryService {
 	 * @return this service
 	 */
 	public CommitFinder find() {
-		return findBetween(Constants.HEAD);
+		return findFrom(Constants.HEAD);
 	}
 
 	/**

@@ -19,8 +19,8 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public class ParentCountFilter extends CommitFilter {
 
-	private int min;
-	private int max;
+	private final int min;
+	private final int max;
 
 	/**
 	 * Create a parent count filter that has at least 2 parents.

@@ -87,9 +87,8 @@ public abstract class CommitUtils {
 	public static RevCommit getBase(final Repository repository,
 			final String... revisions) {
 		Assert.notNull("Repository cannot be null", repository);
-		Assert.notNull("Ref names cannot be null", revisions);
-		Assert.notEmpty("Ref names cannot be empty", revisions);
-
+		Assert.notNull("Revisions cannot be null", revisions);
+		Assert.notEmpty("Revisions cannot be empty", revisions);
 		final ObjectId[] commits = new ObjectId[revisions.length];
 		for (int i = 0; i < revisions.length; i++)
 			commits[i] = resolve(repository, revisions[i]);
@@ -100,21 +99,21 @@ public abstract class CommitUtils {
 			final String revision) {
 		try {
 			ObjectId id = repository.resolve(revision);
-			if (id == null)
-				throw new GitException(MessageFormat.format(
-						"Revision ''{0}'' could not be resolved", revision));
-			return id;
+			if (id != null)
+				return id;
 		} catch (IOException e) {
 			throw new GitException(e);
 		}
+		throw new GitException(MessageFormat.format(
+				"Revision ''{0}'' could not be resolved", revision));
 	}
 
 	private static RevCommit walkToBase(final Repository repository,
 			final ObjectId... commits) {
 		RevWalk walk = new RevWalk(repository);
+		walk.setRetainBody(true);
+		walk.setRevFilter(RevFilter.MERGE_BASE);
 		try {
-			walk.setRetainBody(true);
-			walk.setRevFilter(RevFilter.MERGE_BASE);
 			for (int i = 0; i < commits.length; i++)
 				walk.markStart(walk.parseCommit(commits[i]));
 			return walk.next();
@@ -125,10 +124,11 @@ public abstract class CommitUtils {
 		}
 	}
 
-	private static RevCommit parse(Repository repository, ObjectId commit) {
+	private static RevCommit parse(final Repository repository,
+			final ObjectId commit) {
 		RevWalk walk = new RevWalk(repository);
+		walk.setRetainBody(true);
 		try {
-			walk.setRetainBody(true);
 			return walk.parseCommit(commit);
 		} catch (IOException e) {
 			throw new GitException(e);
