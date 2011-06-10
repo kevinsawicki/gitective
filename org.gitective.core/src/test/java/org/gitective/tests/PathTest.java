@@ -12,6 +12,8 @@ package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.PathFilterUtils;
+import org.gitective.core.filter.commit.AndCommitFilter;
+import org.gitective.core.filter.commit.BugFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.LastCommitFilter;
 import org.gitective.core.service.CommitFinder;
@@ -20,6 +22,30 @@ import org.gitective.core.service.CommitFinder;
  * Unit tests of path filtering
  */
 public class PathTest extends GitTestCase {
+
+	/**
+	 * Test bugs to paths
+	 * 
+	 * @throws Exception
+	 */
+	public void testBugsToPaths() throws Exception {
+		add("foo.cpp", "a");
+		add("bar.cpp", "a", "Fixing bug\nBug: 123");
+		add("bar.cpp", "b", "Fixing bug\nBug: 124");
+		add("Main.java", "public", "Fixing bug\nBug: 555");
+		add("Buffer.java", "private", "Fixing bug\nBug: 888");
+		CommitCountFilter bugCommits = new CommitCountFilter();
+		CommitCountFilter javaBugCommits = new CommitCountFilter();
+		AndCommitFilter filter = new AndCommitFilter(new BugFilter(),
+				bugCommits);
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(filter);
+		finder.setFilter(PathFilterUtils.andSuffix(".java"));
+		finder.setMatcher(javaBugCommits);
+		finder.find();
+		assertEquals(2, javaBugCommits.getCount());
+		assertEquals(4, bugCommits.getCount());
+	}
 
 	/**
 	 * Test matching single suffix
