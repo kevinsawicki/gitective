@@ -5,6 +5,8 @@
 
   <title>kevinsawicki/gitective @ GitHub</title>
 
+  <script src="http://shjs.sourceforge.net/sh_main.min.js" ></script>
+  <script src="http://shjs.sourceforge.net/lang/sh_java.min.js" ></script>
   <style type="text/css">
     body {
       margin-top: 1.0em;
@@ -14,7 +16,7 @@
     }
     #container {
       margin: 0 auto;
-      width: 700px;
+      width: 800px;
     }
     h1 { font-size: 3.8em; color: #6c3c6d; margin-bottom: 3px; }
     h1 .small { font-size: 0.4em; }
@@ -24,13 +26,14 @@
     a { color: #6c3c6d; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
+    pre { background-color:#000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
+  <link rel="stylesheet" type="text/css" href="http://shjs.sourceforge.net/css/sh_darkblue.min.css" />
 </head>
 
-<body>
+<body onload="sh_highlightDocument();">
   <a href="http://github.com/kevinsawicki/gitective"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
   <div id="container">
@@ -46,19 +49,143 @@
       <span class="small">by <a href="http://github.com/kevinsawicki">kevinsawicki</a></span></h1>
 
     <div class="description">
-      Library to easily find interesting commits from Git repositories using JGit.
+      Library to easily find interesting commits in Git repositories.
     </div>
+<h2>Authors</h2>
+<p>Kevin Sawicki (kevinsawicki@gmail.com</p>
+<h2>About</h2>
+<p>
+gitective is a Java library built on top of JGit that makes investigating Git repositories simpler and easier.
+</p>
+<p>
+gitective supports finding commits through registering filters that first select commits and then run matchers against those commits.
+</p>
+The included filters can be used interchangebly for matching and selecting commits. This allows you to collect data on all commits visited as well as the commits that match filters.
+<p>
+Suppose you want to find all the commits that fix bugs to Java source files. But you also want to know the total number of commits that fix bugs so that you can track what subset of all the fixes made are fixes to Java source files.
+</p>
+<p>
+You would find these commits using the following steps:
+<ol>
+<li>Create a filter that selects commits that reference a bug in the message.</li>
+<li>Create a filter that selects commits that alter a .java file.</li>
+<li>Create a filter that counts the number of commits that are selected.</li>
+</ol>
+<pre class="sh_java">
+CommitCountFilter allBugCommits = new CommitCountFilter();
+CommitCountFilter javaBugCommits = new CommitCountFilter();
 
-    <h2>Dependencies</h2>
+CommitFinder finder = new CommitFinder("/repos/myrepo/.git");
+finder.setFilter(new AndCommitFilter(new BugFilter(), allBugCommits));
+finder.setFilter(PathFilterUtils.andSuffix(".java"));
+finder.setMatcher(javaBugCommits);
+finder.find();
+
+System.out.println(javaBugCommits.getCount() + " java bugs fixed");
+System.out.println(allBugCommits.getCount() + " total bugs fixed");
+</pre>
+</p>
+<h2>Why would you use gitective?</h2>
+<ul>
+<li>You are new to Git and/or JGit and need to write an application that uses revision history. Gitective aims to be simple enough to not require a deep understanding of Git or JGit in order to construct a filter to locate the commits you are looking for in a Git Repository.</li><br/>
+<li>You need to write an application that searches for commit information from multiple Git repositories. Gitective supports re-using filters across repositories as well as multiple commit searches of the same repository.</li><br/>
+<li>You want to generate stats or reports based on the commit activity in Git repositories and are looking to use Java/JGit and want a head-start in writing the code that finds the commits needed.</li>
+</ul>
+<h2>More examples</h2>
+<p class="description">Get the latest commit in a repository</p>
+<pre class="sh_java">
+Repository repo = new FileRepository("/repos/myrepo/.git");
+RevCommit latestCommit = CommitUtils.getLatest(repo);
+System.out.println("Latest commit is " + latestCommit.name());
+</pre>
+<p class="description">Find the number of commits you authored but weren't the committer of</p>
+<pre class="sh_java">
+PersonIdent person = new PersonIdent("Michael Bluth", "michael@sitwell.com");
+CommitCountFilter count = new CommitCountFilter();
+AndCommitFilter filters = new AndCommitFilter();
+
+filters.add(new AuthorFilter(person));
+filters.add(new CommitterFilter(person).negate());
+filters.add(count);
+
+CommitFinder finder = new CommitFinder("/repos/myrepo/.git");
+finder.setFilter(filters).find();
+System.out.println(count.getCount());
+</pre>
+<p class="description">Find everyone who has authored commits that were 10-way merges</p>
+<pre class="sh_java">
+AuthorSetFilter authors = new AuthorSetFilter();
+AndCommitFilter filters = new AndCommitFilter();
+filters.add(new ParentCountFilter(10), authors);
+
+CommitFinder finder = new CommitFinder("/repos/linux-2.6/.git");
+finder.setFilter(filters).find();
+
+for (PersonIdent author : authors.getPersons())
+     System.out.println(author);
+</pre>
+<p class="description">Find the number of number of commits that occurred in master since a branch was created</p>
+<pre class="sh_java">
+Repository repo = new FileRepository("/repos/productA/.git");
+RevCommit base = CommitUtils.getBase(repo, "master", "release1");
+
+CommitCountFilter count = new CommitCountFilter();
+CommitFinder finder = new CommitFinder(repo).setFilter(count);
+
+finder.findBetween("master", base);
+System.out.println("Commits in master since release1 was branched: " + count.getCount());
+
+count.reset();
+finder.findBetween("release1", base);
+System.out.println("Commits in release1 since branched from master: " + count.getCount());
+</pre>
+<p class="description">What fraction of commits have a Gerrit Change-Id?</p>
+<pre class="sh_java">
+CommitCountFilter all = new CommitCountFilter();
+CommitCountFilter gerrit = new CommitCountFilter();
+AllCommitFilter filters = new AllCommitFilter();
+filters.add(new AndCommitFilter(new ChangeIdFilter(), gerrit), all);
+
+CommitFinder finder = new CommitFinder("/repos/egit/.git");
+finder.setFilter(filters).find();
+
+System.out.println(MessageFormat.format(
+     "{0} out of {1} commits have Gerrit change ids",
+     gerrit.getCount(), all.getCount()));
+</pre>
+<p class="description">Get commits in blocks of 100</p>
+<pre class="sh_java">
+CommitListFilter block = new CommitListFilter();
+CommitFilter limit = new CommitLimitFilter(100).setStop(true);
+AndCommitFilter filters = new AndCommitFilter(limit, block)
+CommitCursorFilter cursor = new CommitCursorFilter(filters);
+
+Repository repo = new FileRepository("/repos/jgit/.git");
+CommitFinder finder = new CommitFinder(repo);
+finder.setFilter(cursor);
+
+RevCommit commit = CommitUtils.getLatest(repo);
+while (commit != null) {
+     finder.findFrom(commit);
+
+     // block filter now contains a new block of commits
+
+     commit = cursor.getLast();
+     cursor.reset();
+}
+</pre>
+<p class="description">Find commits referencing bugs numbers</p>
+<pre class="sh_java">
+CommitListFilter commits = new CommitListFilter();
+AndCommitFilter filter = new AndCommitFilter(new BugFilter(), commits);
+
+CommitFinder finder = new CommitFinder("/repos/jgit/.git");
+finder.setFilter(filter).find();
+</pre>
+<h2>Dependencies</h2>
 <p>JGit 1.0 or above</p>
 <h2>License</h2>
 <p><a href="http://www.eclipse.org/legal/epl-v10.html">Eclipse Public License v1.0</a></p>
-<h2>Authors</h2>
-<p>Kevin Sawicki (kevinsawicki@gmail.com)
-<br/>
-<br/>      </p>
-
-
     <h2>Download</h2>
     <p>
       You can download this project in either
@@ -75,7 +202,5 @@
     </div>
 
   </div>
-
-  
 </body>
 </html>
