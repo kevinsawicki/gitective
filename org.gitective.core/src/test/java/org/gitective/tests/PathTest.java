@@ -20,6 +20,27 @@ import org.gitective.core.service.CommitFinder;
 public class PathTest extends GitTestCase {
 
 	/**
+	 * Test counting some commits that match a path
+	 * 
+	 * @throws Exception
+	 */
+	public void testCountingSubset() throws Exception {
+		add("file1.txt", "a");
+		add("file2.txt", "b");
+		add("file2.txt", "c");
+		add("file3.txt", "d");
+		CommitCountFilter all = new CommitCountFilter();
+		CommitCountFilter path = new CommitCountFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(all);
+		finder.setFilter(PathUtils.createPathFilter("file2.txt"));
+		finder.setMatcher(path);
+		finder.find();
+		assertEquals(4, all.getCount());
+		assertEquals(2, path.getCount());
+	}
+
+	/**
 	 * Test filtering commits matching either of two paths
 	 * 
 	 * @throws Exception
