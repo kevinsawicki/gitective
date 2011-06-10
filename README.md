@@ -1,6 +1,38 @@
 # gitective - Find the commits you're looking for
 
-gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit) that makes investigating Git repositories simpler and easier.  Gitective makes it straight-forward to find interesting commits in a Git repository through combining the included filters.
+gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit)
+that makes investigating Git repositories simpler and easier.  Gitective makes
+it straight-forward to find interesting commits in a Git repository through
+combining the included filters.
+
+gitective supports finding commits through registering filters that first
+select commits and then run matchers against those commits.
+
+The included filters can be used interchangebly for matching and selecting
+commits.  This allows you to collect data on all commits visited as well as the
+commits that match filters.
+
+Suppose you want to find all the commits that fix bugs to Java source files. But
+you also want to know the total number of commits that fix bugs so you can track
+what subset of all the fixes are fixes to Java source files.
+
+You would find this using the following steps
+
+ .1 Create a filter that selects commits that reference a bug in the message.
+ .2 Create a filter that selects commits that alter a ```.java``` file.
+ .3 Create a filter that counts the number of commits that are selected.
+
+```java
+CommitCountFilter bugCommits = new CommitCountFilter();
+CommitCountFilter javaBugCommits = new CommitCountFilter();
+CommitFinder finder = new CommitFinder("/repos/myrepo/.git");
+finder.setFilter(new AndCommitFilter(new BugFilter(), bugCommits));
+finder.setFilter(PathFilterUtils.andSuffix(".java"));
+finder.setMatcher(javaBugCommits);
+finder.find();
+System.out.println(javaBugCommits.getCount() + " java bugs fixed");
+System.out.println(bugCommits.getCount() + " total bugs fixed");
+```
 
 ## Why would you use gitective?
 
