@@ -18,9 +18,9 @@ what subset of all the fixes are fixes to Java source files.
 
 You would find this using the following steps
 
- .1 Create a filter that selects commits that reference a bug in the message.
- .2 Create a filter that selects commits that alter a ```.java``` file.
- .3 Create a filter that counts the number of commits that are selected.
+ .1  Create a filter that selects commits that reference a bug in the message.
+ .2  Create a filter that selects commits that alter a ```.java``` file.
+ .3  Create a filter that counts the number of commits that are selected.
 
 ```java
 CommitCountFilter bugCommits = new CommitCountFilter();
