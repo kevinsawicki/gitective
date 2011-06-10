@@ -10,14 +10,48 @@
  *****************************************************************************/
 package org.gitective.tests;
 
-import org.gitective.core.PathUtils;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.gitective.core.PathFilterUtils;
 import org.gitective.core.filter.commit.CommitCountFilter;
+import org.gitective.core.filter.commit.LastCommitFilter;
 import org.gitective.core.service.CommitFinder;
 
 /**
  * Unit tests of path filtering
  */
 public class PathTest extends GitTestCase {
+
+	/**
+	 * Test matching single suffix
+	 * 
+	 * @throws Exception
+	 */
+	public void testSingleSuffix() throws Exception {
+		add("foo.cpp", "a");
+		RevCommit commit = add("bar.java", "b");
+		LastCommitFilter matcher = new LastCommitFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(PathFilterUtils.andSuffix(".java"));
+		finder.setMatcher(matcher);
+		finder.find();
+		assertEquals(commit, matcher.getLast());
+	}
+
+	/**
+	 * Test matching two suffixes
+	 * 
+	 * @throws Exception
+	 */
+	public void testTwoSuffixes() throws Exception {
+		add("foo.cpp", "a");
+		RevCommit commit = add("bar.java", "b");
+		LastCommitFilter matcher = new LastCommitFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(PathFilterUtils.andSuffix(".java"));
+		finder.setMatcher(matcher);
+		finder.find();
+		assertEquals(commit, matcher.getLast());
+	}
 
 	/**
 	 * Test counting some commits that match a path
@@ -33,7 +67,7 @@ public class PathTest extends GitTestCase {
 		CommitCountFilter path = new CommitCountFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
 		finder.setFilter(all);
-		finder.setFilter(PathUtils.createPathFilter("file2.txt"));
+		finder.setFilter(PathFilterUtils.and("file2.txt"));
 		finder.setMatcher(path);
 		finder.find();
 		assertEquals(4, all.getCount());
@@ -56,18 +90,18 @@ public class PathTest extends GitTestCase {
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
 		finder.setMatcher(count);
-		finder.setFilter(PathUtils.createPathFilter("file0.txt"));
+		finder.setFilter(PathFilterUtils.and("file0.txt"));
 		finder.find();
 		assertEquals(0, count.getCount());
-		finder.setFilter(PathUtils.createPathFilter("file1.txt"));
+		finder.setFilter(PathFilterUtils.and("file1.txt"));
 		finder.find();
 		assertEquals(1, count.getCount());
 		count.reset();
-		finder.setFilter(PathUtils.createPathFilter("file2.txt"));
+		finder.setFilter(PathFilterUtils.and("file2.txt"));
 		finder.find();
 		assertEquals(2, count.getCount());
 		count.reset();
-		finder.setFilter(PathUtils.createPathFilter("file3.txt"));
+		finder.setFilter(PathFilterUtils.and("file3.txt"));
 		finder.find();
 		assertEquals(3, count.getCount());
 	}
