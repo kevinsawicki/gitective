@@ -174,7 +174,7 @@ while (commit != null) {
      cursor.reset();
 }
 </pre>
-<p class="description">Find commits referencing bugs numbers</p>
+<p class="description">Find commits referencing bug numbers in message</p>
 <pre class="sh_java">
 CommitListFilter commits = new CommitListFilter();
 AndCommitFilter filter = new AndCommitFilter(new BugFilter(), commits);
