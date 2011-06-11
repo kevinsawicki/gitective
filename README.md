@@ -117,7 +117,7 @@ This example collects commits into a list of a configured size and iteratively p
 ```java
 CommitListFilter block = new CommitListFilter();
 CommitFilter limit = new CommitLimitFilter(100).setStop(true);
-AndCommitFilter filters = new AndCommitFilter(limit, block)
+AndCommitFilter filters = new AndCommitFilter(limit, block);
 CommitCursorFilter cursor = new CommitCursorFilter(filters);
 Repository repo = new FileRepository("/repos/jgit/.git");
 CommitFinder finder = new CommitFinder(repo);
@@ -157,4 +157,4 @@ JGit 1.0+
 
 ## License
 
-[Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html)
+[MIT License](http://www.opensource.org/licenses/mit-license.php)
