@@ -1,10 +1,24 @@
-/******************************************************************************
- *  Copyright (c) 2011, Kevin Sawicki <kevinsawicki@gmail.com>
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
- *****************************************************************************/
+/*
+ * Copyright (c) 2011 Kevin Sawicki <kevinsawicki@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ */
 package org.gitective.core.service;
 
 import java.io.File;
@@ -30,12 +44,13 @@ public class RepositoryService {
 	 * 
 	 * @param gitDirs
 	 */
-	public RepositoryService(String... gitDirs) {
+	public RepositoryService(final String... gitDirs) {
 		Assert.notNull("Directories cannot be null", gitDirs);
 		Assert.notEmpty("Directories cannot be empty", gitDirs);
-		repositories = new Repository[gitDirs.length];
+		final int length = gitDirs.length;
+		repositories = new Repository[length];
 		try {
-			for (int i = 0; i < gitDirs.length; i++)
+			for (int i = 0; i < length; i++)
 				repositories[i] = new FileRepository(gitDirs[i]);
 		} catch (IOException e) {
 			throw new GitException(e);
@@ -47,12 +62,13 @@ public class RepositoryService {
 	 * 
 	 * @param gitDirs
 	 */
-	public RepositoryService(File... gitDirs) {
+	public RepositoryService(final File... gitDirs) {
 		Assert.notNull("Directories cannot be null", gitDirs);
 		Assert.notEmpty("Directories cannot be empty", gitDirs);
-		repositories = new Repository[gitDirs.length];
+		final int length = gitDirs.length;
+		repositories = new Repository[length];
 		try {
-			for (int i = 0; i < gitDirs.length; i++)
+			for (int i = 0; i < length; i++)
 				repositories[i] = new FileRepository(gitDirs[i]);
 		} catch (IOException e) {
 			throw new GitException(e);
@@ -64,7 +80,7 @@ public class RepositoryService {
 	 * 
 	 * @param repositories
 	 */
-	public RepositoryService(Repository... repositories) {
+	public RepositoryService(final Repository... repositories) {
 		Assert.notNull("Repositories cannot be null", repositories);
 		Assert.notEmpty("Repositories cannot be empty", repositories);
 		this.repositories = new Repository[repositories.length];

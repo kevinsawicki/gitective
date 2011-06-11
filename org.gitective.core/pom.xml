@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>gitective</groupId>
 	<artifactId>gitective-core</artifactId>
-	<version>0.5-SNAPSHOT</version>
+	<version>0.6-SNAPSHOT</version>
 	<name>gitective - core</name>
 	<description>gitective core library</description>
 	<url>http://gitective.org</url>
@@ -14,7 +14,7 @@
 	<scm>
 		<url>https://github.com/kevinsawicki/gitective</url>
 		<connection>scm:git:git://github.com/kevinsawicki/gitective.git</connection>
-		<tag>v0.5</tag>
+		<tag>v0.6</tag>
 	</scm>
 	<developers>
 		<developer>
