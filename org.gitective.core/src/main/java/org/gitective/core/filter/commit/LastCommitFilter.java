@@ -28,7 +28,10 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * 
+ * Commit filter that retains the last commit seen via a call to
+ * {@link #include(RevWalk, RevCommit)}. The last commit seen is available
+ * through calling {@link #getLast()} and can be cleared through calling
+ * {@link #reset()} on this filter.
  */
 public class LastCommitFilter extends CommitFilter {
 
@@ -43,12 +46,13 @@ public class LastCommitFilter extends CommitFilter {
 	/**
 	 * Get last commit seen
 	 * 
-	 * @return commit or null if none seen sine creation or last reset
+	 * @return commit or null if none seen since creation or last reset
 	 */
 	public RevCommit getLast() {
 		return last;
 	}
 
+	@Override
 	public CommitFilter reset() {
 		last = null;
 		return super.reset();
