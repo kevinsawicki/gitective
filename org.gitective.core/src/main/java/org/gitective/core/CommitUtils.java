@@ -142,7 +142,7 @@ public abstract class CommitUtils {
 
 	private static RevCommit parse(final Repository repository,
 			final ObjectId commit) {
-		RevWalk walk = new RevWalk(repository);
+		final RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
 		try {
 			return walk.parseCommit(commit);
