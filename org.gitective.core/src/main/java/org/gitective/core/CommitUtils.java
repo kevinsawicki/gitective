@@ -124,13 +124,15 @@ public abstract class CommitUtils {
 
 	private static RevCommit walkToBase(final Repository repository,
 			final ObjectId... commits) {
-		RevWalk walk = new RevWalk(repository);
-		walk.setRetainBody(true);
+		final RevWalk walk = new RevWalk(repository);
 		walk.setRevFilter(RevFilter.MERGE_BASE);
 		try {
 			for (int i = 0; i < commits.length; i++)
 				walk.markStart(walk.parseCommit(commits[i]));
-			return walk.next();
+			final RevCommit base = walk.next();
+			if (base != null)
+				walk.parseBody(base);
+			return base;
 		} catch (IOException e) {
 			throw new GitException(e);
 		} finally {
