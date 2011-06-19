@@ -36,7 +36,7 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
  */
 public abstract class PathFilterUtils {
 
-	private static TreeFilter[] paths(String... paths) {
+	private static TreeFilter[] paths(final String... paths) {
 		final int length = paths.length;
 		final TreeFilter[] filters = new TreeFilter[length];
 		for (int i = 0; i < length; i++)
@@ -44,7 +44,7 @@ public abstract class PathFilterUtils {
 		return filters;
 	}
 
-	private static TreeFilter[] suffix(String... paths) {
+	private static TreeFilter[] suffix(final String... paths) {
 		final int length = paths.length;
 		final TreeFilter[] filters = new TreeFilter[length];
 		for (int i = 0; i < length; i++)
@@ -59,7 +59,7 @@ public abstract class PathFilterUtils {
 		return PathFilterGroup.create(filters);
 	}
 
-	private static TreeFilter andDiff(TreeFilter[] filters) {
+	private static TreeFilter andDiff(final TreeFilter[] filters) {
 		if (filters.length > 1)
 			return AndTreeFilter.create(AndTreeFilter.create(filters),
 					TreeFilter.ANY_DIFF);
@@ -67,7 +67,7 @@ public abstract class PathFilterUtils {
 			return AndTreeFilter.create(filters[0], TreeFilter.ANY_DIFF);
 	}
 
-	private static TreeFilter orDiff(TreeFilter[] filters) {
+	private static TreeFilter orDiff(final TreeFilter[] filters) {
 		if (filters.length > 1)
 			return AndTreeFilter.create(OrTreeFilter.create(filters),
 					TreeFilter.ANY_DIFF);
