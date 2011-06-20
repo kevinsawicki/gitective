@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.filter.commit.AndCommitFilter;
@@ -69,5 +70,20 @@ public class CursorTest extends GitTestCase {
 		}
 		assertEquals(commitCount / limit.getLimit(), chunks);
 		assertTrue(commits.isEmpty());
+	}
+
+	/**
+	 * Test clone of {@link CommitCursorFilter}
+	 * 
+	 * @throws Exception
+	 */
+	public void testClone() throws Exception {
+		CommitCursorFilter filter = new CommitCursorFilter(RevFilter.NONE);
+		assertFalse(filter.include(null, null));
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof CommitCursorFilter);
+		assertFalse(clone.include(null, null));
 	}
 }

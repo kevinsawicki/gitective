@@ -82,7 +82,7 @@ public class CommitCursorFilter extends CommitFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new CommitCursorFilter(filter);
+		return new CommitCursorFilter(filter.clone());
 	}
 
 }

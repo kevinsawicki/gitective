@@ -55,6 +55,22 @@ public class AllTest extends GitTestCase {
 	}
 
 	/**
+	 * Test empty adds to filter
+	 * 
+	 * @throws Exception
+	 */
+	public void testEmptyAdds() throws Exception {
+		AllCommitFilter filter = new AllCommitFilter();
+		assertEquals(0, filter.getSize());
+		filter.add((RevFilter[]) null);
+		assertEquals(0, filter.getSize());
+		filter.add(new RevFilter[0]);
+		assertEquals(0, filter.getSize());
+		filter.add(new CommitCountFilter());
+		assertEquals(1, filter.getSize());
+	}
+
+	/**
 	 * Test always matching despite child filter not-including
 	 * 
 	 * @throws Exception

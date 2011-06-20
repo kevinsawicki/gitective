@@ -60,7 +60,7 @@ public abstract class PersonFilter extends CommitFilter {
 	 * @param ident
 	 * @return true on matches, false otherwise
 	 */
-	protected boolean match(PersonIdent ident) {
+	protected boolean match(final PersonIdent ident) {
 		if (equalsNull(person, ident))
 			return true;
 

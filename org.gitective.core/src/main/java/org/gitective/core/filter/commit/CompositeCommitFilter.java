@@ -80,8 +80,18 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * @return non-null but possibly empty array of child filters
 	 */
 	protected RevFilter[] cloneFilters() {
-		RevFilter[] clone = new RevFilter[filters.length];
+		final RevFilter[] clone = new RevFilter[filters.length];
 		System.arraycopy(filters, 0, clone, 0, clone.length);
 		return clone;
+	}
+
+	/**
+	 * Get the number of filters that have been added as a child filter to this
+	 * filter
+	 * 
+	 * @return number of children filters
+	 */
+	public int getSize() {
+		return filters.length;
 	}
 }
