@@ -109,7 +109,18 @@ public abstract class GitTestCase extends TestCase {
 	}
 
 	/**
-	 * Create tag with name and checkout
+	 * Create tag with name
+	 * 
+	 * @param name
+	 * @return tag ref
+	 * @throws Exception
+	 */
+	protected Ref tag(String name) throws Exception {
+		return tag(testRepo, name);
+	}
+
+	/**
+	 * Create tag with name
 	 * 
 	 * @param repo
 	 * @param name

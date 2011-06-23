@@ -23,6 +23,7 @@ package org.gitective.core.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.Constants;
@@ -111,25 +112,27 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Walk commits between the start commit id and end commit id. Starting
-	 * commit and filter cannot be null.
+	 * Create new rev walk
 	 * 
 	 * @param repository
-	 * @param start
-	 * @param end
-	 * @return this service
+	 * @return rev walk
 	 */
-	protected CommitFinder walk(Repository repository, ObjectId start,
-			ObjectId end) {
-		Assert.notNull("Starting commit id cannot be null", start);
+	protected RevWalk createWalk(Repository repository) {
 		final RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
 		walk.setRevFilter(preFilter);
 		walk.setTreeFilter(treeFilter);
+		return walk;
+	}
+
+	/**
+	 * Traverse commits in given rev wlak
+	 * 
+	 * @param walk
+	 * @return this finder
+	 */
+	protected CommitFinder walk(RevWalk walk) {
 		try {
-			walk.markStart(walk.parseCommit(start));
-			if (end != null)
-				walk.markUninteresting(walk.parseCommit(end));
 			if (postFilter != null) {
 				RevCommit commit;
 				while ((commit = walk.next()) != null)
@@ -142,6 +145,30 @@ public class CommitFinder extends RepositoryService {
 			throw new GitException(e);
 		} catch (StopWalkException ignored) {
 			// Ignored
+		}
+		return this;
+	}
+
+	/**
+	 * Walk commits between the start commit id and end commit id. Starting
+	 * commit and filter cannot be null.
+	 * 
+	 * @param repository
+	 * @param start
+	 * @param end
+	 * @return this service
+	 */
+	protected CommitFinder walk(Repository repository, ObjectId start,
+			ObjectId end) {
+		Assert.notNull("Starting commit id cannot be null", start);
+		final RevWalk walk = createWalk(repository);
+		try {
+			walk.markStart(walk.parseCommit(start));
+			if (end != null)
+				walk.markUninteresting(walk.parseCommit(end));
+			walk(walk);
+		} catch (IOException e) {
+			throw new GitException(e);
 		} finally {
 			walk.release();
 		}
@@ -177,6 +204,52 @@ public class CommitFinder extends RepositoryService {
 	 */
 	public CommitFinder find() {
 		return findFrom(Constants.HEAD);
+	}
+
+	/**
+	 * Search commits starting at the commit that each tag is pointing to
+	 * 
+	 * @return this finder
+	 */
+	public CommitFinder findInTags() {
+		final Repository[] repos = repositories;
+		final int repoCount = repositories.length;
+		for (int i = 0; i < repoCount; i++) {
+			Collection<RevCommit> commits = CommitUtils.getTags(repos[i]);
+			if (!commits.isEmpty()) {
+				RevWalk walk = createWalk(repos[i]);
+				try {
+					walk.markStart(commits);
+				} catch (IOException e) {
+					throw new GitException(e);
+				}
+				walk(walk);
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Search commits starting at the commit that each branch is pointing to
+	 * 
+	 * @return this finder
+	 */
+	public CommitFinder findInBranches() {
+		final Repository[] repos = repositories;
+		final int repoCount = repositories.length;
+		for (int i = 0; i < repoCount; i++) {
+			Collection<RevCommit> commits = CommitUtils.getBranches(repos[i]);
+			if (!commits.isEmpty()) {
+				RevWalk walk = createWalk(repos[i]);
+				try {
+					walk.markStart(commits);
+				} catch (IOException e) {
+					throw new GitException(e);
+				}
+				walk(walk);
+			}
+		}
+		return this;
 	}
 
 	/**
