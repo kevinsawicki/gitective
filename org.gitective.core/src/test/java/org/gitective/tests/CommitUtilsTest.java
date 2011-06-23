@@ -21,14 +21,18 @@
  */
 package org.gitective.tests;
 
-import org.gitective.core.CommitUtils;
+import java.util.Collection;
 
-import junit.framework.TestCase;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepository;
+import org.gitective.core.CommitUtils;
 
 /**
  * Unit tests of {@link CommitUtils}
  */
-public class CommitUtilsTest extends TestCase {
+public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Test constructor
@@ -36,5 +40,54 @@ public class CommitUtilsTest extends TestCase {
 	public void testConstructor() {
 		assertNotNull(new CommitUtils() {
 		});
+	}
+
+	/**
+	 * Test getting the commit a tag points to
+	 * 
+	 * @throws Exception
+	 */
+	public void testTagRef() throws Exception {
+		add("a.txt", "a");
+		RevCommit commit = add("test.txt", "content");
+		tag(testRepo, "tag1");
+		Repository repo = new FileRepository(testRepo);
+		RevCommit refCommit = CommitUtils.getRef(repo, "tag1");
+		assertNotNull(refCommit);
+		assertEquals(commit, refCommit);
+		Collection<RevCommit> commits = CommitUtils.getTags(repo);
+		assertNotNull(commits);
+		assertEquals(1, commits.size());
+		assertEquals(commit, commits.iterator().next());
+	}
+
+	/**
+	 * Test getting commit for tag that doesn't exist
+	 * 
+	 * @throws Exception
+	 */
+	public void testInvalidRef() throws Exception {
+		RevCommit commit = CommitUtils.getRef(new FileRepository(testRepo),
+				"notatag");
+		assertNull(commit);
+	}
+
+	/**
+	 * Test getting the commit a branch points to
+	 * 
+	 * @throws Exception
+	 */
+	public void testBranchRef() throws Exception {
+		add("a.txt", "a");
+		RevCommit commit = add("test.txt", "content");
+		Ref ref = branch(testRepo, "branch1");
+		Repository repo = new FileRepository(testRepo);
+		RevCommit refCommit = CommitUtils.getRef(repo, ref);
+		assertNotNull(refCommit);
+		assertEquals(commit, refCommit);
+		Collection<RevCommit> commits = CommitUtils.getBranches(repo);
+		assertNotNull(commits);
+		assertEquals(1, commits.size());
+		assertEquals(commit, commits.iterator().next());
 	}
 }

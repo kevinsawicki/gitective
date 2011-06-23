@@ -23,9 +23,13 @@ package org.gitective.core;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefDatabase;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -103,10 +107,120 @@ public abstract class CommitUtils {
 		Assert.notNull("Repository cannot be null", repository);
 		Assert.notNull("Revisions cannot be null", revisions);
 		Assert.notEmpty("Revisions cannot be empty", revisions);
-		final ObjectId[] commits = new ObjectId[revisions.length];
-		for (int i = 0; i < revisions.length; i++)
+		final int length = revisions.length;
+		final ObjectId[] commits = new ObjectId[length];
+		for (int i = 0; i < length; i++)
 			commits[i] = resolve(repository, revisions[i]);
 		return walkToBase(repository, commits);
+	}
+
+	/**
+	 * Get commit that given ref points to
+	 * 
+	 * @param repository
+	 * @param refName
+	 * @return commit, may be null
+	 */
+	public static RevCommit getRef(final Repository repository,
+			final String refName) {
+		Assert.notNull("Repository cannot be null", repository);
+		Assert.notNull("Ref name cannot be null", refName);
+		Assert.notEmpty("Ref name cannot be empty", refName);
+		Ref ref = null;
+		try {
+			ref = repository.getRef(refName);
+		} catch (IOException e) {
+			throw new GitException(e);
+		}
+		return ref != null ? lookupRef(repository, ref) : null;
+	}
+
+	/**
+	 * Get commit that given ref points to
+	 * 
+	 * @param repository
+	 * @param ref
+	 * @return commit, may be null
+	 */
+	public static RevCommit getRef(final Repository repository, final Ref ref) {
+		Assert.notNull("Repository cannot be null", repository);
+		Assert.notNull("Ref cannot be null", ref);
+		return lookupRef(repository, ref);
+	}
+
+	/**
+	 * Get all commits that tags in the given repository point to
+	 * 
+	 * @param repository
+	 * @return non-null but possibly empty collection of commits
+	 */
+	public static Collection<RevCommit> getTags(final Repository repository) {
+		Assert.notNull("Repository cannot be null", repository);
+		final Collection<RevCommit> commits = new HashSet<RevCommit>();
+		final RevWalk walk = new RevWalk(repository);
+		try {
+			for (Ref tag : repository.getTags().values()) {
+				RevCommit commit = getRef(walk, tag);
+				if (commit != null)
+					commits.add(commit);
+			}
+		} finally {
+			walk.release();
+		}
+		return commits;
+	}
+
+	/**
+	 * Get all commits that branches in the given repository point to
+	 * 
+	 * @param repository
+	 * @return non-null but possibly empty collection of commits
+	 */
+	public static Collection<RevCommit> getBranches(final Repository repository) {
+		Assert.notNull("Repository cannot be null", repository);
+		final Collection<RevCommit> commits = new HashSet<RevCommit>();
+		final RevWalk walk = new RevWalk(repository);
+		final RefDatabase refDb = repository.getRefDatabase();
+		try {
+			for (Ref ref : refDb.getRefs(Constants.R_HEADS).values()) {
+				RevCommit commit = getRef(walk, ref);
+				if (commit != null)
+					commits.add(commit);
+			}
+			for (Ref ref : refDb.getRefs(Constants.R_REMOTES).values()) {
+				RevCommit commit = getRef(walk, ref);
+				if (commit != null)
+					commits.add(commit);
+			}
+		} catch (IOException e) {
+			throw new GitException(e);
+		} finally {
+			walk.release();
+		}
+		return commits;
+	}
+
+	private static RevCommit lookupRef(final Repository repository,
+			final Ref ref) {
+		final RevWalk walk = new RevWalk(repository);
+		try {
+			return getRef(walk, ref);
+		} finally {
+			walk.release();
+		}
+	}
+
+	private static RevCommit getRef(final RevWalk walk, final Ref ref) {
+		try {
+			ObjectId id = ref.getPeeledObjectId();
+			if (id == null)
+				id = ref.getObjectId();
+			if (id != null)
+				return walk.parseCommit(id);
+		} catch (IOException e) {
+			throw new GitException(e);
+		}
+		return null;
 	}
 
 	private static ObjectId resolve(final Repository repository,
@@ -152,5 +266,4 @@ public abstract class CommitUtils {
 			walk.release();
 		}
 	}
-
 }

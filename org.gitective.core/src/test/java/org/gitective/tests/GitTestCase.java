@@ -109,6 +109,22 @@ public abstract class GitTestCase extends TestCase {
 	}
 
 	/**
+	 * Create tag with name and checkout
+	 * 
+	 * @param repo
+	 * @param name
+	 * @return tag ref
+	 * @throws Exception
+	 */
+	protected Ref tag(File repo, String name) throws Exception {
+		Git git = Git.open(repo);
+		git.tag().setName(name).setMessage(name).call();
+		Ref tagRef = git.getRepository().getTags().get(name);
+		assertNotNull(tagRef);
+		return tagRef;
+	}
+
+	/**
 	 * Add file to test repository
 	 * 
 	 * @param path
