@@ -23,6 +23,7 @@ package org.gitective.tests;
 
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.AuthorDateFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
@@ -70,6 +71,19 @@ public class DateTest extends GitTestCase {
 	}
 
 	/**
+	 * Unit test of {@link AuthorDateFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	public void testAuthorClone() throws Exception {
+		AuthorDateFilter date = new AuthorDateFilter(2);
+		RevFilter clone = date.clone();
+		assertNotNull(clone);
+		assertNotSame(date, clone);
+		assertTrue(clone instanceof AuthorDateFilter);
+	}
+
+	/**
 	 * Unit test of {@link CommitterDateFilter}
 	 * 
 	 * @throws Exception
@@ -104,4 +118,16 @@ public class DateTest extends GitTestCase {
 		assertEquals(0, count.getCount());
 	}
 
+	/**
+	 * Unit test of {@link CommitterDateFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	public void testCommitterClone() throws Exception {
+		CommitterDateFilter date = new CommitterDateFilter(2);
+		RevFilter clone = date.clone();
+		assertNotNull(clone);
+		assertNotSame(date, clone);
+		assertTrue(clone instanceof CommitterDateFilter);
+	}
 }
