@@ -43,7 +43,7 @@ public class AuthorTest extends GitTestCase {
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
 		assertNotSame(filter, cloned);
-		assertTrue(filter instanceof AuthorFilter);
+		assertTrue(cloned instanceof AuthorFilter);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class AuthorTest extends GitTestCase {
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
 		assertNotSame(filter, cloned);
-		assertTrue(filter instanceof AuthorSetFilter);
+		assertTrue(cloned instanceof AuthorSetFilter);
 	}
 
 	/**

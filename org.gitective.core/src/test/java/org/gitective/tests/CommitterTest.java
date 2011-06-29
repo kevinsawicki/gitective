@@ -43,7 +43,7 @@ public class CommitterTest extends GitTestCase {
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
 		assertNotSame(filter, cloned);
-		assertTrue(filter instanceof CommitterFilter);
+		assertTrue(cloned instanceof CommitterFilter);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class CommitterTest extends GitTestCase {
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
 		assertNotSame(filter, cloned);
-		assertTrue(filter instanceof CommitterSetFilter);
+		assertTrue(cloned instanceof CommitterSetFilter);
 	}
 
 	/**
