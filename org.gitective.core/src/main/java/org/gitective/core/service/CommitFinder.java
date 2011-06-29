@@ -126,17 +126,18 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Traverse commits in given rev wlak
+	 * Traverse commits in given rev walk
 	 * 
 	 * @param walk
 	 * @return this finder
 	 */
 	protected CommitFinder walk(RevWalk walk) {
 		try {
-			if (postFilter != null) {
+			final RevFilter filter = postFilter;
+			if (filter != null) {
 				RevCommit commit;
 				while ((commit = walk.next()) != null)
-					if (!postFilter.include(walk, commit))
+					if (!filter.include(walk, commit))
 						return this;
 			} else
 				while (walk.next() != null)
@@ -158,8 +159,8 @@ public class CommitFinder extends RepositoryService {
 	 * @param end
 	 * @return this service
 	 */
-	protected CommitFinder walk(Repository repository, ObjectId start,
-			ObjectId end) {
+	protected CommitFinder walk(final Repository repository,
+			final ObjectId start, final ObjectId end) {
 		Assert.notNull("Starting commit id cannot be null", start);
 		final RevWalk walk = createWalk(repository);
 		try {
@@ -181,7 +182,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param start
 	 * @return this service
 	 */
-	public CommitFinder findFrom(ObjectId start) {
+	public CommitFinder findFrom(final ObjectId start) {
 		findBetween(start, (ObjectId) null);
 		return this;
 	}
@@ -192,7 +193,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param start
 	 * @return this service
 	 */
-	public CommitFinder findFrom(String start) {
+	public CommitFinder findFrom(final String start) {
 		return findBetween(start, (ObjectId) null);
 	}
 
@@ -214,10 +215,12 @@ public class CommitFinder extends RepositoryService {
 	public CommitFinder findInTags() {
 		final Repository[] repos = repositories;
 		final int repoCount = repositories.length;
+		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
-			Collection<RevCommit> commits = CommitUtils.getTags(repos[i]);
+			repo = repos[i];
+			Collection<RevCommit> commits = CommitUtils.getTags(repo);
 			if (!commits.isEmpty()) {
-				RevWalk walk = createWalk(repos[i]);
+				RevWalk walk = createWalk(repo);
 				try {
 					walk.markStart(commits);
 				} catch (IOException e) {
@@ -237,10 +240,12 @@ public class CommitFinder extends RepositoryService {
 	public CommitFinder findInBranches() {
 		final Repository[] repos = repositories;
 		final int repoCount = repositories.length;
+		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
-			Collection<RevCommit> commits = CommitUtils.getBranches(repos[i]);
+			repo = repos[i];
+			Collection<RevCommit> commits = CommitUtils.getBranches(repo);
 			if (!commits.isEmpty()) {
-				RevWalk walk = createWalk(repos[i]);
+				RevWalk walk = createWalk(repo);
 				try {
 					walk.markStart(commits);
 				} catch (IOException e) {
@@ -259,7 +264,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param end
 	 * @return this service
 	 */
-	public CommitFinder findBetween(ObjectId start, ObjectId end) {
+	public CommitFinder findBetween(final ObjectId start, final ObjectId end) {
 		final Repository[] repos = repositories;
 		final int repoCount = repositories.length;
 		for (int i = 0; i < repoCount; i++)
@@ -275,7 +280,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param end
 	 * @return this service
 	 */
-	public CommitFinder findBetween(String start, ObjectId end) {
+	public CommitFinder findBetween(final String start, final ObjectId end) {
 		final Repository[] repos = repositories;
 		final int repoCount = repositories.length;
 		Repository repo;
@@ -294,7 +299,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param end
 	 * @return this service
 	 */
-	public CommitFinder findBetween(ObjectId start, String end) {
+	public CommitFinder findBetween(final ObjectId start, final String end) {
 		final Repository[] repos = repositories;
 		final int repoCount = repositories.length;
 		Repository repo;
@@ -313,7 +318,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param end
 	 * @return this service
 	 */
-	public CommitFinder findBetween(String start, String end) {
+	public CommitFinder findBetween(final String start, final String end) {
 		final Repository[] repos = repositories;
 		final int repoCount = repositories.length;
 		Repository repo;
