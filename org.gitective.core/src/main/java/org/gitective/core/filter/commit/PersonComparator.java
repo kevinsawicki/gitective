@@ -21,6 +21,7 @@
  */
 package org.gitective.core.filter.commit;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.eclipse.jgit.lib.PersonIdent;
@@ -31,7 +32,10 @@ import org.eclipse.jgit.lib.PersonIdent;
  * This class compares {@link PersonIdent#getName()	} first and if they are
  * identical it will compare {@link PersonIdent#getEmailAddress()} next.
  */
-public class PersonComparator implements Comparator<PersonIdent> {
+public class PersonComparator implements Comparator<PersonIdent>, Serializable {
+
+	/** */
+	private static final long serialVersionUID = -14341068273148025L;
 
 	public int compare(final PersonIdent p1, final PersonIdent p2) {
 		int compare = p1.getName().compareTo(p2.getName());
