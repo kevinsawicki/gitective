@@ -27,7 +27,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 /**
  * Base commit filter class with utility methods to be used by sub-classes.
  */
-public abstract class CommitFilter extends RevFilter {
+public abstract class CommitFilter extends RevFilter implements Cloneable {
 
 	private boolean stop;
 
