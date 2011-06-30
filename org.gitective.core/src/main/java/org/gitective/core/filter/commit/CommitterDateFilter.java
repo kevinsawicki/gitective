@@ -35,19 +35,19 @@ public class CommitterDateFilter extends DateFilter {
 	/**
 	 * @param date
 	 */
-	public CommitterDateFilter(Date date) {
+	public CommitterDateFilter(final Date date) {
 		super(date);
 	}
 
 	/**
 	 * @param time
 	 */
-	public CommitterDateFilter(long time) {
+	public CommitterDateFilter(final long time) {
 		super(time);
 	}
 
 	@Override
-	protected Date getDate(RevCommit commit) {
+	protected Date getDate(final RevCommit commit) {
 		final PersonIdent committer = commit.getCommitterIdent();
 		return committer != null ? committer.getWhen() : null;
 	}

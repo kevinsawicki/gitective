@@ -39,7 +39,7 @@ public class CommitterFilter extends PersonFilter {
 	 * 
 	 * @param person
 	 */
-	public CommitterFilter(PersonIdent person) {
+	public CommitterFilter(final PersonIdent person) {
 		super(person);
 	}
 
@@ -49,12 +49,13 @@ public class CommitterFilter extends PersonFilter {
 	 * @param name
 	 * @param email
 	 */
-	public CommitterFilter(String name, String email) {
+	public CommitterFilter(final String name, final String email) {
 		super(name, email);
 	}
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		return match(commit.getCommitterIdent());
 	}
 

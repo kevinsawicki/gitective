@@ -38,7 +38,8 @@ public class LastCommitFilter extends CommitFilter {
 	private RevCommit last;
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		last = commit;
 		return true;
 	}

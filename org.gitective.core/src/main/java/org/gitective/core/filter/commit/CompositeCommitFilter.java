@@ -38,7 +38,7 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * 
 	 * @param filters
 	 */
-	public CompositeCommitFilter(RevFilter... filters) {
+	public CompositeCommitFilter(final RevFilter... filters) {
 		if (filters != null && filters.length > 0) {
 			this.filters = new RevFilter[filters.length];
 			System.arraycopy(filters, 0, this.filters, 0, filters.length);
@@ -54,10 +54,10 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * @param addedFilters
 	 * @return this filter
 	 */
-	public CompositeCommitFilter add(RevFilter... addedFilters) {
+	public CompositeCommitFilter add(final RevFilter... addedFilters) {
 		if (addedFilters == null || addedFilters.length == 0)
 			return this;
-		RevFilter[] resized = new RevFilter[addedFilters.length
+		final RevFilter[] resized = new RevFilter[addedFilters.length
 				+ filters.length];
 		System.arraycopy(filters, 0, resized, 0, filters.length);
 		System.arraycopy(addedFilters, 0, resized, filters.length,

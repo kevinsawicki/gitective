@@ -40,7 +40,7 @@ public class SignedOffByFilter extends CommitMessageFindFilter {
 	public static final String SIGNED_OFF_BY = Constants.SIGNED_OFF_BY_TAG
 			+ "{0} <{1}>";
 
-	private PersonIdent person;
+	private final PersonIdent person;
 
 	/**
 	 * Create a signed off by filter matching the person
@@ -48,7 +48,7 @@ public class SignedOffByFilter extends CommitMessageFindFilter {
 	 * @param person
 	 *            must be non-null
 	 */
-	public SignedOffByFilter(PersonIdent person) {
+	public SignedOffByFilter(final PersonIdent person) {
 		super(Pattern.quote(MessageFormat.format(SIGNED_OFF_BY,
 				person.getName(), person.getEmailAddress())), Pattern.MULTILINE);
 		this.person = person;

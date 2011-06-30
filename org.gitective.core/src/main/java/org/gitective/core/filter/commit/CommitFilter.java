@@ -38,7 +38,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	 * @param stop
 	 * @return this filter
 	 */
-	public CommitFilter setStop(boolean stop) {
+	public CommitFilter setStop(final boolean stop) {
 		this.stop = stop;
 		return this;
 	}
@@ -51,7 +51,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	 * @param object2
 	 * @return true if equal, false otherwise
 	 */
-	protected boolean equals(Object object1, Object object2) {
+	protected boolean equals(final Object object1, final Object object2) {
 		return equalsNull(object1, object2) || equalsNonNull(object1, object2);
 	}
 
@@ -62,7 +62,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	 * @param object2
 	 * @return true if both are null, false otherwise
 	 */
-	protected boolean equalsNull(Object object1, Object object2) {
+	protected boolean equalsNull(final Object object1, final Object object2) {
 		return object1 == null && object2 == null;
 	}
 
@@ -74,7 +74,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	 * @param object2
 	 * @return true if non-null and equal, false otherwise
 	 */
-	protected boolean equalsNonNull(Object object1, Object object2) {
+	protected boolean equalsNonNull(final Object object1, final Object object2) {
 		return object1 != null && object2 != null && object1.equals(object2);
 	}
 
@@ -95,7 +95,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	 * @param include
 	 * @return include parameter value
 	 */
-	protected boolean include(boolean include) {
+	protected boolean include(final boolean include) {
 		if (!include && stop)
 			throw StopWalkException.INSTANCE;
 		return include;

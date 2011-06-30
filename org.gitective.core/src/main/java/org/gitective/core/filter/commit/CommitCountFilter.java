@@ -35,7 +35,8 @@ public class CommitCountFilter extends CommitFilter {
 	private long count;
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit cmit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit cmit)
+			throws IOException {
 		count++;
 		return true;
 	}

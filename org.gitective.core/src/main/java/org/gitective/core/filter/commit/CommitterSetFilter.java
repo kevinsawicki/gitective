@@ -32,7 +32,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class CommitterSetFilter extends PersonSetFilter {
 
 	@Override
-	protected PersonIdent getPerson(RevCommit commit) {
+	protected PersonIdent getPerson(final RevCommit commit) {
 		return commit.getCommitterIdent();
 	}
 

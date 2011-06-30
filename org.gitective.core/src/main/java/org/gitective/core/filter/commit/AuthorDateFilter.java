@@ -35,19 +35,19 @@ public class AuthorDateFilter extends DateFilter {
 	/**
 	 * @param date
 	 */
-	public AuthorDateFilter(Date date) {
+	public AuthorDateFilter(final Date date) {
 		super(date);
 	}
 
 	/**
 	 * @param time
 	 */
-	public AuthorDateFilter(long time) {
+	public AuthorDateFilter(final long time) {
 		super(time);
 	}
 
 	@Override
-	protected Date getDate(RevCommit commit) {
+	protected Date getDate(final RevCommit commit) {
 		final PersonIdent author = commit.getAuthorIdent();
 		return author != null ? author.getWhen() : null;
 	}

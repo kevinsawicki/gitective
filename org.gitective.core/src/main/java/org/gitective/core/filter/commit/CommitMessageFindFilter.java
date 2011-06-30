@@ -35,7 +35,7 @@ public class CommitMessageFindFilter extends PatternFindCommitFilter {
 	 * 
 	 * @param pattern
 	 */
-	public CommitMessageFindFilter(String pattern) {
+	public CommitMessageFindFilter(final String pattern) {
 		super(pattern);
 	}
 
@@ -45,12 +45,12 @@ public class CommitMessageFindFilter extends PatternFindCommitFilter {
 	 * @param pattern
 	 * @param flags
 	 */
-	public CommitMessageFindFilter(String pattern, int flags) {
+	public CommitMessageFindFilter(final String pattern, final int flags) {
 		super(pattern, flags);
 	}
 
 	@Override
-	protected CharSequence getText(RevCommit commit) {
+	protected CharSequence getText(final RevCommit commit) {
 		return commit.getFullMessage();
 	}
 

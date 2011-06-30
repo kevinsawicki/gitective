@@ -50,7 +50,7 @@ public class ParentCountFilter extends CommitFilter {
 	 * @param min
 	 *            minimum number of parent commits (inclusive)
 	 */
-	public ParentCountFilter(int min) {
+	public ParentCountFilter(final int min) {
 		this(min, Integer.MAX_VALUE);
 	}
 
@@ -63,14 +63,15 @@ public class ParentCountFilter extends CommitFilter {
 	 * @param max
 	 *            maximum number of parent commits (inclusive)
 	 */
-	public ParentCountFilter(int min, int max) {
+	public ParentCountFilter(final int min, final int max) {
 		this.min = min;
 		this.max = max;
 	}
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
-		int parents = commit.getParentCount();
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
+		final int parents = commit.getParentCount();
 		return include(parents >= min && parents <= max);
 	}
 
@@ -78,5 +79,4 @@ public class ParentCountFilter extends CommitFilter {
 	public RevFilter clone() {
 		return new ParentCountFilter(min, max);
 	}
-
 }

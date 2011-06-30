@@ -41,12 +41,13 @@ public class AllCommitFilter extends CompositeCommitFilter {
 	 * 
 	 * @param filters
 	 */
-	public AllCommitFilter(RevFilter... filters) {
+	public AllCommitFilter(final RevFilter... filters) {
 		super(filters);
 	}
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		final int length = filters.length;
 		for (int i = 0; i < length; i++)
 			filters[i].include(walker, commit);

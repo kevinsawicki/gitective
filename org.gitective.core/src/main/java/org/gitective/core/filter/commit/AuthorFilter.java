@@ -37,7 +37,7 @@ public class AuthorFilter extends PersonFilter {
 	/**
 	 * @param person
 	 */
-	public AuthorFilter(PersonIdent person) {
+	public AuthorFilter(final PersonIdent person) {
 		super(person);
 	}
 
@@ -45,12 +45,13 @@ public class AuthorFilter extends PersonFilter {
 	 * @param name
 	 * @param email
 	 */
-	public AuthorFilter(String name, String email) {
+	public AuthorFilter(final String name, final String email) {
 		super(name, email);
 	}
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		return match(commit.getAuthorIdent());
 	}
 

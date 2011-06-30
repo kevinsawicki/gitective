@@ -38,7 +38,7 @@ public class CommitCursorFilter extends CommitFilter {
 
 	private RevCommit last;
 
-	private RevFilter filter;
+	private final RevFilter filter;
 
 	/**
 	 * Create cursor filter that retains last commit when not included by the
@@ -46,15 +46,16 @@ public class CommitCursorFilter extends CommitFilter {
 	 * 
 	 * @param filter
 	 */
-	public CommitCursorFilter(RevFilter filter) {
+	public CommitCursorFilter(final RevFilter filter) {
 		Assert.notNull("Filter cannot be null", filter);
 		this.filter = filter;
 	}
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		try {
-			boolean include = filter.include(walker, commit);
+			final boolean include = filter.include(walker, commit);
 			last = include ? null : commit;
 			return include;
 		} catch (StopWalkException e) {

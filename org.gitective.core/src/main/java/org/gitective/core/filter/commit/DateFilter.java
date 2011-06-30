@@ -60,7 +60,8 @@ public abstract class DateFilter extends CommitFilter {
 	}
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		final Date date = getDate(commit);
 		return include(date != null && time <= date.getTime());
 	}

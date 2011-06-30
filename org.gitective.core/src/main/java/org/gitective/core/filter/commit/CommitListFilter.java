@@ -34,10 +34,11 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public class CommitListFilter extends CommitFilter {
 
-	List<RevCommit> commits = new LinkedList<RevCommit>();
+	private List<RevCommit> commits = new LinkedList<RevCommit>();
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		commits.add(commit);
 		return true;
 	}

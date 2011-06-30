@@ -53,12 +53,13 @@ public abstract class PersonSetFilter extends CommitFilter {
 	 * 
 	 * @param comparator
 	 */
-	public PersonSetFilter(Comparator<PersonIdent> comparator) {
+	public PersonSetFilter(final Comparator<PersonIdent> comparator) {
 		persons = new TreeSet<PersonIdent>(comparator);
 	}
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		PersonIdent person = getPerson(commit);
 		if (person != null)
 			persons.add(person);

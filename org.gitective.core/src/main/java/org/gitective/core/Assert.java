@@ -36,7 +36,7 @@ public abstract class Assert {
 	 * @return object
 	 * @throws IllegalArgumentException
 	 */
-	public static <V> V notNull(String message, V object)
+	public static <V> V notNull(final String message, final V object)
 			throws IllegalArgumentException {
 		if (object == null)
 			throw new IllegalArgumentException(message != null
@@ -52,7 +52,7 @@ public abstract class Assert {
 	 * @return object
 	 * @throws IllegalArgumentException
 	 */
-	public static <V> V notNull(V object) throws IllegalArgumentException {
+	public static <V> V notNull(final V object) throws IllegalArgumentException {
 		return notNull(null, object);
 	}
 
@@ -65,7 +65,7 @@ public abstract class Assert {
 	 * @return objects
 	 * @throws IllegalArgumentException
 	 */
-	public static <V> V[] notEmpty(String message, V[] objects)
+	public static <V> V[] notEmpty(final String message, final V[] objects)
 			throws IllegalArgumentException {
 		if (objects.length == 0)
 			throw new IllegalArgumentException(message != null
@@ -82,7 +82,8 @@ public abstract class Assert {
 	 * @return objects
 	 * @throws IllegalArgumentException
 	 */
-	public static <V> V[] notEmpty(V[] objects) throws IllegalArgumentException {
+	public static <V> V[] notEmpty(final V[] objects)
+			throws IllegalArgumentException {
 		return notEmpty(null, objects);
 	}
 
@@ -95,7 +96,7 @@ public abstract class Assert {
 	 * @return string
 	 * @throws IllegalArgumentException
 	 */
-	public static String notEmpty(String message, String string)
+	public static String notEmpty(final String message, final String string)
 			throws IllegalArgumentException {
 		if (string.length() == 0)
 			throw new IllegalArgumentException(message != null
@@ -112,7 +113,7 @@ public abstract class Assert {
 	 * @return string
 	 * @throws IllegalArgumentException
 	 */
-	public static String notEmpty(String string)
+	public static String notEmpty(final String string)
 			throws IllegalArgumentException {
 		return notEmpty(null, string);
 	}
