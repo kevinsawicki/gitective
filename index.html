@@ -182,6 +182,20 @@ AndCommitFilter filter = new AndCommitFilter(new BugFilter(), commits);
 CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(filter).find();
 </pre>
+
+<p class="description">Find files modified during a merge</p>
+<pre class="sh_java">
+CommitDiffFilter diffs = new CommitDiffFilter() {
+
+     protected boolean diff(RevCommit commit, Collection<DiffEntry> diffs) {
+          // Diffs collection contains all files modified during merge
+     }
+
+};
+AndCommitFilter filter = new AndCommitFilter(new ParentCountFilter(), diff);
+CommitFinder finder = new CommitFinder("/repos/jgit/.git");
+finder.setFilter(filter).find();
+</pre>
 <h2>Dependencies</h2>
 <p>JGit 1.0 or above</p>
 <h2>License</h2>
