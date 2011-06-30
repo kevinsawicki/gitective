@@ -34,7 +34,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public class CommitLimitFilter extends CommitFilter {
 
-	private long limit;
+	private final long limit;
 	private long count;
 
 	/**
@@ -42,7 +42,7 @@ public class CommitLimitFilter extends CommitFilter {
 	 * 
 	 * @param limit
 	 */
-	public CommitLimitFilter(long limit) {
+	public CommitLimitFilter(final long limit) {
 		this.limit = limit;
 	}
 
@@ -56,7 +56,8 @@ public class CommitLimitFilter extends CommitFilter {
 	}
 
 	@Override
-	public boolean include(RevWalk walker, RevCommit commit) throws IOException {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
 		return include(count++ < limit);
 	}
 

@@ -37,7 +37,7 @@ public class GitException extends RuntimeException {
 	 * @param message
 	 * @param cause
 	 */
-	public GitException(String message, Throwable cause) {
+	public GitException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 
@@ -46,7 +46,7 @@ public class GitException extends RuntimeException {
 	 * 
 	 * @param cause
 	 */
-	public GitException(Throwable cause) {
+	public GitException(final Throwable cause) {
 		super(cause);
 	}
 
@@ -55,7 +55,7 @@ public class GitException extends RuntimeException {
 	 * 
 	 * @param message
 	 */
-	public GitException(String message) {
+	public GitException(final String message) {
 		super(message);
 	}
 
