@@ -29,10 +29,13 @@ import java.util.Date;
 import junit.framework.TestCase;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.gitective.core.CommitUtils;
 
 /**
  * Base test case with utilities for common Git operations performed during
@@ -103,6 +106,30 @@ public abstract class GitTestCase extends TestCase {
 	protected Ref branch(File repo, String name) throws Exception {
 		Git git = Git.open(repo);
 		git.branchCreate().setName(name).call();
+		return checkout(repo, name);
+	}
+
+	/**
+	 * Checkout branch
+	 * 
+	 * @param name
+	 * @return branch ref
+	 * @throws Exception
+	 */
+	protected Ref checkout(String name) throws Exception {
+		return checkout(testRepo, name);
+	}
+
+	/**
+	 * Checkout branch
+	 * 
+	 * @param repo
+	 * @param name
+	 * @return branch ref
+	 * @throws Exception
+	 */
+	protected Ref checkout(File repo, String name) throws Exception {
+		Git git = Git.open(repo);
 		Ref ref = git.checkout().setName(name).call();
 		assertNotNull(ref);
 		return ref;
@@ -209,5 +236,19 @@ public abstract class GitTestCase extends TestCase {
 				.setAuthor(author).setCommitter(committer).call();
 		assertNotNull(commit);
 		return commit;
+	}
+
+	/**
+	 * Merge ref into current branch
+	 * 
+	 * @param ref
+	 * @return result
+	 * @throws Exception
+	 */
+	protected MergeResult merge(String ref) throws Exception {
+		Git git = Git.open(testRepo);
+		return git.merge().setStrategy(MergeStrategy.RESOLVE)
+				.include(CommitUtils.getCommit(git.getRepository(), ref))
+				.call();
 	}
 }
