@@ -34,6 +34,7 @@ import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
@@ -42,7 +43,7 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
  * Commit diff filter that computes the differences introduced by each commit
  * visited.
  */
-public abstract class CommitDiffFilter extends CommitFilter {
+public class CommitDiffFilter extends CommitFilter {
 
 	private static class LocalDiffEntry extends DiffEntry {
 
@@ -136,12 +137,20 @@ public abstract class CommitDiffFilter extends CommitFilter {
 	}
 
 	/**
-	 * Handle the diffs introduced by given commit
+	 * Handle the diffs introduced by given commit. Sub-classes should override
+	 * this method.
 	 * 
 	 * @param commit
 	 * @param diffs
 	 * @return true to continue, false to abort
 	 */
-	protected abstract boolean diff(RevCommit commit,
-			Collection<DiffEntry> diffs);
+	protected boolean diff(final RevCommit commit,
+			final Collection<DiffEntry> diffs) {
+		return true;
+	}
+
+	@Override
+	public RevFilter clone() {
+		return this;
+	}
 }

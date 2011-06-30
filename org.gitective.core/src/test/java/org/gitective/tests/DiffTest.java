@@ -27,7 +27,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.CommitDiffFilter;
 import org.gitective.core.service.CommitFinder;
 
@@ -45,10 +44,6 @@ public class DiffTest extends GitTestCase {
 		add("test.txt", "content");
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
-
-			public RevFilter clone() {
-				return this;
-			}
 
 			protected boolean diff(RevCommit commit, Collection<DiffEntry> diffs) {
 				ref.set(diffs);
@@ -75,10 +70,6 @@ public class DiffTest extends GitTestCase {
 		add("test.txt", "content2");
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
-
-			public RevFilter clone() {
-				return this;
-			}
 
 			protected boolean diff(RevCommit commit, Collection<DiffEntry> diffs) {
 				ref.set(diffs);
@@ -110,10 +101,6 @@ public class DiffTest extends GitTestCase {
 		merge("test");
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
-
-			public RevFilter clone() {
-				return this;
-			}
 
 			protected boolean diff(RevCommit commit, Collection<DiffEntry> diffs) {
 				ref.set(diffs);
