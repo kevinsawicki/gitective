@@ -138,7 +138,23 @@ This example collects all the commits that have a 'Bug: XXXXXXX' line in the com
 
 ```java
 CommitListFilter commits = new CommitListFilter();
-AndCommitFilter filter = new AndCommitFilter(new BugFilter(), commits)
+AndCommitFilter filter = new AndCommitFilter(new BugFilter(), commits);
+CommitFinder finder = new CommitFinder("/repos/jgit/.git");
+finder.setFilter(filter).find();
+```
+
+### Find files modified during a merge
+This example visits all the files that were modified as part of a merge.
+
+```java
+CommitDiffFilter diffs = new CommitDiffFilter() {
+
+     protected boolean diff(RevCommit commit, Collection<DiffEntry> diffs) {
+          // Diffs collection contains all files modified during merge
+     }
+
+};
+AndCommitFilter filter = new AndCommitFilter(new ParentCountFilter(), diff);
 CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(filter).find();
 ```
