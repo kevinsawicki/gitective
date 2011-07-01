@@ -76,8 +76,7 @@ public class DiffTest extends GitTestCase {
 				return false;
 			}
 		};
-		filter.setStop(true);
-		new CommitFinder(testRepo).setFilter(filter).find();
+		new CommitFinder(testRepo).setMatcher(filter).find();
 		Collection<DiffEntry> diffs = ref.get();
 		assertNotNull(diffs);
 		assertEquals(1, diffs.size());
@@ -107,8 +106,7 @@ public class DiffTest extends GitTestCase {
 				return false;
 			}
 		};
-		filter.setStop(true);
-		new CommitFinder(testRepo).setFilter(filter).find();
+		new CommitFinder(testRepo).setMatcher(filter).find();
 		Collection<DiffEntry> diffs = ref.get();
 		assertNotNull(diffs);
 		assertEquals(1, diffs.size());
