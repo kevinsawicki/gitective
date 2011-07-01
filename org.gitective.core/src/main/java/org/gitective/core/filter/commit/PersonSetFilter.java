@@ -60,7 +60,7 @@ public abstract class PersonSetFilter extends CommitFilter {
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
-		PersonIdent person = getPerson(commit);
+		final PersonIdent person = getPerson(commit);
 		if (person != null)
 			persons.add(person);
 		return true;

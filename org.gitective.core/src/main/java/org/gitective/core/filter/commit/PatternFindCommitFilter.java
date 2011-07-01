@@ -55,7 +55,7 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 	 * 
 	 * @param pattern
 	 */
-	public PatternFindCommitFilter(String pattern) {
+	public PatternFindCommitFilter(final String pattern) {
 		this(pattern, 0);
 	}
 
@@ -65,7 +65,7 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 	 * @param pattern
 	 * @param flags
 	 */
-	public PatternFindCommitFilter(String pattern, int flags) {
+	public PatternFindCommitFilter(final String pattern, final int flags) {
 		Assert.notNull("Pattern cannot be null", pattern);
 		Assert.notEmpty("Pattern cannot be empty", pattern);
 		this.pattern = pattern;

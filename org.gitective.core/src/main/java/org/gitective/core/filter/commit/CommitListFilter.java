@@ -34,7 +34,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public class CommitListFilter extends CommitFilter {
 
-	private List<RevCommit> commits = new LinkedList<RevCommit>();
+	private final List<RevCommit> commits = new LinkedList<RevCommit>();
 
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)

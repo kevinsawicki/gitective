@@ -4,10 +4,6 @@
     <ruleSetFile>.ruleset</ruleSetFile>
     <rules>
         <rule>
-            <name>AbstractClassWithoutAbstractMethod</name>
-            <ruleset>Design Rules</ruleset>
-        </rule>
-        <rule>
             <name>AbstractClassWithoutAnyMethod</name>
             <ruleset>Design Rules</ruleset>
         </rule>
@@ -26,10 +22,6 @@
         <rule>
             <name>ArrayIsStoredDirectly</name>
             <ruleset>Security Code Guidelines</ruleset>
-        </rule>
-        <rule>
-            <name>AssignmentInOperand</name>
-            <ruleset>Controversial Rules</ruleset>
         </rule>
         <rule>
             <name>AssignmentToNonFinalStatic</name>
@@ -104,10 +96,6 @@
             <ruleset>Design Rules</ruleset>
         </rule>
         <rule>
-            <name>AvoidInstantiatingObjectsInLoops</name>
-            <ruleset>Optimization Rules</ruleset>
-        </rule>
-        <rule>
             <name>AvoidMultipleUnaryOperators</name>
             <ruleset>Basic Rules</ruleset>
         </rule>
@@ -176,10 +164,6 @@
             <ruleset>Design Rules</ruleset>
         </rule>
         <rule>
-            <name>BeanMembersShouldSerialize</name>
-            <ruleset>JavaBean Rules</ruleset>
-        </rule>
-        <rule>
             <name>BigIntegerInstantiation</name>
             <ruleset>Basic Rules</ruleset>
         </rule>
@@ -204,10 +188,6 @@
             <ruleset>Migration Rules</ruleset>
         </rule>
         <rule>
-            <name>CallSuperInConstructor</name>
-            <ruleset>Controversial Rules</ruleset>
-        </rule>
-        <rule>
             <name>CheckResultSet</name>
             <ruleset>Basic Rules</ruleset>
         </rule>
@@ -224,10 +204,6 @@
             <ruleset>Design Rules</ruleset>
         </rule>
         <rule>
-            <name>CloneMethodMustImplementCloneable</name>
-            <ruleset>Type Resolution Rules</ruleset>
-        </rule>
-        <rule>
             <name>CloseResource</name>
             <ruleset>Design Rules</ruleset>
         </rule>
@@ -237,10 +213,6 @@
         </rule>
         <rule>
             <name>CompareObjectsWithEquals</name>
-            <ruleset>Design Rules</ruleset>
-        </rule>
-        <rule>
-            <name>ConfusingTernary</name>
             <ruleset>Design Rules</ruleset>
         </rule>
         <rule>
@@ -258,10 +230,6 @@
         <rule>
             <name>CyclomaticComplexity</name>
             <ruleset>Code Size Rules</ruleset>
-        </rule>
-        <rule>
-            <name>DataflowAnomalyAnalysis</name>
-            <ruleset>Controversial Rules</ruleset>
         </rule>
         <rule>
             <name>DefaultLabelNotLastInSwitchStmt</name>
@@ -308,10 +276,6 @@
             <ruleset>Import Statement Rules</ruleset>
         </rule>
         <rule>
-            <name>EmptyCatchBlock</name>
-            <ruleset>Basic Rules</ruleset>
-        </rule>
-        <rule>
             <name>EmptyFinalizer</name>
             <ruleset>Finalizer Rules</ruleset>
         </rule>
@@ -349,10 +313,6 @@
         </rule>
         <rule>
             <name>EmptyTryBlock</name>
-            <ruleset>Basic Rules</ruleset>
-        </rule>
-        <rule>
-            <name>EmptyWhileStmt</name>
             <ruleset>Basic Rules</ruleset>
         </rule>
         <rule>
@@ -584,10 +544,6 @@
             <ruleset>Code Size Rules</ruleset>
         </rule>
         <rule>
-            <name>NullAssignment</name>
-            <ruleset>Controversial Rules</ruleset>
-        </rule>
-        <rule>
             <name>OptimizableToArrayCall</name>
             <ruleset>Design Rules</ruleset>
         </rule>
@@ -729,10 +685,6 @@
         </rule>
         <rule>
             <name>TooManyFields</name>
-            <ruleset>Code Size Rules</ruleset>
-        </rule>
-        <rule>
-            <name>TooManyMethods</name>
             <ruleset>Code Size Rules</ruleset>
         </rule>
         <rule>

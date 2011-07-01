@@ -40,7 +40,7 @@ public abstract class PersonFilter extends CommitFilter {
 	 * @param name
 	 * @param email
 	 */
-	public PersonFilter(String name, String email) {
+	public PersonFilter(final String name, final String email) {
 		this(new PersonIdent(name, email));
 	}
 
@@ -49,7 +49,7 @@ public abstract class PersonFilter extends CommitFilter {
 	 * 
 	 * @param person
 	 */
-	public PersonFilter(PersonIdent person) {
+	public PersonFilter(final PersonIdent person) {
 		this.person = person;
 	}
 

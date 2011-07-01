@@ -60,21 +60,21 @@ public class CommitFinder extends RepositoryService {
 	/**
 	 * @param gitDirs
 	 */
-	public CommitFinder(File... gitDirs) {
+	public CommitFinder(final File... gitDirs) {
 		super(gitDirs);
 	}
 
 	/**
 	 * @param repositories
 	 */
-	public CommitFinder(Repository... repositories) {
+	public CommitFinder(final Repository... repositories) {
 		super(repositories);
 	}
 
 	/**
 	 * @param gitDirs
 	 */
-	public CommitFinder(String... gitDirs) {
+	public CommitFinder(final String... gitDirs) {
 		super(gitDirs);
 	}
 
@@ -84,7 +84,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder setFilter(RevFilter filter) {
+	public CommitFinder setFilter(final RevFilter filter) {
 		preFilter = filter;
 		return this;
 	}
@@ -95,7 +95,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder setMatcher(RevFilter filter) {
+	public CommitFinder setMatcher(final RevFilter filter) {
 		postFilter = filter;
 		return this;
 	}
@@ -106,7 +106,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param filter
 	 * @return this service
 	 */
-	public CommitFinder setFilter(TreeFilter filter) {
+	public CommitFinder setFilter(final TreeFilter filter) {
 		treeFilter = filter;
 		return this;
 	}
@@ -117,7 +117,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param repository
 	 * @return rev walk
 	 */
-	protected RevWalk createWalk(Repository repository) {
+	protected RevWalk createWalk(final Repository repository) {
 		final RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
 		walk.setRevFilter(preFilter);
@@ -131,7 +131,7 @@ public class CommitFinder extends RepositoryService {
 	 * @param walk
 	 * @return this finder
 	 */
-	protected CommitFinder walk(RevWalk walk) {
+	protected CommitFinder walk(final RevWalk walk) {
 		try {
 			final RevFilter filter = postFilter;
 			if (filter != null) {
@@ -218,9 +218,9 @@ public class CommitFinder extends RepositoryService {
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			Collection<RevCommit> commits = CommitUtils.getTags(repo);
+			final Collection<RevCommit> commits = CommitUtils.getTags(repo);
 			if (!commits.isEmpty()) {
-				RevWalk walk = createWalk(repo);
+				final RevWalk walk = createWalk(repo);
 				try {
 					walk.markStart(commits);
 				} catch (IOException e) {
@@ -243,9 +243,9 @@ public class CommitFinder extends RepositoryService {
 		Repository repo;
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
-			Collection<RevCommit> commits = CommitUtils.getBranches(repo);
+			final Collection<RevCommit> commits = CommitUtils.getBranches(repo);
 			if (!commits.isEmpty()) {
-				RevWalk walk = createWalk(repo);
+				final RevWalk walk = createWalk(repo);
 				try {
 					walk.markStart(commits);
 				} catch (IOException e) {
