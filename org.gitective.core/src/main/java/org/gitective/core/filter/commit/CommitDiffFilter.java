@@ -98,9 +98,11 @@ public class CommitDiffFilter extends CommitFilter {
 		default:
 			final RevCommit[] parents = commit.getParents();
 			final int parentCount = parents.length;
+
 			for (int i = 0; i < parentCount; i++)
 				walk.addTree(getTree(walker, parents[i]));
 			walk.addTree(commit.getTree());
+
 			final List<DiffEntry> diffs = new ArrayList<DiffEntry>();
 			final MutableObjectId objectId = new MutableObjectId();
 			while (walk.next()) {
@@ -137,8 +139,9 @@ public class CommitDiffFilter extends CommitFilter {
 	}
 
 	/**
-	 * Handle the diffs introduced by given commit. Sub-classes should override
-	 * this method.
+	 * Handle the differences introduced by given commit.
+	 * 
+	 * Sub-classes should override this method.
 	 * 
 	 * @param commit
 	 * @param diffs
@@ -149,6 +152,11 @@ public class CommitDiffFilter extends CommitFilter {
 		return true;
 	}
 
+	/**
+	 * Returns this filter.
+	 * 
+	 * Sub-classes should override to return an actual cloned filter.
+	 */
 	@Override
 	public RevFilter clone() {
 		return this;
