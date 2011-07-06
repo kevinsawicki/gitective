@@ -47,6 +47,11 @@ public class CommitDiffFilter extends CommitFilter {
 
 	private static class LocalDiffEntry extends DiffEntry {
 
+		public LocalDiffEntry(final String path) {
+			setOldPath(path);
+			setNewPath(path);
+		}
+
 		private LocalDiffEntry setOldPath(final String path) {
 			oldPath = path;
 			return this;
@@ -83,49 +88,53 @@ public class CommitDiffFilter extends CommitFilter {
 
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
+		final List<DiffEntry> diffs;
+
 		final TreeWalk walk = new TreeWalk(walker.getObjectReader());
 		walk.setRecursive(true);
 		walk.setFilter(TreeFilter.ANY_DIFF);
+
 		switch (commit.getParentCount()) {
 		case 0:
 			walk.addTree(new EmptyTreeIterator());
 			walk.addTree(commit.getTree());
-			return include(diff(commit, DiffEntry.scan(walk)));
+			diffs = DiffEntry.scan(walk);
+			break;
 		case 1:
 			walk.addTree(getTree(walker, commit.getParent(0)));
 			walk.addTree(commit.getTree());
-			return include(diff(commit, DiffEntry.scan(walk)));
+			diffs = DiffEntry.scan(walk);
+			break;
 		default:
 			final RevCommit[] parents = commit.getParents();
 			final int parentCount = parents.length;
 
+			// Add all parent trees with current commit tree last
 			for (int i = 0; i < parentCount; i++)
 				walk.addTree(getTree(walker, parents[i]));
 			walk.addTree(commit.getTree());
 
-			final List<DiffEntry> diffs = new ArrayList<DiffEntry>();
+			diffs = new ArrayList<DiffEntry>();
 			final MutableObjectId objectId = new MutableObjectId();
 			while (walk.next()) {
 				final int currentMode = walk.getRawMode(parentCount);
 				int parentMode = 0;
-				boolean sameInParent = false;
+				boolean same = false;
 				for (int i = 0; i < parentCount; i++) {
 					final int mode = walk.getRawMode(i);
-					sameInParent = mode == currentMode
-							&& walk.idEqual(parentCount, i);
-					if (sameInParent)
+					same = mode == currentMode && walk.idEqual(parentCount, i);
+					if (same)
 						break;
 					parentMode |= mode;
 				}
-				if (sameInParent)
+				if (same)
 					continue;
 
-				final LocalDiffEntry diff = new LocalDiffEntry();
+				final LocalDiffEntry diff = new LocalDiffEntry(
+						walk.getPathString());
 				diff.setNewMode(FileMode.fromBits(currentMode));
 				walk.getObjectId(objectId, parentCount);
 				diff.setNewId(AbbreviatedObjectId.fromObjectId(objectId));
-				final String path = walk.getPathString();
-				diff.setNewPath(path).setOldPath(path);
 				if (parentMode == 0 && currentMode != 0)
 					diff.setChangeType(ChangeType.ADD);
 				else if (parentMode != 0 && currentMode == 0)
@@ -134,8 +143,9 @@ public class CommitDiffFilter extends CommitFilter {
 					diff.setChangeType(ChangeType.MODIFY);
 				diffs.add(diff);
 			}
-			return include(diff(commit, diffs));
 		}
+
+		return include(diff(commit, diffs));
 	}
 
 	/**
