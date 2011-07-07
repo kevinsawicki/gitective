@@ -45,7 +45,7 @@ public abstract class Check {
 	 * @return true if both are null, false otherwise
 	 */
 	public static boolean allNull(final Object... objects) {
-		Assert.notNull("Objects cannot be null", objects);
+		Assert.notNull(objects);
 		final int length = objects.length;
 		for (int i = 0; i < length; i++)
 			if (objects[i] != null)
@@ -60,7 +60,7 @@ public abstract class Check {
 	 * @return true if any object is null, false otherwise
 	 */
 	public static boolean anyNull(final Object... objects) {
-		Assert.notNull("Objects cannot be null", objects);
+		Assert.notNull(objects);
 		final int length = objects.length;
 		for (int i = 0; i < length; i++)
 			if (objects[i] == null)
