@@ -24,6 +24,7 @@ package org.gitective.core.filter.commit;
 import java.io.IOException;
 import java.util.Date;
 
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.gitective.core.Assert;
@@ -64,6 +65,16 @@ public abstract class DateFilter extends CommitFilter {
 			throws IOException {
 		final Date date = getDate(commit);
 		return include(date != null && time <= date.getTime());
+	}
+
+	/**
+	 * Get date from given {@link PersonIdent}
+	 * 
+	 * @param person
+	 * @return date or null if given person is null
+	 */
+	protected Date getWhen(final PersonIdent person) {
+		return person != null ? person.getWhen() : null;
 	}
 
 	/**

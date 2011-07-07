@@ -23,7 +23,6 @@ package org.gitective.core.filter.commit;
 
 import java.util.Date;
 
-import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
@@ -48,8 +47,7 @@ public class AuthorDateFilter extends DateFilter {
 
 	@Override
 	protected Date getDate(final RevCommit commit) {
-		final PersonIdent author = commit.getAuthorIdent();
-		return author != null ? author.getWhen() : null;
+		return getWhen(commit.getAuthorIdent());
 	}
 
 	@Override
