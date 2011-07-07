@@ -29,6 +29,7 @@ import java.util.TreeSet;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.gitective.core.PersonComparator;
 
 /**
  * Commit filter that stores a {@link TreeSet} of persons encountered while
