@@ -22,6 +22,7 @@
 package org.gitective.core.filter.commit;
 
 import org.eclipse.jgit.lib.PersonIdent;
+import org.gitective.core.Assert;
 import org.gitective.core.Check;
 import org.gitective.core.PersonComparator;
 
@@ -43,7 +44,9 @@ public abstract class PersonFilter extends CommitFilter {
 	 * @param email
 	 */
 	public PersonFilter(final String name, final String email) {
-		this(new PersonIdent(name, email));
+		Assert.notNull(name);
+		Assert.notNull(email);
+		person = new PersonIdent(name, email);
 	}
 
 	/**
