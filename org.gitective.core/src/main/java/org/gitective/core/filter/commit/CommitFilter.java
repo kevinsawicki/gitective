@@ -44,41 +44,6 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	}
 
 	/**
-	 * Check if the two objects specified are either both null or both equal
-	 * according the {@link Object#equals(Object)} method of object1.
-	 * 
-	 * @param object1
-	 * @param object2
-	 * @return true if equal, false otherwise
-	 */
-	protected boolean equals(final Object object1, final Object object2) {
-		return equalsNull(object1, object2) || equalsNonNull(object1, object2);
-	}
-
-	/**
-	 * Check if the two objects specified are both null.
-	 * 
-	 * @param object1
-	 * @param object2
-	 * @return true if both are null, false otherwise
-	 */
-	protected boolean equalsNull(final Object object1, final Object object2) {
-		return object1 == null && object2 == null;
-	}
-
-	/**
-	 * Check if the two objects specified are both non-null and equal according
-	 * to the {@link Object#equals(Object)} method of object1.
-	 * 
-	 * @param object1
-	 * @param object2
-	 * @return true if non-null and equal, false otherwise
-	 */
-	protected boolean equalsNonNull(final Object object1, final Object object2) {
-		return object1 != null && object2 != null && object1.equals(object2);
-	}
-
-	/**
 	 * Resets the filter state.
 	 * 
 	 * The base implementation does nothing by default and sub-classes should

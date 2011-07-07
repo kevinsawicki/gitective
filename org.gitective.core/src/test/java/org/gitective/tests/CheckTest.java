@@ -19,56 +19,60 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-package org.gitective.core.filter.commit;
+package org.gitective.tests;
 
-import org.eclipse.jgit.lib.PersonIdent;
+import junit.framework.TestCase;
+
 import org.gitective.core.Check;
-import org.gitective.core.PersonComparator;
 
 /**
- * Base commit filter that contains utility methods for matching the configured
- * {@link PersonIdent}.
+ * Unit tests of {@link Check} class
  */
-public abstract class PersonFilter extends CommitFilter {
+public class CheckTest extends TestCase {
 
 	/**
-	 * Person matching against
+	 * Test {@link Check} class constructor
 	 */
-	protected final PersonIdent person;
-
-	/**
-	 * Create a person filter
-	 * 
-	 * @param name
-	 * @param email
-	 */
-	public PersonFilter(final String name, final String email) {
-		this(new PersonIdent(name, email));
+	public void testContructor() {
+		assertNotNull(new Check() {
+		});
 	}
 
 	/**
-	 * Create a person filter
-	 * 
-	 * @param person
+	 * Unit test of {@link Check#anyNull(Object...)}
 	 */
-	public PersonFilter(final PersonIdent person) {
-		this.person = person;
+	public void testAnyNull() {
+		assertTrue(Check.anyNull((Object) null));
+		assertFalse(Check.anyNull(this));
+		assertTrue(Check.anyNull("", (Object) null));
 	}
 
 	/**
-	 * Match the specified {@link PersonIdent} against the name and e-mail
-	 * address of the configured {@link PersonIdent}.
-	 * 
-	 * @param ident
-	 * @return true on matches, false otherwise
+	 * Unit test of {@link Check#allNull(Object...)}
 	 */
-	protected boolean match(final PersonIdent ident) {
-		if (Check.allNull(person, ident))
-			return true;
+	public void testAllNull() {
+		assertTrue(Check.allNull((Object) null));
+		assertFalse(Check.allNull(this));
+		assertFalse(Check.allNull("", (Object) null));
+	}
 
-		if (Check.anyNull(person, ident))
-			return false;
+	/**
+	 * Unit test of {@link Check#equals(Object)}
+	 */
+	public void testEquals() {
+		assertTrue(Check.equals(null, null));
+		assertFalse(Check.equals("a", null));
+		assertFalse(Check.equals(null, "b"));
+		assertFalse(Check.equals("a", "b"));
+		assertTrue(Check.equals("a", "a"));
+	}
 
-		return PersonComparator.INSTANCE.equals(person, ident);
+	/**
+	 * Unit test of {@link Check#equalsNonNull(Object, Object)}
+	 */
+	public void testEqualsNonNull() {
+		assertFalse(Check.equalsNonNull(null, null));
+		assertFalse(Check.equalsNonNull("a", "b"));
+		assertTrue(Check.equalsNonNull("a", "a"));
 	}
 }

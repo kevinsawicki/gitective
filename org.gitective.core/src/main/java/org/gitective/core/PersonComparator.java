@@ -37,6 +37,23 @@ public class PersonComparator implements Comparator<PersonIdent>, Serializable {
 	/** */
 	private static final long serialVersionUID = -14341068273148025L;
 
+	/**
+	 * Instance
+	 */
+	public static final PersonComparator INSTANCE = new PersonComparator();
+
+	/**
+	 * Check if the two given {@link PersonIdent} objects are equal according to
+	 * the semantics of {@link #compare(PersonIdent, PersonIdent)}.
+	 * 
+	 * @param p1
+	 * @param p2
+	 * @return true if equal, false otherwise
+	 */
+	public boolean equals(final PersonIdent p1, final PersonIdent p2) {
+		return compare(p1, p2) == 0;
+	}
+
 	public int compare(final PersonIdent p1, final PersonIdent p2) {
 		int compare = p1.getName().compareTo(p2.getName());
 		if (compare == 0)

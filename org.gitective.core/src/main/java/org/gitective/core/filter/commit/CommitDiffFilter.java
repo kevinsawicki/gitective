@@ -41,7 +41,7 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 /**
  * Commit diff filter that computes the differences introduced by each commit
- * visited.
+ * visited and calls {@link #diff(RevCommit, Collection)}.
  */
 public class CommitDiffFilter extends CommitFilter {
 
