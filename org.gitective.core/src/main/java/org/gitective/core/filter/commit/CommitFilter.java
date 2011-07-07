@@ -79,12 +79,14 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	}
 
 	/**
-	 * Resets the filter state
+	 * Resets the filter state.
+	 * 
+	 * The base implementation does nothing by default and sub-classes should
+	 * override if custom reset logic exists.
 	 * 
 	 * @return this filter
 	 */
 	public CommitFilter reset() {
-		// Does nothing by default, sub-classes should override
 		return this;
 	}
 
