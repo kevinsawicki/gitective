@@ -159,6 +159,21 @@ CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(filter).find();
 ```
 
+### Inspect notes associated with commits
+This example visits all Git notes associated with each commit visited..
+
+```java
+CommitNotesFilter notes = new CommitNotesFilter() {
+
+     protected boolean include(RevCommit commit, Note note, String content) {
+          // Content string contains text of note associated with commit
+     }
+
+};
+CommitFinder finder = new CommitFinder("/repos/jgit/.git");
+finder.setFilter(notes).find();
+```
+
 ## Building from source
 gitective can be built using [Maven](http://maven.apache.org/). The pom.xml to build the core plug-in is located at the root of the org.gitective.core folder.
 
