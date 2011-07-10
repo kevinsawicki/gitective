@@ -34,6 +34,7 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.merge.MergeStrategy;
+import org.eclipse.jgit.notes.Note;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.CommitUtils;
 
@@ -250,5 +251,20 @@ public abstract class GitTestCase extends TestCase {
 		return git.merge().setStrategy(MergeStrategy.RESOLVE)
 				.include(CommitUtils.getCommit(git.getRepository(), ref))
 				.call();
+	}
+
+	/**
+	 * Add note to latest commit with given content
+	 * 
+	 * @param content
+	 * @return note
+	 * @throws Exception
+	 */
+	protected Note note(String content) throws Exception {
+		Git git = Git.open(testRepo);
+		Note note = git.notesAdd().setMessage(content)
+				.setObjectId(CommitUtils.getLatest(git.getRepository())).call();
+		assertNotNull(note);
+		return note;
 	}
 }
