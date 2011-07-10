@@ -197,6 +197,19 @@ AndCommitFilter filter = new AndCommitFilter(new ParentCountFilter(), diff);
 CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(filter).find();
 </pre>
+<p class="description">Inspect all notes associated with each commit visited</p>
+<pre class="sh_java">
+CommitNotesFilter notes = new CommitNotesFilter() {
+
+     protected boolean include(RevCommit commit, Note note, String content) {
+          // Content string contains text of note associated with commit
+     }
+
+};
+CommitFinder finder = new CommitFinder("/repos/jgit/.git");
+finder.setFilter(notes).find();
+</pre>
+
 <h2>Dependencies</h2>
 <p>JGit 1.0 or above</p>
 <h2>License</h2>
