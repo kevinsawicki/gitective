@@ -36,6 +36,7 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.Assert;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.GitException;
+import org.gitective.core.filter.commit.CommitFilter;
 
 /**
  * Commit locator class
@@ -122,6 +123,10 @@ public class CommitFinder extends RepositoryService {
 		walk.setRetainBody(true);
 		walk.setRevFilter(preFilter);
 		walk.setTreeFilter(treeFilter);
+		if (preFilter instanceof CommitFilter)
+			((CommitFilter) preFilter).setRepository(repository);
+		if (postFilter instanceof CommitFilter)
+			((CommitFilter) postFilter).setRepository(repository);
 		return walk;
 	}
 

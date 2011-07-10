@@ -22,6 +22,7 @@
 package org.gitective.core.filter.commit;
 
 import org.eclipse.jgit.errors.StopWalkException;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
@@ -32,6 +33,11 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	private boolean stop;
 
 	/**
+	 * Repository for current walk
+	 */
+	protected Repository repository;
+
+	/**
 	 * Set whether the search should be stopped when a commit visited is not
 	 * included.
 	 * 
@@ -40,6 +46,17 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	 */
 	public CommitFilter setStop(final boolean stop) {
 		this.stop = stop;
+		return this;
+	}
+
+	/**
+	 * Set the repository for the walk that is about to begin.
+	 * 
+	 * @param repository
+	 * @return this filter
+	 */
+	public CommitFilter setRepository(final Repository repository) {
+		this.repository = repository;
 		return this;
 	}
 
