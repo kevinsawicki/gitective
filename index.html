@@ -188,7 +188,7 @@ finder.setFilter(filter).find();
 <pre class="sh_java">
 CommitDiffFilter diffs = new CommitDiffFilter() {
 
-     protected boolean diff(RevCommit commit, Collection<DiffEntry> diffs) {
+     protected boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
           // Diffs collection contains all files modified during merge
      }
 
