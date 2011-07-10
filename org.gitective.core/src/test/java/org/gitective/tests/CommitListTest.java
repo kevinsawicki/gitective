@@ -25,6 +25,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link CommitListFilter}
@@ -34,7 +35,8 @@ public class CommitListTest extends GitTestCase {
 	/**
 	 * Unit test of {@link CommitListFilter#clone()}
 	 */
-	public void testClone() {
+	@Test
+	public void cloneFilter() {
 		CommitListFilter filter = new CommitListFilter();
 		assertTrue(filter.getCommits().isEmpty());
 		RevFilter clone = filter.clone();
@@ -49,7 +51,8 @@ public class CommitListTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testReset() throws Exception {
+	@Test
+	public void reset() throws Exception {
 		RevCommit commit = add("file.txt", "content");
 
 		CommitListFilter filter = new CommitListFilter();

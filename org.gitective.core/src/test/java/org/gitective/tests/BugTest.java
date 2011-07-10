@@ -27,6 +27,7 @@ import org.gitective.core.filter.commit.BugFilter;
 import org.gitective.core.filter.commit.BugSetFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link BugSetFilter} and {@link BugFilter}
@@ -38,7 +39,8 @@ public class BugTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMatch() throws Exception {
+	@Test
+	public void match() throws Exception {
 		add("file.txt", "content", "fixes NPE\nBug: 1234");
 
 		CommitCountFilter count = new CommitCountFilter();
@@ -54,7 +56,8 @@ public class BugTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNonMatch() throws Exception {
+	@Test
+	public void nonMatch() throws Exception {
 		add("file.txt", "content", "fixes NPE\nIssue: 1234");
 
 		CommitCountFilter count = new CommitCountFilter();
@@ -70,7 +73,8 @@ public class BugTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMultipleCommits() throws Exception {
+	@Test
+	public void multipleCommits() throws Exception {
 		add("file.txt", "content", "fixes NPE\nBug: 1");
 		add("file.txt2", "content", "fixes NPE\nBug: a");
 
@@ -87,7 +91,8 @@ public class BugTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMultipleBugsSameCommit() throws Exception {
+	@Test
+	public void multipleBugsSameCommit() throws Exception {
 		add("file.txt", "content", "fixes NPE\nBug: 123\nBug: 456");
 
 		BugSetFilter bugs = new BugSetFilter();
@@ -103,7 +108,8 @@ public class BugTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testCloneBugFilter() throws Exception {
+	@Test
+	public void cloneBugFilter() throws Exception {
 		add("file.txt", "content", "fixes NPE\nBug: abcd");
 
 		CommitCountFilter count = new CommitCountFilter();
@@ -122,7 +128,8 @@ public class BugTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testCloneBugSetFilter() throws Exception {
+	@Test
+	public void cloneBugSetFilter() throws Exception {
 		add("file.txt", "content", "fixes NPE\nBug: abcd");
 
 		BugSetFilter filter = new BugSetFilter();
@@ -143,7 +150,8 @@ public class BugTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testReset() throws Exception {
+	@Test
+	public void reset() throws Exception {
 		add("file.txt", "content", "fixes NPE\nBug: abcd");
 
 		BugSetFilter filter = new BugSetFilter();

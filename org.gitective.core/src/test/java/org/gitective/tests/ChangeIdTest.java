@@ -25,6 +25,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.ChangeIdFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link ChangeIdFilter}
@@ -36,7 +37,8 @@ public class ChangeIdTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMatch() throws Exception {
+	@Test
+	public void match() throws Exception {
 		add("file.txt", "patch",
 				"fixes a bug\nChange-Id: I12345abcde12345abcde12345abcde12345abcde");
 
@@ -57,7 +59,8 @@ public class ChangeIdTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNonMatch() throws Exception {
+	@Test
+	public void nonMatch() throws Exception {
 		add("file.txt", "patch",
 				"fixes a bug\nChange-Id: I12345abcde12345abxyz12345abcde12345abcde");
 
@@ -67,5 +70,4 @@ public class ChangeIdTest extends GitTestCase {
 		service.find();
 		assertEquals(0, count.getCount());
 	}
-
 }

@@ -28,6 +28,7 @@ import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Tests of
@@ -42,7 +43,8 @@ public class CommitBaseTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testBaseCommits() throws Exception {
+	@Test
+	public void baseCommits() throws Exception {
 		RevCommit commit1 = add("file.txt", "content");
 		branch("release1");
 		RevCommit commit2 = add("file.txt", "edit 1");

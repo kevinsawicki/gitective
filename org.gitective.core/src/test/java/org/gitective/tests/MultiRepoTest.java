@@ -27,6 +27,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of using multiple repositories from the same service class.
@@ -38,7 +39,8 @@ public class MultiRepoTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testConstructors() throws Exception {
+	@Test
+	public void constructors() throws Exception {
 		new CommitFinder(testRepo);
 		new CommitFinder(new FileRepository(testRepo));
 		new CommitFinder(testRepo.getAbsolutePath());
@@ -49,7 +51,8 @@ public class MultiRepoTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testTwoRepos() throws Exception {
+	@Test
+	public void twoRepos() throws Exception {
 		add("repo1file.txt", "content");
 		File repo2 = initRepo();
 		RevCommit repo2Commit = add(repo2, "repo2file.txt", "test");
@@ -60,5 +63,4 @@ public class MultiRepoTest extends GitTestCase {
 		service.setFilter(count).find();
 		assertEquals(2, count.getCount());
 	}
-
 }

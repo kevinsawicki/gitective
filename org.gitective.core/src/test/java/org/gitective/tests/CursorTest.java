@@ -33,6 +33,7 @@ import org.gitective.core.filter.commit.CommitCursorFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link CommitCursorFilter}
@@ -44,7 +45,8 @@ public class CursorTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testChunk() throws Exception {
+	@Test
+	public void chunk() throws Exception {
 		int commitCount = 50;
 		final List<RevCommit> commits = new ArrayList<RevCommit>(commitCount);
 		for (int i = 0; i < commitCount; i++)
@@ -77,7 +79,8 @@ public class CursorTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testClone() throws Exception {
+	@Test
+	public void cloneFilter() throws Exception {
 		CommitCursorFilter filter = new CommitCursorFilter(RevFilter.NONE);
 		assertFalse(filter.include(null, null));
 		RevFilter clone = filter.clone();

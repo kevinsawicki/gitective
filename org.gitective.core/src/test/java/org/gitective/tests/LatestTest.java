@@ -25,6 +25,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.GitException;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link CommitUtils#getLatest(org.eclipse.jgit.lib.Repository)}
@@ -36,7 +37,8 @@ public class LatestTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testLatest() throws Exception {
+	@Test
+	public void latest() throws Exception {
 		RevCommit commit = add("file.txt", "content");
 		assertEquals(commit,
 				CommitUtils.getLatest(new FileRepository(testRepo)));
@@ -47,7 +49,8 @@ public class LatestTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testLatestOnEmptyRepository() throws Exception {
+	@Test
+	public void latestOnEmptyRepository() throws Exception {
 		try {
 			CommitUtils.getLatest(new FileRepository(testRepo));
 			fail("Exception not thrown");
@@ -61,7 +64,8 @@ public class LatestTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testById() throws Exception {
+	@Test
+	public void byId() throws Exception {
 		RevCommit commit = add("file.txt", "content");
 		assertEquals(commit,
 				CommitUtils.getCommit(new FileRepository(testRepo), commit));

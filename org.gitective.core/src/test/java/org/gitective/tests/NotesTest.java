@@ -27,6 +27,7 @@ import org.eclipse.jgit.notes.Note;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.filter.commit.CommitNotesFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link CommitNotesFilter}
@@ -38,7 +39,8 @@ public class NotesTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNoteContentCallback() throws Exception {
+	@Test
+	public void noteContentCallback() throws Exception {
 		add("test.txt", "abc");
 		final String note = "this is a note";
 		note(note);
@@ -58,5 +60,4 @@ public class NotesTest extends GitTestCase {
 		finder.find();
 		assertEquals(note, found.get());
 	}
-
 }

@@ -29,9 +29,10 @@ import org.gitective.core.filter.commit.AuthorDateFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitterDateFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
- * 
+ * Unit tests of {@link AuthorDateFilter} and {@link CommitterDateFilter}
  */
 public class DateTest extends GitTestCase {
 
@@ -40,7 +41,8 @@ public class DateTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testAuthorMatch() throws Exception {
+	@Test
+	public void authorMatch() throws Exception {
 		add("file.txt", "a");
 		Thread.sleep(1001);
 		author = new PersonIdent("Test Author", "author@test.com");
@@ -59,7 +61,8 @@ public class DateTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testAuthorNonMatch() throws Exception {
+	@Test
+	public void authorNonMatch() throws Exception {
 		RevCommit first = add("file.txt", "a");
 		CommitCountFilter count = new CommitCountFilter();
 
@@ -75,7 +78,8 @@ public class DateTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testAuthorClone() throws Exception {
+	@Test
+	public void authorClone() throws Exception {
 		AuthorDateFilter date = new AuthorDateFilter(2);
 		RevFilter clone = date.clone();
 		assertNotNull(clone);
@@ -88,7 +92,8 @@ public class DateTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testCommitterMatch() throws Exception {
+	@Test
+	public void committerMatch() throws Exception {
 		add("file.txt", "a");
 		Thread.sleep(1001);
 		committer = new PersonIdent("Test committer", "commit@test.com");
@@ -107,7 +112,8 @@ public class DateTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testCommitterNonMatch() throws Exception {
+	@Test
+	public void committerNonMatch() throws Exception {
 		RevCommit first = add("file.txt", "a");
 		CommitCountFilter count = new CommitCountFilter();
 
@@ -123,7 +129,8 @@ public class DateTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testCommitterClone() throws Exception {
+	@Test
+	public void committerClone() throws Exception {
 		CommitterDateFilter date = new CommitterDateFilter(2);
 		RevFilter clone = date.clone();
 		assertNotNull(clone);

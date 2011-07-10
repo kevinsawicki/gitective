@@ -29,6 +29,7 @@ import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.filter.commit.CommitterFilter;
 import org.gitective.core.filter.commit.CommitterSetFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of committer filters
@@ -38,7 +39,8 @@ public class CommitterTest extends GitTestCase {
 	/**
 	 * Test clone of {@link CommitterFilter}
 	 */
-	public void testCloneCommitterFilter() {
+	@Test
+	public void cloneCommitterFilter() {
 		CommitterFilter filter = new CommitterFilter(committer);
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
@@ -49,7 +51,8 @@ public class CommitterTest extends GitTestCase {
 	/**
 	 * Test clone of {@link CommitterSetFilter}
 	 */
-	public void testCloneCommitterSetFilter() {
+	@Test
+	public void cloneCommitterSetFilter() {
 		CommitterSetFilter filter = new CommitterSetFilter();
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
@@ -62,7 +65,8 @@ public class CommitterTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testCommitterFilter() throws Exception {
+	@Test
+	public void committerFilter() throws Exception {
 		add("file.txt", "a");
 		PersonIdent findUser = new PersonIdent("find user", "find@user.com");
 		committer = findUser;
@@ -83,7 +87,8 @@ public class CommitterTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNonMatch() throws Exception {
+	@Test
+	public void nonMatch() throws Exception {
 		add("file.txt", "a");
 		CommitterFilter filter = new CommitterFilter("not the committer",
 				"not@committer.org");
@@ -99,7 +104,8 @@ public class CommitterTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testCommitterSetFilter() throws Exception {
+	@Test
+	public void committerSetFilter() throws Exception {
 		add("file.txt", "a");
 		PersonIdent findUser = new PersonIdent("find user", "find@user.com");
 		committer = findUser;
@@ -112,5 +118,4 @@ public class CommitterTest extends GitTestCase {
 		assertEquals(2, filter.getPersons().size());
 		assertTrue(filter.getPersons().contains(findUser));
 	}
-
 }

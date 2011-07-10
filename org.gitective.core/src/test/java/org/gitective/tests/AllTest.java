@@ -34,6 +34,7 @@ import org.gitective.core.filter.commit.AllCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link AllCommitFilter}
@@ -45,7 +46,8 @@ public class AllTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testClone() throws Exception {
+	@Test
+	public void cloneFilter() throws Exception {
 		CommitCountFilter count = new CommitCountFilter();
 		AllCommitFilter filter = new AllCommitFilter(count);
 		RevFilter clone = filter.clone();
@@ -59,7 +61,8 @@ public class AllTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testEmptyAdds() throws Exception {
+	@Test
+	public void addEmptiesToFilter() throws Exception {
 		AllCommitFilter filter = new AllCommitFilter();
 		assertEquals(0, filter.getSize());
 		filter.add((RevFilter[]) null);
@@ -75,7 +78,8 @@ public class AllTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMatch() throws Exception {
+	@Test
+	public void matchChildrenNotIncluding() throws Exception {
 		final AtomicReference<RevCommit> visited = new AtomicReference<RevCommit>();
 		CommitFilter filter = new CommitFilter() {
 
@@ -102,7 +106,8 @@ public class AllTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMultiMatch() throws Exception {
+	@Test
+	public void multiMatchChildrenNotIncluding() throws Exception {
 		final AtomicReference<RevCommit> visited1 = new AtomicReference<RevCommit>();
 		CommitFilter filter1 = new CommitFilter() {
 

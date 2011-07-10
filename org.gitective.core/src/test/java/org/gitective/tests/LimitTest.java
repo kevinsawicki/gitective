@@ -26,6 +26,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link CommitLimitFilter}
@@ -37,7 +38,8 @@ public class LimitTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testClone() throws Exception {
+	@Test
+	public void cloneFilter() throws Exception {
 		add("file1.txt", "a");
 		add("file1.txt", "b");
 		add("file1.txt", "c");
@@ -59,7 +61,8 @@ public class LimitTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testReset() throws Exception {
+	@Test
+	public void reset() throws Exception {
 		add("file1.txt", "a");
 		CommitFinder service = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
@@ -81,7 +84,8 @@ public class LimitTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testLimit() throws Exception {
+	@Test
+	public void limit() throws Exception {
 		add("file1.txt", "a");
 		add("file2.txt", "b");
 		add("file3.txt", "c");
@@ -95,5 +99,4 @@ public class LimitTest extends GitTestCase {
 		service.find();
 		assertEquals(3, count.getCount());
 	}
-
 }

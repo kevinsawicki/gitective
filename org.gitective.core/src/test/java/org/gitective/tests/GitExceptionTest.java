@@ -22,18 +22,19 @@
 package org.gitective.tests;
 
 import org.gitective.core.GitException;
-
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link GitException}
  */
-public class GitExceptionTest extends TestCase {
+public class GitExceptionTest extends Assert {
 
 	/**
 	 * Test constructors
 	 */
-	public void testConstructors() {
+	@Test
+	public void constructors() {
 		String message = "test";
 		NullPointerException cause = new NullPointerException();
 

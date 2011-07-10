@@ -28,6 +28,7 @@ import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.filter.commit.ParentCountFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link ParentCountFilter}
@@ -39,7 +40,8 @@ public class ParentTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMatch() throws Exception {
+	@Test
+	public void match() throws Exception {
 		add("file.txt", "abc");
 		add("file.txt", "abcd");
 
@@ -55,7 +57,8 @@ public class ParentTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNonMatch() throws Exception {
+	@Test
+	public void nonMatch() throws Exception {
 		add("file.txt", "abc");
 
 		CommitCountFilter count = new CommitCountFilter();
@@ -70,7 +73,8 @@ public class ParentTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testClone() throws Exception {
+	@Test
+	public void cloneFilter() throws Exception {
 		add("file.txt", "abc");
 		RevCommit commit2 = add("file.txt", "abcd");
 
@@ -89,6 +93,5 @@ public class ParentTest extends GitTestCase {
 		service.setFilter(new AndCommitFilter(clone, commits));
 		service.find();
 		assertEquals(commit2, commits.getCommits().get(0));
-
 	}
 }

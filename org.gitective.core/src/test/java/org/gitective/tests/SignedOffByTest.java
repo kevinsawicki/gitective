@@ -27,6 +27,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.SignedOffByFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link SignedOffByFilter}
@@ -38,7 +39,8 @@ public class SignedOffByTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMatch() throws Exception {
+	@Test
+	public void match() throws Exception {
 		PersonIdent person = new PersonIdent("Test user", "test@user.com");
 		add("file.txt", "patch", Constants.SIGNED_OFF_BY_TAG + person.getName()
 				+ " <" + person.getEmailAddress() + ">");
@@ -61,7 +63,8 @@ public class SignedOffByTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNonMatch() throws Exception {
+	@Test
+	public void nonMatch() throws Exception {
 		PersonIdent person = new PersonIdent("Test user", "test@user.com");
 		add("file.txt", "patch", Constants.SIGNED_OFF_BY_TAG + "person");
 
@@ -72,5 +75,4 @@ public class SignedOffByTest extends GitTestCase {
 		service.find();
 		assertEquals(0, count.getCount());
 	}
-
 }

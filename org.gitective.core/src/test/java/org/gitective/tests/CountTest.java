@@ -24,6 +24,7 @@ package org.gitective.tests;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link CommitCountFilter}
@@ -33,7 +34,8 @@ public class CountTest extends GitTestCase {
 	/**
 	 * Unit test of {@link CommitListFilter#clone()}
 	 */
-	public void testClone() {
+	@Test
+	public void cloneFilter() {
 		CommitCountFilter filter = new CommitCountFilter();
 		assertEquals(0, filter.getCount());
 		RevFilter clone = filter.clone();
@@ -42,5 +44,4 @@ public class CountTest extends GitTestCase {
 		assertTrue(clone instanceof CommitCountFilter);
 		assertEquals(0, ((CommitCountFilter) clone).getCount());
 	}
-
 }

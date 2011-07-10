@@ -24,6 +24,7 @@ package org.gitective.tests;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of working with branches
@@ -35,7 +36,8 @@ public class BranchTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testBranches() throws Exception {
+	@Test
+	public void branches() throws Exception {
 		RevCommit masterCommit = add("f0.txt", "content0");
 		branch("b1");
 		RevCommit b1Commit = add("f1.txt", "content1");

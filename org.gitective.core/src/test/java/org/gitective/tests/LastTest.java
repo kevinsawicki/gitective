@@ -27,6 +27,7 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.LastCommitFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link LastCommitFilter}
@@ -38,7 +39,8 @@ public class LastTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testLast() throws Exception {
+	@Test
+	public void last() throws Exception {
 		add("a.txt", "a");
 		RevCommit commit2 = add("a.txt", "b");
 		add("a.txt", "c");
@@ -63,7 +65,8 @@ public class LastTest extends GitTestCase {
 	/**
 	 * Test of {@link LastCommitFilter#clone()}
 	 */
-	public void testClone() {
+	@Test
+	public void cloneFilter() {
 		LastCommitFilter filter = new LastCommitFilter();
 		assertNull(filter.getLast());
 		RevFilter clone = filter.clone();

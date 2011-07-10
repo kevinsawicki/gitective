@@ -28,6 +28,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.CommitUtils;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link CommitUtils}
@@ -37,7 +38,8 @@ public class CommitUtilsTest extends GitTestCase {
 	/**
 	 * Test constructor
 	 */
-	public void testConstructor() {
+	@Test
+	public void constructor() {
 		assertNotNull(new CommitUtils() {
 		});
 	}
@@ -47,7 +49,8 @@ public class CommitUtilsTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testTagRef() throws Exception {
+	@Test
+	public void tagRef() throws Exception {
 		add("a.txt", "a");
 		RevCommit commit = add("test.txt", "content");
 		tag(testRepo, "tag1");
@@ -66,7 +69,8 @@ public class CommitUtilsTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testInvalidRef() throws Exception {
+	@Test
+	public void invalidRef() throws Exception {
 		RevCommit commit = CommitUtils.getRef(new FileRepository(testRepo),
 				"notatag");
 		assertNull(commit);
@@ -77,7 +81,8 @@ public class CommitUtilsTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testBranchRef() throws Exception {
+	@Test
+	public void branchRef() throws Exception {
 		add("a.txt", "a");
 		RevCommit commit = add("test.txt", "content");
 		Ref ref = branch(testRepo, "branch1");

@@ -28,6 +28,7 @@ import org.gitective.core.filter.commit.BugFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.LastCommitFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of path filtering
@@ -39,7 +40,8 @@ public class PathTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testBugsToPaths() throws Exception {
+	@Test
+	public void bugsToPaths() throws Exception {
 		add("foo.cpp", "a");
 		add("bar.cpp", "a", "Fixing bug\nBug: 123");
 		add("bar.cpp", "b", "Fixing bug\nBug: 124");
@@ -63,7 +65,8 @@ public class PathTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testSingleSuffix() throws Exception {
+	@Test
+	public void singleSuffix() throws Exception {
 		add("foo.cpp", "a");
 		RevCommit commit = add("bar.java", "b");
 		LastCommitFilter matcher = new LastCommitFilter();
@@ -79,7 +82,8 @@ public class PathTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testTwoSuffixes() throws Exception {
+	@Test
+	public void twoSuffixes() throws Exception {
 		add("foo.cpp", "a");
 		RevCommit commit = add("bar.java", "b");
 		LastCommitFilter matcher = new LastCommitFilter();
@@ -95,7 +99,8 @@ public class PathTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testCountingSubset() throws Exception {
+	@Test
+	public void countingSubset() throws Exception {
 		add("file1.txt", "a");
 		add("file2.txt", "b");
 		add("file2.txt", "c");
@@ -112,11 +117,12 @@ public class PathTest extends GitTestCase {
 	}
 
 	/**
-	 * Test filtering commits matching either of two paths
+	 * Test filtering paths matching one, two, and three commits
 	 * 
 	 * @throws Exception
 	 */
-	public void testTwoPaths() throws Exception {
+	@Test
+	public void multipleCommits() throws Exception {
 		add("file1.txt", "a");
 		add("file2.txt", "b");
 		add("file2.txt", "c");

@@ -29,6 +29,7 @@ import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.filter.commit.CommitDiffFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link CommitDiffFilter}
@@ -40,12 +41,14 @@ public class DiffTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testFirst() throws Exception {
+	@Test
+	public void first() throws Exception {
 		add("test.txt", "content");
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
 
-			protected boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
+			protected boolean include(RevCommit commit,
+					Collection<DiffEntry> diffs) {
 				ref.set(diffs);
 				return true;
 			}
@@ -65,13 +68,15 @@ public class DiffTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testSecond() throws Exception {
+	@Test
+	public void second() throws Exception {
 		add("test.txt", "content");
 		add("test.txt", "content2");
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
 
-			protected boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
+			protected boolean include(RevCommit commit,
+					Collection<DiffEntry> diffs) {
 				ref.set(diffs);
 				return false;
 			}
@@ -91,7 +96,8 @@ public class DiffTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMerge() throws Exception {
+	@Test
+	public void merge() throws Exception {
 		add("test.txt", "a\nb\nc");
 		branch("test");
 		add("test.txt", "a\nb\nc\nd");
@@ -101,7 +107,8 @@ public class DiffTest extends GitTestCase {
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
 
-			protected boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
+			protected boolean include(RevCommit commit,
+					Collection<DiffEntry> diffs) {
 				ref.set(diffs);
 				return false;
 			}

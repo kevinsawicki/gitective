@@ -24,6 +24,7 @@ package org.gitective.tests;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link AndCommitFilter}
@@ -33,7 +34,8 @@ public class AndTest extends GitTestCase {
 	/**
 	 * Unit test of {@link AndCommitFilter#clone()}
 	 */
-	public void testClone() {
+	@Test
+	public void cloneFilter() {
 		CommitLimitFilter limit = new CommitLimitFilter(1);
 		AndCommitFilter and = new AndCommitFilter(limit);
 		RevFilter clone = and.clone();
@@ -41,5 +43,4 @@ public class AndTest extends GitTestCase {
 		assertNotSame(and, clone);
 		assertTrue(clone instanceof AndCommitFilter);
 	}
-
 }

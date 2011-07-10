@@ -29,6 +29,7 @@ import org.gitective.core.filter.commit.AuthorFilter;
 import org.gitective.core.filter.commit.AuthorSetFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of author filters
@@ -38,7 +39,8 @@ public class AuthorTest extends GitTestCase {
 	/**
 	 * Test clone of {@link AuthorFilter}
 	 */
-	public void testCloneAuthorFilter() {
+	@Test
+	public void cloneAuthorFilter() {
 		AuthorFilter filter = new AuthorFilter(author);
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
@@ -49,7 +51,8 @@ public class AuthorTest extends GitTestCase {
 	/**
 	 * Test clone of {@link AuthorSetFilter}
 	 */
-	public void testCloneAuthorSetFilter() {
+	@Test
+	public void cloneAuthorSetFilter() {
 		AuthorSetFilter filter = new AuthorSetFilter();
 		RevFilter cloned = filter.clone();
 		assertNotNull(cloned);
@@ -62,7 +65,8 @@ public class AuthorTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testAuthorFilter() throws Exception {
+	@Test
+	public void authorFilter() throws Exception {
 		add("file.txt", "a");
 		PersonIdent findUser = new PersonIdent("find user", "find@user.com");
 		author = findUser;
@@ -83,7 +87,8 @@ public class AuthorTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNonMatch() throws Exception {
+	@Test
+	public void nonMatch() throws Exception {
 		add("file.txt", "a");
 		AuthorFilter filter = new AuthorFilter("not the author",
 				"not@author.org");
@@ -99,7 +104,8 @@ public class AuthorTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testAuthorSetFilter() throws Exception {
+	@Test
+	public void authorSetFilter() throws Exception {
 		add("file.txt", "a");
 		PersonIdent findUser = new PersonIdent("find user", "find@user.com");
 		author = findUser;
@@ -119,7 +125,8 @@ public class AuthorTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testAuthorSetFilterReset() throws Exception {
+	@Test
+	public void authorSetFilterReset() throws Exception {
 		add("file.txt", "a");
 		AuthorSetFilter filter = new AuthorSetFilter();
 		assertTrue(filter.getPersons().isEmpty());
@@ -133,5 +140,4 @@ public class AuthorTest extends GitTestCase {
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(author));
 	}
-
 }

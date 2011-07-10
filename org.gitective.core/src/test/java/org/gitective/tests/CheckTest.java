@@ -21,19 +21,20 @@
  */
 package org.gitective.tests;
 
-import junit.framework.TestCase;
-
 import org.gitective.core.Check;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link Check} class
  */
-public class CheckTest extends TestCase {
+public class CheckTest extends Assert {
 
 	/**
 	 * Test {@link Check} class constructor
 	 */
-	public void testContructor() {
+	@Test
+	public void contructor() {
 		assertNotNull(new Check() {
 		});
 	}
@@ -41,7 +42,8 @@ public class CheckTest extends TestCase {
 	/**
 	 * Unit test of {@link Check#anyNull(Object...)}
 	 */
-	public void testAnyNull() {
+	@Test
+	public void anyNull() {
 		assertTrue(Check.anyNull((Object) null));
 		assertFalse(Check.anyNull(this));
 		assertTrue(Check.anyNull("", (Object) null));
@@ -50,7 +52,8 @@ public class CheckTest extends TestCase {
 	/**
 	 * Unit test of {@link Check#allNull(Object...)}
 	 */
-	public void testAllNull() {
+	@Test
+	public void allNull() {
 		assertTrue(Check.allNull((Object) null));
 		assertFalse(Check.allNull(this));
 		assertFalse(Check.allNull("", (Object) null));
@@ -59,7 +62,8 @@ public class CheckTest extends TestCase {
 	/**
 	 * Unit test of {@link Check#equals(Object)}
 	 */
-	public void testEquals() {
+	@Test
+	public void equals() {
 		assertTrue(Check.equals(null, null));
 		assertFalse(Check.equals("a", null));
 		assertFalse(Check.equals(null, "b"));
@@ -70,7 +74,8 @@ public class CheckTest extends TestCase {
 	/**
 	 * Unit test of {@link Check#equalsNonNull(Object, Object)}
 	 */
-	public void testEqualsNonNull() {
+	@Test
+	public void equalsNonNull() {
 		assertFalse(Check.equalsNonNull(null, null));
 		assertFalse(Check.equalsNonNull("a", "b"));
 		assertTrue(Check.equalsNonNull("a", "a"));

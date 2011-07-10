@@ -24,6 +24,7 @@ package org.gitective.tests;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of working with tags
@@ -35,7 +36,8 @@ public class TagTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testTags() throws Exception {
+	@Test
+	public void tags() throws Exception {
 		RevCommit commit1 = add("f1.txt", "content0");
 		tag("t1");
 		RevCommit commit2 = add("f2.txt", "content2");

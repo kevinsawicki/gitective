@@ -27,6 +27,7 @@ import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.OrCommitFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link OrCommitFilter}
@@ -36,7 +37,8 @@ public class OrTest extends GitTestCase {
 	/**
 	 * Test of {@link OrCommitFilter#clone()}
 	 */
-	public void testClone() {
+	@Test
+	public void cloneFilter() {
 		CommitCountFilter count = new CommitCountFilter();
 		OrCommitFilter or = new OrCommitFilter(count);
 		RevFilter clone = or.clone();
@@ -51,7 +53,8 @@ public class OrTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testSecondNotCalled() throws Exception {
+	@Test
+	public void secondNotCalled() throws Exception {
 		add("file.txt", "test");
 		add("file.txt", "testa");
 		CommitLimitFilter limit = new CommitLimitFilter(1);
@@ -66,7 +69,8 @@ public class OrTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNoMatches() throws Exception {
+	@Test
+	public void noMatches() throws Exception {
 		add("file.txt", "test");
 		add("file.txt", "testa");
 		add("file.txt", "testb");

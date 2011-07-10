@@ -22,18 +22,18 @@
 package org.gitective.tests;
 
 import org.gitective.core.Assert;
-
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * Units tests of the {@link Assert} class
  */
-public class AssertTest extends TestCase {
+public class AssertTest extends org.junit.Assert {
 
 	/**
 	 * Test constructor
 	 */
-	public void testConstructor() {
+	@Test
+	public void constructor() {
 		assertNotNull(new Assert() {
 		});
 	}
@@ -41,7 +41,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notNull(String, Object)}
 	 */
-	public void testNullWithMessage() {
+	@Test
+	public void nullWithMessage() {
 		String message = "this is null";
 		try {
 			Assert.notNull(message, null);
@@ -54,7 +55,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notNull(Object)}
 	 */
-	public void testNonNull() {
+	@Test
+	public void nonNullWithoutMessage() {
 		try {
 			Assert.notNull(new Object());
 		} catch (IllegalArgumentException iae) {
@@ -65,7 +67,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notNull(Object)}
 	 */
-	public void testNullWithoutMessage() {
+	@Test
+	public void nullWithoutMessage() {
 		try {
 			Assert.notNull(null);
 			fail("Illegal argument exception not thrown");
@@ -78,7 +81,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notNull(String, Object)}
 	 */
-	public void testNullWithNullMessage() {
+	@Test
+	public void nullWithNullMessage() {
 		try {
 			Assert.notNull(null, null);
 			fail("Illegal argument exception not thrown");
@@ -91,7 +95,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notNull(String, Object)}
 	 */
-	public void testNullWithEmptyMessage() {
+	@Test
+	public void nullWithEmptyMessage() {
 		try {
 			Assert.notNull("", null);
 			fail("Illegal argument exception not thrown");
@@ -104,7 +109,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String, String)}
 	 */
-	public void testEmptyStringWithMessage() {
+	@Test
+	public void emptyStringWithMessage() {
 		String message = "string is empty";
 		try {
 			Assert.notEmpty(message, "");
@@ -117,7 +123,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String)}
 	 */
-	public void testEmptyStringWithoutMessage() {
+	@Test
+	public void emptyStringWithoutMessage() {
 		try {
 			Assert.notEmpty("");
 			fail("Illegal argument exception not thrown");
@@ -130,7 +137,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String, String)}
 	 */
-	public void testEmptyStringWithNullMessage() {
+	@Test
+	public void emptyStringWithNullMessage() {
 		try {
 			Assert.notEmpty(null, "");
 			fail("Illegal argument exception not thrown");
@@ -143,7 +151,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String, String)}
 	 */
-	public void testEmptyStringWithEmptyMessage() {
+	@Test
+	public void emptyStringWithEmptyMessage() {
 		try {
 			Assert.notEmpty("", "");
 			fail("Illegal argument exception not thrown");
@@ -156,7 +165,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String)}
 	 */
-	public void testNonEmptyString() {
+	@Test
+	public void nonEmptyString() {
 		try {
 			Assert.notEmpty("content");
 		} catch (IllegalArgumentException iae) {
@@ -167,7 +177,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String, Object[])}
 	 */
-	public void testEmptyArrayWithMessage() {
+	@Test
+	public void emptyArrayWithMessage() {
 		String message = "array is empty";
 		try {
 			Assert.notEmpty(message, new Object[0]);
@@ -180,7 +191,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String, Object[])}
 	 */
-	public void testEmptyArrayWithoutMessage() {
+	@Test
+	public void emptyArrayWithoutMessage() {
 		try {
 			Assert.notEmpty(new Object[0]);
 			fail("Illegal argument exception not thrown");
@@ -193,7 +205,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String, Object[])}
 	 */
-	public void testEmptyArrayWithNullMessage() {
+	@Test
+	public void emptyArrayWithNullMessage() {
 		try {
 			Assert.notEmpty(null, new Object[0]);
 			fail("Illegal argument exception not thrown");
@@ -206,7 +219,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(String, Object[])}
 	 */
-	public void testEmptyArrayWithEmptyMessage() {
+	@Test
+	public void emptyArrayWithEmptyMessage() {
 		try {
 			Assert.notEmpty("", new Object[0]);
 			fail("Illegal argument exception not thrown");
@@ -219,7 +233,8 @@ public class AssertTest extends TestCase {
 	/**
 	 * Test {@link Assert#notEmpty(Object[])}
 	 */
-	public void testNonEmptyArray() {
+	@Test
+	public void nonEmptyArray() {
 		try {
 			Assert.notEmpty(new Object[10]);
 		} catch (IllegalArgumentException iae) {

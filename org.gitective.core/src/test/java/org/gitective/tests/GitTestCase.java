@@ -26,8 +26,6 @@ import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import junit.framework.TestCase;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.lib.Constants;
@@ -37,12 +35,14 @@ import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.notes.Note;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.CommitUtils;
+import org.junit.Assert;
+import org.junit.Before;
 
 /**
  * Base test case with utilities for common Git operations performed during
  * testing
  */
-public abstract class GitTestCase extends TestCase {
+public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Test repository .git directory
@@ -61,9 +61,13 @@ public abstract class GitTestCase extends TestCase {
 	protected PersonIdent committer = new PersonIdent("Test Committer",
 			"committer@test.com");
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	/**
+	 * Set up method that initializes git repository
+	 * 
+	 * @throws Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
 		testRepo = initRepo();
 	}
 

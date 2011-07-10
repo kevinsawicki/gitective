@@ -27,6 +27,7 @@ import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitMessageFindFilter;
 import org.gitective.core.filter.commit.PatternFindCommitFilter;
 import org.gitective.core.service.CommitFinder;
+import org.junit.Test;
 
 /**
  * Unit tests of {@link PatternFindCommitFilter}
@@ -38,7 +39,8 @@ public class FindTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMatch() throws Exception {
+	@Test
+	public void matc() throws Exception {
 		add("file.txt", "content", "matchmiddlehere");
 		CommitMessageFindFilter find = new CommitMessageFindFilter("middle");
 		CommitCountFilter count = new CommitCountFilter();
@@ -52,7 +54,8 @@ public class FindTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testNonMatch() throws Exception {
+	@Test
+	public void nonMatch() throws Exception {
 		add("file.txt", "content", "matchmiddlehere");
 		CommitMessageFindFilter find = new CommitMessageFindFilter("nomatch");
 		CommitCountFilter count = new CommitCountFilter();
@@ -66,12 +69,12 @@ public class FindTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testClone() throws Exception {
+	@Test
+	public void cloneFitler() throws Exception {
 		CommitMessageFindFilter find = new CommitMessageFindFilter("content");
 		RevFilter clone = find.clone();
 		assertNotNull(clone);
 		assertNotSame(find, clone);
 		assertTrue(clone instanceof CommitMessageFindFilter);
 	}
-
 }
