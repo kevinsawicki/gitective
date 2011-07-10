@@ -149,7 +149,7 @@ This example visits all the files that were modified as part of a merge.
 ```java
 CommitDiffFilter diffs = new CommitDiffFilter() {
 
-     protected boolean diff(RevCommit commit, Collection<DiffEntry> diffs) {
+     protected boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
           // Diffs collection contains all files modified during merge
      }
 
