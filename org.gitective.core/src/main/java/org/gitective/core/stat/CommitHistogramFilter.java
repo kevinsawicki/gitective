@@ -44,17 +44,20 @@ public class CommitHistogramFilter extends CommitFilter {
 		return histogram;
 	}
 
+	@Override
 	public CommitFilter reset() {
 		histogram = new CommitHistogram();
 		return super.reset();
 	}
 
+	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		histogram.include(commit);
 		return true;
 	}
 
+	@Override
 	public RevFilter clone() {
 		return new CommitHistogramFilter();
 	}

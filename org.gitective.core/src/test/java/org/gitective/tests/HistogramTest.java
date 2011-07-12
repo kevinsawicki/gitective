@@ -26,6 +26,7 @@ import java.util.TimeZone;
 
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.service.CommitFinder;
 import org.gitective.core.stat.CommitHistogram;
 import org.gitective.core.stat.CommitHistogramFilter;
@@ -189,5 +190,40 @@ public class HistogramTest extends GitTestCase {
 		UserCommitActivity[] authors = histogram.authors(new CountComparator());
 		assertEquals(commit, authors[0].first());
 		assertEquals(commit2, authors[1].last());
+	}
+
+	/**
+	 * Unit test of {@link CommitHistogramFilter#reset()}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void resetFilter() throws Exception {
+		add("test.txt", "content");
+		CommitHistogramFilter filter = new CommitHistogramFilter();
+		CommitHistogram histogram = filter.getHistogram();
+		assertNotNull(histogram);
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertSame(histogram, filter.getHistogram());
+		filter.reset();
+		assertNotNull(filter.getHistogram());
+		assertNotSame(histogram, filter.getHistogram());
+	}
+
+	/**
+	 * Unit test of {@link CommitHistogramFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void cloneFilter() throws Exception {
+		CommitHistogramFilter filter = new CommitHistogramFilter();
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof CommitHistogramFilter);
+		CommitHistogramFilter clonedFilter = (CommitHistogramFilter) clone;
+		assertNotNull(clonedFilter.getHistogram());
+		assertNotSame(filter.getHistogram(), clonedFilter.getHistogram());
 	}
 }
