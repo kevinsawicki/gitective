@@ -45,6 +45,11 @@ public class UserCommitActivity implements Serializable {
 	 */
 	public static final int SIZE = 16;
 
+	/**
+	 * Default growth percentage of expected commits
+	 */
+	public static final int GROWTH = 10;
+
 	private final String name;
 	private final String email;
 	private int index;
@@ -104,8 +109,12 @@ public class UserCommitActivity implements Serializable {
 			throw new GitException(e);
 		}
 		if (index == commits.length) {
-			commits = Arrays.copyOf(commits, commits.length + SIZE);
-			times = Arrays.copyOf(times, times.length + SIZE);
+			int newSize = commits.length;
+			// Grow arrays by either GROWTH percentage or SIZE value, whichever
+			// is higher
+			newSize += Math.max(SIZE, (int) (newSize / GROWTH));
+			commits = Arrays.copyOf(commits, newSize);
+			times = Arrays.copyOf(times, newSize);
 		}
 		commits[index] = stream.toByteArray();
 		times[index] = when;
