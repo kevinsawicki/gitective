@@ -28,6 +28,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.service.CommitFinder;
 import org.gitective.core.stat.CommitCalendar;
 import org.gitective.core.stat.CommitHistogramFilter;
+import org.gitective.core.stat.Month;
 import org.gitective.core.stat.UserCommitActivity;
 import org.gitective.core.stat.YearCommitActivity;
 import org.junit.Test;
@@ -83,18 +84,28 @@ public class CalendarTest extends GitTestCase {
 		CommitCalendar cal = new CommitCalendar(filter.getHistogram().authors());
 
 		GregorianCalendar commitTime = new GregorianCalendar();
+		int month = commitTime.get(Calendar.MONTH);
+		int day = commitTime.get(Calendar.DAY_OF_MONTH) - 1;
+		int hour = commitTime.get(Calendar.HOUR_OF_DAY);
 		commitTime.setTime(commit.getAuthorIdent().getWhen());
-		assertEquals(1, cal.countDay(commitTime.get(Calendar.DAY_OF_MONTH) - 1));
-		assertEquals(1, cal.countMonth(commitTime.get(Calendar.MONTH)));
-		assertEquals(1, cal.countHour(commitTime.get(Calendar.HOUR_OF_DAY)));
+		assertEquals(1, cal.countDay(day));
+		assertEquals(1, cal.countMonth(month));
+		assertEquals(1, cal.countHour(hour));
 
-		assertEquals(1, cal.days()[commitTime.get(Calendar.DAY_OF_MONTH) - 1]);
-		assertEquals(1, cal.months()[commitTime.get(Calendar.MONTH)]);
-		assertEquals(1, cal.hours()[commitTime.get(Calendar.HOUR_OF_DAY)]);
+		assertEquals(1, cal.days()[day]);
+		assertEquals(1, cal.months()[month]);
+		assertEquals(1, cal.hours()[hour]);
 
 		assertEquals(1, cal.years().length);
 		YearCommitActivity year = cal.years()[0];
 		assertEquals(1, year.count());
 		assertEquals(commitTime.get(Calendar.YEAR), year.year());
+		assertNotNull(year.months());
+		assertEquals(1, year.months()[month]);
+		assertEquals(1, year.monthCount(Month.month(month)));
+		assertNotNull(year.days());
+		assertEquals(1, year.days()[day]);
+		assertNotNull(year.hours());
+		assertEquals(1, year.hours()[hour]);
 	}
 }

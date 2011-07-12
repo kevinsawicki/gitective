@@ -165,9 +165,8 @@ public class YearCommitActivity {
 	 * @return number of commits
 	 */
 	public int monthCount(final int month) {
-		final int[][][] commits = this.commits;
 		int total = 0;
-		int[][] monthly = commits[month];
+		final int[][] monthly = commits[month];
 		for (int i = 0; i < monthly.length; i++)
 			for (int j = 0; j < HOURS; j++)
 				total += monthly[i][j];
