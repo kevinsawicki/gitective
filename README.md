@@ -175,7 +175,7 @@ finder.setFilter(notes).find();
 ```
 
 ### Generate commit histogram
-This examples finds how many commmits happpened each year in August.
+This examples prints out how many commits happened each year in August.
 
 ```java
 CommitHistogramFilter filter = new CommitHistogramFilter();
