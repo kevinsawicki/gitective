@@ -224,15 +224,15 @@ public class CommitFinder extends RepositoryService {
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
 			final Collection<RevCommit> commits = CommitUtils.getTags(repo);
-			if (!commits.isEmpty()) {
-				final RevWalk walk = createWalk(repo);
-				try {
-					walk.markStart(commits);
-				} catch (IOException e) {
-					throw new GitException(e);
-				}
-				walk(walk);
+			if (commits.isEmpty())
+				continue;
+			final RevWalk walk = createWalk(repo);
+			try {
+				walk.markStart(commits);
+			} catch (IOException e) {
+				throw new GitException(e);
 			}
+			walk(walk);
 		}
 		return this;
 	}
@@ -249,15 +249,15 @@ public class CommitFinder extends RepositoryService {
 		for (int i = 0; i < repoCount; i++) {
 			repo = repos[i];
 			final Collection<RevCommit> commits = CommitUtils.getBranches(repo);
-			if (!commits.isEmpty()) {
-				final RevWalk walk = createWalk(repo);
-				try {
-					walk.markStart(commits);
-				} catch (IOException e) {
-					throw new GitException(e);
-				}
-				walk(walk);
+			if (commits.isEmpty())
+				continue;
+			final RevWalk walk = createWalk(repo);
+			try {
+				walk.markStart(commits);
+			} catch (IOException e) {
+				throw new GitException(e);
 			}
+			walk(walk);
 		}
 		return this;
 	}
