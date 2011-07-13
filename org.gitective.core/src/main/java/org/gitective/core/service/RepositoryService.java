@@ -23,6 +23,7 @@ package org.gitective.core.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepository;
@@ -83,8 +84,6 @@ public class RepositoryService {
 	public RepositoryService(final Repository... repositories) {
 		Assert.notNull("Repositories cannot be null", repositories);
 		Assert.notEmpty("Repositories cannot be empty", repositories);
-		this.repositories = new Repository[repositories.length];
-		System.arraycopy(repositories, 0, this.repositories, 0,
-				repositories.length);
+		this.repositories = Arrays.copyOf(repositories, repositories.length);
 	}
 }
