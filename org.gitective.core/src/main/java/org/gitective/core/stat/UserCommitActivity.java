@@ -90,7 +90,9 @@ public class UserCommitActivity implements Serializable {
 	 * Include given commit in activity
 	 * 
 	 * @param commit
+	 *            must be non-null
 	 * @param user
+	 *            must be non-null
 	 * @return this activity
 	 */
 	public UserCommitActivity include(final RevCommit commit,
@@ -127,7 +129,7 @@ public class UserCommitActivity implements Serializable {
 	}
 
 	/**
-	 * Get raw commits
+	 * Get raw commits as array of byte arrays
 	 * 
 	 * @return non-null but possibly empty array
 	 */
@@ -136,7 +138,7 @@ public class UserCommitActivity implements Serializable {
 	}
 
 	/**
-	 * Get commits as object ids
+	 * Get commits as array of object ids
 	 * 
 	 * @return non-null but possibly empty array
 	 */
@@ -159,7 +161,7 @@ public class UserCommitActivity implements Serializable {
 	/**
 	 * Get id of first commit
 	 * 
-	 * @return commit id
+	 * @return commit id or null if no commits
 	 */
 	public ObjectId first() {
 		return index > 0 ? ObjectId.fromRaw(commits[index - 1]) : null;
@@ -168,7 +170,7 @@ public class UserCommitActivity implements Serializable {
 	/**
 	 * Get id of latest commit
 	 * 
-	 * @return commit id
+	 * @return commit id or null if no commits
 	 */
 	public ObjectId last() {
 		return index > 0 ? ObjectId.fromRaw(commits[0]) : null;
@@ -177,7 +179,7 @@ public class UserCommitActivity implements Serializable {
 	/**
 	 * Get time of earliest commit
 	 * 
-	 * @return time
+	 * @return time in milliseconds or 0 if no commits
 	 */
 	public long earliest() {
 		return index > 0 ? first : 0;
@@ -186,7 +188,7 @@ public class UserCommitActivity implements Serializable {
 	/**
 	 * Get time of latest commit
 	 * 
-	 * @return time
+	 * @return time in milliseconds or 0 if no commits
 	 */
 	public long latest() {
 		return index > 0 ? last : 0;
