@@ -21,6 +21,8 @@
  */
 package org.gitective.core.filter.commit;
 
+import java.util.Arrays;
+
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
@@ -55,13 +57,14 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * @return this filter
 	 */
 	public CompositeCommitFilter add(final RevFilter... addedFilters) {
-		if (addedFilters == null || addedFilters.length == 0)
+		if (addedFilters == null)
 			return this;
-		final RevFilter[] resized = new RevFilter[addedFilters.length
-				+ filters.length];
-		System.arraycopy(filters, 0, resized, 0, filters.length);
-		System.arraycopy(addedFilters, 0, resized, filters.length,
-				addedFilters.length);
+		final int added = addedFilters.length;
+		if (added == 0)
+			return this;
+		final int current = filters.length;
+		final RevFilter[] resized = Arrays.copyOf(filters, added + current);
+		System.arraycopy(addedFilters, 0, resized, current, added);
 		filters = resized;
 		return this;
 	}
