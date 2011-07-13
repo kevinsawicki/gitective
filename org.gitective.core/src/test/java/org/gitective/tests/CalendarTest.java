@@ -21,9 +21,12 @@
  */
 package org.gitective.tests;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.service.CommitFinder;
 import org.gitective.core.stat.CommitCalendar;
@@ -66,6 +69,42 @@ public class CalendarTest extends GitTestCase {
 		assertEquals(YearCommitActivity.HOURS, calendar.hours().length);
 		for (int hour : calendar.hours())
 			assertEquals(0, hour);
+	}
+
+	/**
+	 * Unit test of empty {@link YearCommitActivity}
+	 */
+	@Test
+	public void emptyYear() {
+		YearCommitActivity year = new YearCommitActivity(2000);
+		assertEquals(0, year.count());
+		for (int i = 0; i < YearCommitActivity.MONTHS; i++)
+			assertEquals(0, year.monthCount(i));
+		for (int i = 0; i < YearCommitActivity.DAYS; i++)
+			assertEquals(0, year.dayCount(i));
+		for (int i = 0; i < YearCommitActivity.HOURS; i++)
+			assertEquals(0, year.hourCount(i));
+	}
+
+	/**
+	 * Test proper resize of internal arrays of {@link UserCommitActivity}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void resizeBySizeAndGrowth() throws Exception {
+		RevCommit commit = add("test.txt", "content");
+		UserCommitActivity user = new UserCommitActivity("a", "b");
+		final int size = (UserCommitActivity.SIZE * UserCommitActivity.GROWTH) + 2;
+		for (int i = 0; i < size; i++)
+			user.include(commit, author);
+		assertEquals(size, user.count());
+		byte[] commitId = new byte[Constants.OBJECT_ID_LENGTH];
+		commit.copyRawTo(commitId, 0);
+		for (byte[] id : user.rawIds())
+			assertTrue(Arrays.equals(commitId, id));
+		for (ObjectId id : user.ids())
+			assertEquals(commit, id);
 	}
 
 	/**
