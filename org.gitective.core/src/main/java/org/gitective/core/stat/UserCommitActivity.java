@@ -21,8 +21,6 @@
  */
 package org.gitective.core.stat;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -30,7 +28,6 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.gitective.core.GitException;
 
 /**
  * Commit user activity class
@@ -57,9 +54,6 @@ public class UserCommitActivity implements Serializable {
 	private long[] times;
 	private long first = Long.MAX_VALUE;
 	private long last = Long.MIN_VALUE;
-
-	private final transient ByteArrayOutputStream stream = new ByteArrayOutputStream(
-			Constants.OBJECT_ID_LENGTH);
 
 	/**
 	 * Create user activity for given name and email
@@ -102,12 +96,6 @@ public class UserCommitActivity implements Serializable {
 	public UserCommitActivity include(final RevCommit commit,
 			final PersonIdent user) {
 		final long when = user.getWhen().getTime();
-		stream.reset();
-		try {
-			commit.copyRawTo(stream);
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
 		if (index == commits.length) {
 			int newSize = commits.length;
 			// Grow arrays by either GROWTH percentage or SIZE value, whichever
@@ -116,7 +104,9 @@ public class UserCommitActivity implements Serializable {
 			commits = Arrays.copyOf(commits, newSize);
 			times = Arrays.copyOf(times, newSize);
 		}
-		commits[index] = stream.toByteArray();
+		final byte[] id = new byte[Constants.OBJECT_ID_LENGTH];
+		commit.copyRawTo(id, 0);
+		commits[index] = id;
 		times[index] = when;
 		index++;
 
@@ -134,6 +124,27 @@ public class UserCommitActivity implements Serializable {
 	 */
 	public long[] times() {
 		return Arrays.copyOf(times, index);
+	}
+
+	/**
+	 * Get raw commits
+	 * 
+	 * @return non-null but possibly empty array
+	 */
+	public byte[][] rawIds() {
+		return Arrays.copyOf(commits, index);
+	}
+
+	/**
+	 * Get commits as object ids
+	 * 
+	 * @return non-null but possibly empty array
+	 */
+	public ObjectId[] ids() {
+		final ObjectId[] ids = new ObjectId[index];
+		for (int i = 0; i < index; i++)
+			ids[i] = ObjectId.fromRaw(commits[i]);
+		return ids;
 	}
 
 	/**
