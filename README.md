@@ -160,10 +160,10 @@ finder.setFilter(filter).find();
 ```
 
 ### Inspect notes associated with commits
-This example visits all Git notes associated with each commit visited..
+This example visits all Git notes associated with each commit visited.
 
 ```java
-CommitNotesFilter notes = new CommitNotesFilter() {
+NoteContentFilter notes = new NoteContentFilter() {
 
      protected boolean include(RevCommit commit, Note note, String content) {
           // Content string contains text of note associated with commit
@@ -172,6 +172,18 @@ CommitNotesFilter notes = new CommitNotesFilter() {
 };
 CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(notes).find();
+```
+
+### Generate commit histogram
+This examples finds how many commmits happpened each year in August.
+
+```java
+CommitHistogramFilter filter = new CommitHistogramFilter();
+CommitFinder finder = new CommitFinder("/repos/redis/.git");
+finder.setFilter(filter).find();
+CommitCalendar commits = new CommitCalendar(filter.getHistogram().authors());
+for(YearCommitActivity year : commits.years())
+     System.out.println(year.monthCount(7) + " commits in August, " + year.year());
 ```
 
 ## Building from source
