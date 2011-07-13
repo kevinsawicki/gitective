@@ -23,9 +23,8 @@ package org.gitective.tests;
 
 import java.io.IOException;
 
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
-import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.StopWalkException;
+import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
@@ -33,6 +32,7 @@ import org.gitective.core.GitException;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitFilter;
+import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
@@ -95,5 +95,52 @@ public class CommitFinderTest extends GitTestCase {
 		}, count));
 		finder.find();
 		assertEquals(0, count.getCount());
+	}
+
+	/**
+	 * Test searching commit range that has none in-between start and end
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void noCommitsBetween() throws Exception {
+		add("test.txt", "content");
+		CommitFinder finder = new CommitFinder(testRepo);
+		CommitCountFilter count = new CommitCountFilter();
+		finder.setFilter(count);
+		finder.findBetween(Constants.HEAD, Constants.HEAD);
+		assertEquals(0, count.getCount());
+	}
+
+	/**
+	 * Test searching commit range that has none in-between start and end
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void noCommitsBetweenHeadAndHead() throws Exception {
+		add("test.txt", "content");
+		CommitFinder finder = new CommitFinder(testRepo);
+		CommitCountFilter count = new CommitCountFilter();
+		finder.setFilter(count);
+		finder.findBetween(Constants.HEAD, Constants.HEAD);
+		assertEquals(0, count.getCount());
+	}
+
+	/**
+	 * Test searching commit range that has none in-between start and end
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void noCommitsBetweenCommitIdAndHead() throws Exception {
+		add("test.txt", "content");
+		RevCommit commit = add("test.txt", "content2");
+		CommitFinder finder = new CommitFinder(testRepo);
+		CommitListFilter commits = new CommitListFilter();
+		finder.setFilter(commits);
+		finder.findBetween(commit, Constants.HEAD + "~1");
+		assertEquals(1, commits.getCommits().size());
+		assertEquals(commit, commits.getCommits().get(0));
 	}
 }
