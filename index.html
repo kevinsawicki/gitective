@@ -199,7 +199,7 @@ finder.setFilter(filter).find();
 </pre>
 <p class="description">Inspect all notes associated with each commit visited</p>
 <pre class="sh_java">
-CommitNotesFilter notes = new CommitNotesFilter() {
+NoteContentFilter notes = new NoteContentFilter() {
 
      protected boolean include(RevCommit commit, Note note, String content) {
           // Content string contains text of note associated with commit
@@ -208,6 +208,16 @@ CommitNotesFilter notes = new CommitNotesFilter() {
 };
 CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(notes).find();
+</pre>
+
+<p class="description">Generate commit histogram and print commits per year</p>
+<pre class="sh_java">
+CommitHistogramFilter filter = new CommitHistogramFilter();
+CommitFinder finder = new CommitFinder("/repos/redis/.git");
+finder.setFilter(filter).find();
+CommitCalendar commits = new CommitCalendar(filter.getHistogram().authors());
+for(YearCommitActivity year : commits.years())
+     System.out.println(year.count() + " commits in " + year.year());
 </pre>
 
 <h2>Dependencies</h2>
