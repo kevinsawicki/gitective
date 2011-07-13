@@ -23,6 +23,7 @@ package org.gitective.core.filter.commit;
 
 import java.util.Arrays;
 
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
@@ -66,6 +67,14 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 		System.arraycopy(addedFilters, 0, resized, current, added);
 		filters = resized;
 		return this;
+	}
+
+	@Override
+	public CommitFilter setRepository(final Repository repository) {
+		for (RevFilter filter : filters)
+			if (filter instanceof CommitFilter)
+				((CommitFilter) filter).setRepository(repository);
+		return super.setRepository(repository);
 	}
 
 	@Override
