@@ -21,10 +21,23 @@
  */
 package org.gitective.tests;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefDatabase;
+import org.eclipse.jgit.lib.RefRename;
+import org.eclipse.jgit.lib.RefUpdate;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.notes.Note;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.eclipse.jgit.storage.file.FileRepository;
+import org.gitective.core.GitException;
+import org.gitective.core.filter.commit.AndCommitFilter;
+import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitNotesFilter;
 import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
@@ -59,5 +72,123 @@ public class NotesTest extends GitTestCase {
 		});
 		finder.find();
 		assertEquals(note, found.get());
+	}
+
+	/**
+	 * Test not including a commit based on the note found
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void noteNotIncluded() throws Exception {
+		add("test.txt", "abc");
+		note("this is a note");
+
+		CommitCountFilter count = new CommitCountFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(new AndCommitFilter(new CommitNotesFilter() {
+
+			protected boolean include(RevCommit commit, Note note,
+					String content) {
+				return false;
+			}
+
+		}, count)).find();
+		assertEquals(0, count.getCount());
+	}
+
+	/**
+	 * Unit test of
+	 * {@link CommitNotesFilter#setRepository(org.eclipse.jgit.lib.Repository)}
+	 */
+	@Test
+	public void setNoRepository() {
+		CommitNotesFilter filter = new CommitNotesFilter();
+		assertSame(filter, filter.setRepository(null));
+	}
+
+	private static class BadRefDatabase extends RefDatabase {
+
+		private final IOException exception;
+
+		public BadRefDatabase(IOException exception) {
+			this.exception = exception;
+		}
+
+		public void create() throws IOException {
+			throw exception;
+		}
+
+		public void close() {
+		}
+
+		public boolean isNameConflicting(String name) throws IOException {
+			throw exception;
+		}
+
+		public RefUpdate newUpdate(String name, boolean detach)
+				throws IOException {
+			throw exception;
+		}
+
+		public RefRename newRename(String fromName, String toName)
+				throws IOException {
+			throw exception;
+		}
+
+		public Ref getRef(String name) throws IOException {
+			throw exception;
+		}
+
+		public Map<String, Ref> getRefs(String prefix) throws IOException {
+			throw exception;
+		}
+
+		public List<Ref> getAdditionalRefs() throws IOException {
+			throw exception;
+		}
+
+		public Ref peel(Ref ref) throws IOException {
+			throw exception;
+		}
+	}
+
+	/**
+	 * Set invalid repository on notes filter
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void setRepositoryThrowsIOException() throws Exception {
+		CommitNotesFilter filter = new CommitNotesFilter();
+		final IOException exception = new IOException("message");
+		Repository repo = new FileRepository(testRepo) {
+
+			public RefDatabase getRefDatabase() {
+				return new BadRefDatabase(exception);
+			}
+
+		};
+		try {
+			filter.setRepository(repo);
+			fail("Exception not thrown when reading bad refs");
+		} catch (GitException e) {
+			assertNotNull(e);
+			assertEquals(exception, e.getCause());
+		}
+	}
+
+	/**
+	 * Unit test of {@link CommitNotesFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void cloneFilter() throws Exception {
+		CommitNotesFilter filter = new CommitNotesFilter();
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof CommitNotesFilter);
 	}
 }
