@@ -38,12 +38,13 @@ import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.GitException;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
-import org.gitective.core.filter.commit.CommitNotesFilter;
+import org.gitective.core.filter.commit.NoteContentFilter;
+import org.gitective.core.filter.commit.NoteFilter;
 import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**
- * Unit tests of {@link CommitNotesFilter}
+ * Unit tests of {@link NoteContentFilter}
  */
 public class NotesTest extends GitTestCase {
 
@@ -61,7 +62,7 @@ public class NotesTest extends GitTestCase {
 		final AtomicReference<String> found = new AtomicReference<String>();
 
 		CommitFinder finder = new CommitFinder(testRepo);
-		finder.setFilter(new CommitNotesFilter() {
+		finder.setFilter(new NoteContentFilter() {
 
 			protected boolean include(RevCommit commit, Note note,
 					String content) {
@@ -86,7 +87,7 @@ public class NotesTest extends GitTestCase {
 
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
-		finder.setFilter(new AndCommitFilter(new CommitNotesFilter() {
+		finder.setFilter(new AndCommitFilter(new NoteContentFilter() {
 
 			protected boolean include(RevCommit commit, Note note,
 					String content) {
@@ -98,13 +99,46 @@ public class NotesTest extends GitTestCase {
 	}
 
 	/**
+	 * Test repository with no notes
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void noNotesInRepository() throws Exception {
+		add("test.txt", "abc");
+
+		CommitCountFilter count = new CommitCountFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(new AndCommitFilter(new NoteFilter(), count)).find();
+		assertEquals(0, count.getCount());
+	}
+
+	/**
+	 * Test repository with no notes
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void noNoteInRepository() throws Exception {
+		add("test.txt", "abc");
+		note("a note");
+
+		CommitCountFilter count = new CommitCountFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(new AndCommitFilter(new NoteFilter(), count)).find();
+		assertEquals(1, count.getCount());
+	}
+
+	/**
 	 * Unit test of
-	 * {@link CommitNotesFilter#setRepository(org.eclipse.jgit.lib.Repository)}
+	 * {@link NoteContentFilter#setRepository(org.eclipse.jgit.lib.Repository)}
 	 */
 	@Test
 	public void setNoRepository() {
-		CommitNotesFilter filter = new CommitNotesFilter();
-		assertSame(filter, filter.setRepository(null));
+		NoteFilter noteFilter = new NoteFilter();
+		assertSame(noteFilter, noteFilter.setRepository(null));
+		NoteContentFilter noteContentFilter = new NoteContentFilter();
+		assertSame(noteContentFilter, noteContentFilter.setRepository(null));
 	}
 
 	private static class BadRefDatabase extends RefDatabase {
@@ -160,7 +194,7 @@ public class NotesTest extends GitTestCase {
 	 */
 	@Test
 	public void setRepositoryThrowsIOException() throws Exception {
-		CommitNotesFilter filter = new CommitNotesFilter();
+		NoteContentFilter filter = new NoteContentFilter();
 		final IOException exception = new IOException("message");
 		Repository repo = new FileRepository(testRepo) {
 
@@ -179,16 +213,28 @@ public class NotesTest extends GitTestCase {
 	}
 
 	/**
-	 * Unit test of {@link CommitNotesFilter#clone()}
+	 * Unit test of {@link NoteFilter#clone()}
+	 */
+	@Test
+	public void cloneFilter() {
+		NoteFilter filter = new NoteFilter();
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof NoteFilter);
+	}
+
+	/**
+	 * Unit test of {@link NoteContentFilter#clone()}
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void cloneFilter() throws Exception {
-		CommitNotesFilter filter = new CommitNotesFilter();
+	public void cloneContentFilter() throws Exception {
+		NoteContentFilter filter = new NoteContentFilter();
 		RevFilter clone = filter.clone();
 		assertNotNull(clone);
 		assertNotSame(filter, clone);
-		assertTrue(clone instanceof CommitNotesFilter);
+		assertTrue(clone instanceof NoteContentFilter);
 	}
 }

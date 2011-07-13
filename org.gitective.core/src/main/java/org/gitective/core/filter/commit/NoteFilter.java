@@ -22,25 +22,19 @@
 package org.gitective.core.filter.commit;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ShowNoteCommand;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.notes.Note;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.gitective.core.BlobUtils;
-import org.gitective.core.GitException;
+import org.gitective.core.RepositoryUtils;
 
 /**
- * Filter that looks up the notes associated with each commit visited
+ * Filter that only includes commits that have at least one note attached
  */
-public class CommitNotesFilter extends CommitFilter {
+public class NoteFilter extends CommitFilter {
 
 	private ShowNoteCommand show;
 
@@ -66,74 +60,20 @@ public class CommitNotesFilter extends CommitFilter {
 	 * @return non-null array of ref names
 	 */
 	protected String[] getNoteRefs(final Repository repository) {
-		final Set<String> notes = new HashSet<String>();
-		notes.add(Constants.R_NOTES_COMMITS);
-		try {
-			for (Ref ref : repository.getRefDatabase()
-					.getRefs(Constants.R_NOTES).values())
-				notes.add(ref.getName());
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
-		return notes.toArray(new String[notes.size()]);
+		return RepositoryUtils.getNoteRefs(repository);
 	}
 
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		show.setObjectId(commit);
-		for (int i = 0; i < noteRefs.length; i++) {
-			final Note note = show.setNotesRef(noteRefs[i]).call();
-			if (note != null && !include(commit, note))
-				return include(false);
-		}
-		return true;
-	}
-
-	/**
-	 * Get content of note as string
-	 * 
-	 * @param note
-	 * @return string
-	 */
-	protected String getContent(final Note note) {
-		return BlobUtils.getContent(repository, note.getData());
-	}
-
-	/**
-	 * Handle note associate with given commit.
-	 * 
-	 * This method calls {@link #include(RevCommit, Note, String)} by default
-	 * with the content read from the blob associated with the note, sub-classes
-	 * should override if needed.
-	 * 
-	 * @param commit
-	 * @param note
-	 *            non-null note
-	 * @return true to continue, false to abort
-	 */
-	protected boolean include(final RevCommit commit, final Note note) {
-		return include(commit, note, getContent(note));
-	}
-
-	/**
-	 * Handle note content associated with given commit.
-	 * 
-	 * This method always returns true by default and sub-classes should
-	 * override.
-	 * 
-	 * @param commit
-	 * @param note
-	 * @param content
-	 * @return true to continue, false to abort
-	 */
-	protected boolean include(final RevCommit commit, final Note note,
-			final String content) {
-		return true;
+		for (int i = 0; i < noteRefs.length; i++)
+			if (show.setNotesRef(noteRefs[i]).call() != null)
+				return true;
+		return include(false);
 	}
 
 	public RevFilter clone() {
-		return new CommitNotesFilter();
+		return new NoteFilter();
 	}
-
 }
