@@ -48,4 +48,18 @@ public class TagTest extends GitTestCase {
 		assertTrue(commits.getCommits().contains(commit1));
 		assertFalse(commits.getCommits().contains(commit2));
 	}
+
+	/**
+	 * Test searching for commits in repository with no tags
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void noTags() throws Exception {
+		RevCommit commit1 = add("f1.txt", "content0");
+		CommitFinder finder = new CommitFinder(testRepo);
+		CommitListFilter commits = new CommitListFilter();
+		finder.setFilter(commits).findInTags();
+		assertFalse(commits.getCommits().contains(commit1));
+	}
 }
