@@ -22,9 +22,9 @@
 package org.gitective.core;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
@@ -43,9 +43,8 @@ public abstract class RepositoryUtils {
 	 */
 	public static String[] getNoteRefs(final Repository repository) {
 		if (repository == null)
-			throw new IllegalArgumentException("Repository cannot be null");
-		final Set<String> notes = new HashSet<String>();
-		notes.add(Constants.R_NOTES_COMMITS);
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
 		Collection<Ref> refs;
 		try {
 			refs = repository.getRefDatabase().getRefs(Constants.R_NOTES)
@@ -53,8 +52,13 @@ public abstract class RepositoryUtils {
 		} catch (IOException e) {
 			throw new GitException(e);
 		}
-		for (Ref ref : refs)
-			notes.add(ref.getName());
+		final List<String> notes = new ArrayList<String>(refs.size() + 1);
+		notes.add(Constants.R_NOTES_COMMITS);
+		for (Ref ref : refs) {
+			final String name = ref.getName();
+			if (!Constants.R_NOTES_COMMITS.equals(name))
+				notes.add(name);
+		}
 		return notes.toArray(new String[notes.size()]);
 	}
 }

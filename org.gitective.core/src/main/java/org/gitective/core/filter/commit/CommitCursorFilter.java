@@ -47,7 +47,8 @@ public class CommitCursorFilter extends CommitFilter {
 	 * @param filter
 	 */
 	public CommitCursorFilter(final RevFilter filter) {
-		Assert.notNull("Filter cannot be null", filter);
+		if (filter == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Filter"));
 		this.filter = filter;
 	}
 

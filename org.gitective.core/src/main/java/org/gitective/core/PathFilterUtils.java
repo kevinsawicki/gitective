@@ -82,8 +82,10 @@ public abstract class PathFilterUtils {
 	 * @return tree filter for diffs affecting given paths
 	 */
 	public static TreeFilter and(final String... paths) {
-		Assert.notNull("Paths cannot be null", paths);
-		Assert.notEmpty("Paths cannot be empty", paths);
+		if (paths == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Paths"));
+		if (paths.length == 0)
+			throw new IllegalArgumentException(Assert.formatNotEmpty("Paths"));
 		return andDiff(paths(paths));
 	}
 
@@ -94,8 +96,10 @@ public abstract class PathFilterUtils {
 	 * @return tree filter for diffs affecting given paths
 	 */
 	public static TreeFilter or(final String... paths) {
-		Assert.notNull("Paths cannot be null", paths);
-		Assert.notEmpty("Paths cannot be empty", paths);
+		if (paths == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Paths"));
+		if (paths.length == 0)
+			throw new IllegalArgumentException(Assert.formatNotEmpty("Paths"));
 		return AndTreeFilter.create(group(paths), TreeFilter.ANY_DIFF);
 	}
 
@@ -106,8 +110,11 @@ public abstract class PathFilterUtils {
 	 * @return tree filter for diffs affecting given suffixes
 	 */
 	public static TreeFilter andSuffix(final String... suffixes) {
-		Assert.notNull("Suffixes cannot be null", suffixes);
-		Assert.notEmpty("Suffixes cannot be empty", suffixes);
+		if (suffixes == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Suffixes"));
+		if (suffixes.length == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Suffixes"));
 		return andDiff(suffix(suffixes));
 	}
 
@@ -118,8 +125,11 @@ public abstract class PathFilterUtils {
 	 * @return tree filter for diffs affecting given suffixes
 	 */
 	public static TreeFilter orSuffix(final String... suffixes) {
-		Assert.notNull("Suffixes cannot be null", suffixes);
-		Assert.notEmpty("Suffixes cannot be empty", suffixes);
+		if (suffixes == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Suffixes"));
+		if (suffixes.length == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Suffixes"));
 		return orDiff(suffix(suffixes));
 	}
 }

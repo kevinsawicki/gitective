@@ -21,6 +21,7 @@
  */
 package org.gitective.core;
 
+
 /**
  * Assert utilities that all throw {@link IllegalArgumentException} that will
  * have a non-null/non-empty message.
@@ -118,4 +119,23 @@ public abstract class Assert {
 		return notEmpty(null, string);
 	}
 
+	/**
+	 * Return formatted not null message with given prefix
+	 * 
+	 * @param prefix
+	 * @return non-null message
+	 */
+	public static String formatNotNull(final String prefix) {
+		return prefix + " cannot be null";
+	}
+
+	/**
+	 * Return formatted not empty message with given prefix
+	 * 
+	 * @param prefix
+	 * @return non-empty message
+	 */
+	public static String formatNotEmpty(final String prefix) {
+		return prefix + " cannot be empty";
+	}
 }

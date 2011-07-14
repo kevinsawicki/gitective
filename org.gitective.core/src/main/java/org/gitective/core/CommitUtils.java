@@ -49,9 +49,14 @@ public abstract class CommitUtils {
 	 */
 	public static RevCommit getCommit(final Repository repository,
 			final String revision) {
-		checkRepo(repository);
-		Assert.notNull("Revision cannot be null", revision);
-		Assert.notNull("Revision cannot be empty", revision);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (revision == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Revision"));
+		if (revision.length() == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Revision"));
 		return parse(repository, resolve(repository, revision));
 	}
 
@@ -64,8 +69,12 @@ public abstract class CommitUtils {
 	 */
 	public static RevCommit getCommit(final Repository repository,
 			final ObjectId commitId) {
-		checkRepo(repository);
-		Assert.notNull("Commit id cannot be null", commitId);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (commitId == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Commit id"));
 		return parse(repository, commitId);
 	}
 
@@ -89,9 +98,13 @@ public abstract class CommitUtils {
 	 */
 	public static RevCommit getBase(final Repository repository,
 			final ObjectId... commits) {
-		checkRepo(repository);
-		Assert.notNull("Commits cannot be null", commits);
-		Assert.notEmpty("Commits cannot be empty", commits);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (commits == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Commits"));
+		if (commits.length == 1)
+			throw new IllegalArgumentException(Assert.formatNotEmpty("Commits"));
 		return walkToBase(repository, commits);
 	}
 
@@ -104,9 +117,15 @@ public abstract class CommitUtils {
 	 */
 	public static RevCommit getBase(final Repository repository,
 			final String... revisions) {
-		checkRepo(repository);
-		Assert.notNull("Revisions cannot be null", revisions);
-		Assert.notEmpty("Revisions cannot be empty", revisions);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (revisions == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Revisions"));
+		if (revisions.length == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Revisions"));
 		final int length = revisions.length;
 		final ObjectId[] commits = new ObjectId[length];
 		for (int i = 0; i < length; i++)
@@ -123,9 +142,14 @@ public abstract class CommitUtils {
 	 */
 	public static RevCommit getRef(final Repository repository,
 			final String refName) {
-		checkRepo(repository);
-		Assert.notNull("Ref name cannot be null", refName);
-		Assert.notEmpty("Ref name cannot be empty", refName);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (refName == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Ref name"));
+		if (refName.length() == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Ref name"));
 		Ref ref;
 		try {
 			ref = repository.getRef(refName);
@@ -143,8 +167,11 @@ public abstract class CommitUtils {
 	 * @return commit, may be null
 	 */
 	public static RevCommit getRef(final Repository repository, final Ref ref) {
-		checkRepo(repository);
-		Assert.notNull("Ref cannot be null", ref);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (ref == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Ref"));
 		return lookupRef(repository, ref);
 	}
 
@@ -155,7 +182,9 @@ public abstract class CommitUtils {
 	 * @return non-null but possibly empty collection of commits
 	 */
 	public static Collection<RevCommit> getTags(final Repository repository) {
-		checkRepo(repository);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
 		final Collection<RevCommit> commits = new HashSet<RevCommit>();
 		final RevWalk walk = new RevWalk(repository);
 		try {
@@ -177,7 +206,9 @@ public abstract class CommitUtils {
 	 * @return non-null but possibly empty collection of commits
 	 */
 	public static Collection<RevCommit> getBranches(final Repository repository) {
-		checkRepo(repository);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
 		final Collection<RevCommit> commits = new HashSet<RevCommit>();
 		final RevWalk walk = new RevWalk(repository);
 		final RefDatabase refDb = repository.getRefDatabase();
@@ -225,13 +256,14 @@ public abstract class CommitUtils {
 
 	private static ObjectId resolve(final Repository repository,
 			final String revision) {
+		final ObjectId id;
 		try {
-			final ObjectId id = repository.resolve(revision);
-			if (id != null)
-				return id;
+			id = repository.resolve(revision);
 		} catch (IOException e) {
 			throw new GitException(e);
 		}
+		if (id != null)
+			return id;
 		throw new GitException(MessageFormat.format(
 				"Revision ''{0}'' could not be resolved", revision));
 	}
@@ -265,9 +297,5 @@ public abstract class CommitUtils {
 		} finally {
 			walk.release();
 		}
-	}
-
-	private static void checkRepo(final Repository repository) {
-		Assert.notNull("Repository cannot be null", repository);
 	}
 }

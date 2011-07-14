@@ -166,7 +166,9 @@ public class CommitFinder extends RepositoryService {
 	 */
 	protected CommitFinder walk(final Repository repository,
 			final ObjectId start, final ObjectId end) {
-		Assert.notNull("Starting commit id cannot be null", start);
+		if (start == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Starting commit id"));
 		final RevWalk walk = createWalk(repository);
 		try {
 			walk.markStart(walk.parseCommit(start));

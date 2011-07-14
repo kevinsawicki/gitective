@@ -56,7 +56,8 @@ public abstract class DateFilter extends CommitFilter {
 	 *            must be non-null
 	 */
 	public DateFilter(final Date date) {
-		Assert.notNull("Date cannot be null", date);
+		if (date == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Date"));
 		time = date.getTime();
 	}
 

@@ -46,8 +46,12 @@ public class RepositoryService {
 	 * @param gitDirs
 	 */
 	public RepositoryService(final String... gitDirs) {
-		Assert.notNull("Directories cannot be null", gitDirs);
-		Assert.notEmpty("Directories cannot be empty", gitDirs);
+		if (gitDirs == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Directories"));
+		if (gitDirs.length == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Directories"));
 		final int length = gitDirs.length;
 		repositories = new Repository[length];
 		try {
@@ -64,8 +68,12 @@ public class RepositoryService {
 	 * @param gitDirs
 	 */
 	public RepositoryService(final File... gitDirs) {
-		Assert.notNull("Directories cannot be null", gitDirs);
-		Assert.notEmpty("Directories cannot be empty", gitDirs);
+		if (gitDirs == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Directories"));
+		if (gitDirs.length == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Directories"));
 		final int length = gitDirs.length;
 		repositories = new Repository[length];
 		try {
@@ -82,8 +90,12 @@ public class RepositoryService {
 	 * @param repositories
 	 */
 	public RepositoryService(final Repository... repositories) {
-		Assert.notNull("Repositories cannot be null", repositories);
-		Assert.notEmpty("Repositories cannot be empty", repositories);
+		if (repositories == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repositories"));
+		if (repositories.length == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Repositories"));
 		this.repositories = Arrays.copyOf(repositories, repositories.length);
 	}
 }

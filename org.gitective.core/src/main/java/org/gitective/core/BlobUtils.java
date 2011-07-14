@@ -43,8 +43,12 @@ public abstract class BlobUtils {
 	 */
 	public static String getContent(final Repository repository,
 			final ObjectId id) {
-		Assert.notNull(repository);
-		Assert.notNull(id);
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (id == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Object id"));
 		final byte[] data;
 		try {
 			final ObjectLoader loader = repository.open(id, Constants.OBJ_BLOB);

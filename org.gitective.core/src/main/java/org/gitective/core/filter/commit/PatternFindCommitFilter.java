@@ -66,8 +66,10 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 	 * @param flags
 	 */
 	public PatternFindCommitFilter(final String pattern, final int flags) {
-		Assert.notNull("Pattern cannot be null", pattern);
-		Assert.notEmpty("Pattern cannot be empty", pattern);
+		if (pattern == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Pattern"));
+		if (pattern.length() == 0)
+			throw new IllegalArgumentException(Assert.formatNotEmpty("Pattern"));
 		this.pattern = pattern;
 		this.flags = flags;
 		matcher = Pattern.compile(pattern, flags).matcher("");
