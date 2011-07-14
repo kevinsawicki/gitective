@@ -103,7 +103,7 @@ public abstract class CommitUtils {
 					Assert.formatNotNull("Repository"));
 		if (commits == null)
 			throw new IllegalArgumentException(Assert.formatNotNull("Commits"));
-		if (commits.length == 1)
+		if (commits.length == 0)
 			throw new IllegalArgumentException(Assert.formatNotEmpty("Commits"));
 		return walkToBase(repository, commits);
 	}

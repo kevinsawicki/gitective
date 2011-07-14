@@ -23,6 +23,8 @@ package org.gitective.tests;
 
 import java.util.Collection;
 
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -94,5 +96,107 @@ public class CommitUtilsTest extends GitTestCase {
 		assertNotNull(commits);
 		assertEquals(1, commits.size());
 		assertEquals(commit, commits.iterator().next());
+	}
+
+	/**
+	 * Get commit with null repository parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getCommitWithNullRepository() {
+		CommitUtils.getCommit(null, ObjectId.zeroId());
+	}
+
+	/**
+	 * Get commit with null repository parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getCommitWithNullRepository2() {
+		CommitUtils.getCommit(null, Constants.MASTER);
+	}
+
+	/**
+	 * Get commit with null object id parameter
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getCommitWithNullObjectId() throws Exception {
+		CommitUtils.getCommit(new FileRepository(testRepo), (ObjectId) null);
+	}
+
+	/**
+	 * Get commit with null revision parameter
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getCommitWithNullRevision() throws Exception {
+		CommitUtils.getCommit(new FileRepository(testRepo), (String) null);
+	}
+
+	/**
+	 * Get commit with empty revision parameter
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getCommitWithEmptyRevision() throws Exception {
+		CommitUtils.getCommit(new FileRepository(testRepo), "");
+	}
+
+	/**
+	 * Get base with null repository parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getBaseWithNullRepository() {
+		CommitUtils.getBase(null, ObjectId.zeroId());
+	}
+
+	/**
+	 * Get base with null repository parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getBaseWithNullRepository2() {
+		CommitUtils.getBase(null, Constants.MASTER);
+	}
+
+	/**
+	 * Get base with null object ids
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getBaseWithNullIds() throws Exception {
+		CommitUtils.getBase(new FileRepository(testRepo), (ObjectId[]) null);
+	}
+
+	/**
+	 * Get base with empty object ids
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getBaseWithEmptyIds() throws Exception {
+		CommitUtils.getBase(new FileRepository(testRepo), new ObjectId[0]);
+	}
+
+	/**
+	 * Get base with null revisions
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getBaseWithNullRevisions() throws Exception {
+		CommitUtils.getBase(new FileRepository(testRepo), (String[]) null);
+	}
+
+	/**
+	 * Get base with empty revision
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getBaseWithEmptyRevisions() throws Exception {
+		CommitUtils.getBase(new FileRepository(testRepo), new String[0]);
 	}
 }
