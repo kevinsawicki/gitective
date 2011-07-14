@@ -53,26 +53,29 @@ public abstract class PathFilterUtils {
 	}
 
 	private static TreeFilter group(final String... paths) {
-		final List<PathFilter> filters = new ArrayList<PathFilter>(paths.length);
-		for (String path : paths)
-			filters.add(PathFilter.create(path));
+		final int length = paths.length;
+		final List<PathFilter> filters = new ArrayList<PathFilter>(length);
+		for (int i = 0; i < length; i++)
+			filters.add(PathFilter.create(paths[i]));
 		return PathFilterGroup.create(filters);
 	}
 
 	private static TreeFilter andDiff(final TreeFilter[] filters) {
+		final TreeFilter filter;
 		if (filters.length > 1)
-			return AndTreeFilter.create(AndTreeFilter.create(filters),
-					TreeFilter.ANY_DIFF);
+			filter = AndTreeFilter.create(filters);
 		else
-			return AndTreeFilter.create(filters[0], TreeFilter.ANY_DIFF);
+			filter = filters[0];
+		return AndTreeFilter.create(filter, TreeFilter.ANY_DIFF);
 	}
 
 	private static TreeFilter orDiff(final TreeFilter[] filters) {
+		final TreeFilter filter;
 		if (filters.length > 1)
-			return AndTreeFilter.create(OrTreeFilter.create(filters),
-					TreeFilter.ANY_DIFF);
+			filter = OrTreeFilter.create(filters);
 		else
-			return AndTreeFilter.create(filters[0], TreeFilter.ANY_DIFF);
+			filter = filters[0];
+		return AndTreeFilter.create(filter, TreeFilter.ANY_DIFF);
 	}
 
 	/**

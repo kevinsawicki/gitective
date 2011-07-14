@@ -148,4 +148,68 @@ public class PathTest extends GitTestCase {
 		finder.find();
 		assertEquals(3, count.getCount());
 	}
+
+	/**
+	 * Test or path with null parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void nullOrPath() {
+		PathFilterUtils.or((String[]) null);
+	}
+
+	/**
+	 * Test or path with empty parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void emptyOrPath() {
+		PathFilterUtils.or(new String[0]);
+	}
+
+	/**
+	 * Test or suffix with null parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void nullOrSuffix() {
+		PathFilterUtils.orSuffix((String[]) null);
+	}
+
+	/**
+	 * Test or suffix with empty parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void emptyOrSuffix() {
+		PathFilterUtils.orSuffix(new String[0]);
+	}
+
+	/**
+	 * Test and path with null parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void nullAndPath() {
+		PathFilterUtils.and((String[]) null);
+	}
+
+	/**
+	 * Test and path with empty parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void emptyAndPath() {
+		PathFilterUtils.and(new String[0]);
+	}
+
+	/**
+	 * Test and suffix with null parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void nullAndSuffix() {
+		PathFilterUtils.andSuffix((String[]) null);
+	}
+
+	/**
+	 * Test and suffix with empty parameter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void emptyAndSuffix() {
+		PathFilterUtils.andSuffix(new String[0]);
+	}
 }
