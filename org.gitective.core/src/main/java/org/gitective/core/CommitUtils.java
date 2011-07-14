@@ -211,15 +211,15 @@ public abstract class CommitUtils {
 	}
 
 	private static RevCommit getRef(final RevWalk walk, final Ref ref) {
-		try {
-			ObjectId id = ref.getPeeledObjectId();
-			if (id == null)
-				id = ref.getObjectId();
-			if (id != null)
+		ObjectId id = ref.getPeeledObjectId();
+		if (id == null)
+			id = ref.getObjectId();
+		if (id != null)
+			try {
 				return walk.parseCommit(id);
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
+			} catch (IOException e) {
+				throw new GitException(e);
+			}
 		return null;
 	}
 
