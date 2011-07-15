@@ -199,4 +199,66 @@ public class CommitUtilsTest extends GitTestCase {
 	public void getBaseWithEmptyRevisions() throws Exception {
 		CommitUtils.getBase(new FileRepository(testRepo), new String[0]);
 	}
+
+	/**
+	 * Get ref with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRefWithNullRepository() {
+		CommitUtils.getRef(null, Constants.MASTER);
+	}
+
+	/**
+	 * Get ref with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRefWithNullRepository2() {
+		CommitUtils.getRef(null, (Ref) null);
+	}
+
+	/**
+	 * Get ref with null ref name
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRefWithNullRef() throws Exception {
+		CommitUtils.getRef(new FileRepository(testRepo), (Ref) null);
+	}
+
+	/**
+	 * Get ref with null ref name
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRefWithNullRefName() throws Exception {
+		CommitUtils.getRef(new FileRepository(testRepo), (String) null);
+	}
+
+	/**
+	 * Get ref with empty ref name
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRefWithEmptyRefName() throws Exception {
+		CommitUtils.getRef(new FileRepository(testRepo), "");
+	}
+
+	/**
+	 * Get tags with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getTagsWithNullRepository() {
+		CommitUtils.getTags(null);
+	}
+
+	/**
+	 * Get branches with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getBranchesWithNullRepository() {
+		CommitUtils.getBranches(null);
+	}
 }
