@@ -80,4 +80,20 @@ public class CheckTest extends Assert {
 		assertFalse(Check.equalsNonNull("a", "b"));
 		assertTrue(Check.equalsNonNull("a", "a"));
 	}
+
+	/**
+	 * Test all null with null objects
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void allNullWithNull() {
+		Check.allNull((Object[]) null);
+	}
+
+	/**
+	 * Test any null with null objects
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void anyNullWithNull() {
+		Check.anyNull((Object[]) null);
+	}
 }
