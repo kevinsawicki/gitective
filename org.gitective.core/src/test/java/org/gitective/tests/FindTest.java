@@ -70,11 +70,27 @@ public class FindTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void cloneFitler() throws Exception {
+	public void cloneFilter() throws Exception {
 		CommitMessageFindFilter find = new CommitMessageFindFilter("content");
 		RevFilter clone = find.clone();
 		assertNotNull(clone);
 		assertNotSame(find, clone);
 		assertTrue(clone instanceof CommitMessageFindFilter);
+	}
+
+	/**
+	 * Test constructor with null pattern
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void constructorNullPattern() {
+		new CommitMessageFindFilter(null);
+	}
+
+	/**
+	 * Test constructor with empty pattern
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void constructorEmptyPattern() {
+		new CommitMessageFindFilter("");
 	}
 }
