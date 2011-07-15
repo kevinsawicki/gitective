@@ -187,12 +187,11 @@ public abstract class CommitUtils {
 					Assert.formatNotNull("Repository"));
 		final Collection<RevCommit> commits = new HashSet<RevCommit>();
 		final RevWalk walk = new RevWalk(repository);
+		final RefDatabase refDb = repository.getRefDatabase();
 		try {
-			for (Ref tag : repository.getTags().values()) {
-				final RevCommit commit = getRef(walk, tag);
-				if (commit != null)
-					commits.add(commit);
-			}
+			getRefCommits(walk, refDb, Constants.R_TAGS, commits);
+		} catch (IOException e) {
+			throw new GitException(e);
 		} finally {
 			walk.release();
 		}
@@ -213,22 +212,23 @@ public abstract class CommitUtils {
 		final RevWalk walk = new RevWalk(repository);
 		final RefDatabase refDb = repository.getRefDatabase();
 		try {
-			for (Ref ref : refDb.getRefs(Constants.R_HEADS).values()) {
-				final RevCommit commit = getRef(walk, ref);
-				if (commit != null)
-					commits.add(commit);
-			}
-			for (Ref ref : refDb.getRefs(Constants.R_REMOTES).values()) {
-				final RevCommit commit = getRef(walk, ref);
-				if (commit != null)
-					commits.add(commit);
-			}
+			getRefCommits(walk, refDb, Constants.R_HEADS, commits);
+			getRefCommits(walk, refDb, Constants.R_REMOTES, commits);
 		} catch (IOException e) {
 			throw new GitException(e);
 		} finally {
 			walk.release();
 		}
 		return commits;
+	}
+
+	private static void getRefCommits(RevWalk walk, RefDatabase refDb,
+			String prefix, Collection<RevCommit> commits) throws IOException {
+		for (Ref ref : refDb.getRefs(prefix).values()) {
+			final RevCommit commit = getRef(walk, ref);
+			if (commit != null)
+				commits.add(commit);
+		}
 	}
 
 	private static RevCommit lookupRef(final Repository repository,

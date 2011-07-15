@@ -21,6 +21,7 @@
  */
 package org.gitective.tests;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import org.eclipse.jgit.lib.Constants;
@@ -30,6 +31,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.CommitUtils;
+import org.gitective.core.GitException;
 import org.junit.Test;
 
 /**
@@ -260,5 +262,36 @@ public class CommitUtilsTest extends GitTestCase {
 	@Test(expected = IllegalArgumentException.class)
 	public void getBranchesWithNullRepository() {
 		CommitUtils.getBranches(null);
+	}
+
+	/**
+	 * Get ref with bad ref database
+	 * 
+	 * @throws IOException
+	 */
+	@Test(expected = GitException.class)
+	public void getRefWithBadRepository() throws IOException {
+		CommitUtils.getRef(new BadRepository(testRepo, new IOException()),
+				Constants.MASTER);
+	}
+
+	/**
+	 * Get branches with bad ref database
+	 * 
+	 * @throws IOException
+	 */
+	@Test(expected = GitException.class)
+	public void getBranchesWithBadRepository() throws IOException {
+		CommitUtils.getBranches(new BadRepository(testRepo, new IOException()));
+	}
+
+	/**
+	 * Get tags with bad ref database
+	 * 
+	 * @throws IOException
+	 */
+	@Test(expected = GitException.class)
+	public void getTagsWithBadRepository() throws IOException {
+		CommitUtils.getTags(new BadRepository(testRepo, new IOException()));
 	}
 }
