@@ -44,8 +44,10 @@ public abstract class PersonFilter extends CommitFilter {
 	 * @param email
 	 */
 	public PersonFilter(final String name, final String email) {
-		Assert.notNull(name);
-		Assert.notNull(email);
+		if (name == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Name"));
+		if (email == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("E-mail"));
 		person = new PersonIdent(name, email);
 	}
 

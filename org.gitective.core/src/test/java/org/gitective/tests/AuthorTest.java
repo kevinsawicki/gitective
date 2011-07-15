@@ -140,4 +140,20 @@ public class AuthorTest extends GitTestCase {
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(author));
 	}
+
+	/**
+	 * Test constructor of author filter with null name
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void constructorWithNullName() {
+		new AuthorFilter(null, "a@b.c");
+	}
+
+	/**
+	 * Test constructor of author filter with null name
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void constructorWithNullEmail() {
+		new AuthorFilter("name", null);
+	}
 }
