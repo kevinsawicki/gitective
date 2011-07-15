@@ -49,14 +49,9 @@ public class LatestTest extends GitTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expected = GitException.class)
 	public void latestOnEmptyRepository() throws Exception {
-		try {
-			CommitUtils.getLatest(new FileRepository(testRepo));
-			fail("Exception not thrown");
-		} catch (GitException e) {
-			assertNotNull(e.getMessage());
-		}
+		CommitUtils.getLatest(new FileRepository(testRepo));
 	}
 
 	/**
