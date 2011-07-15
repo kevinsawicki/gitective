@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
@@ -142,5 +143,14 @@ public class CommitFinderTest extends GitTestCase {
 		finder.findBetween(commit, Constants.HEAD + "~1");
 		assertEquals(1, commits.getCommits().size());
 		assertEquals(commit, commits.getCommits().get(0));
+	}
+
+	/**
+	 * Find commits between with null starting id
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void findNullStartId() {
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.findBetween((ObjectId) null, ObjectId.zeroId());
 	}
 }
