@@ -174,13 +174,12 @@ public class CommitFinder extends RepositoryService {
 			walk.markStart(walk.parseCommit(start));
 			if (end != null)
 				walk.markUninteresting(walk.parseCommit(end));
-			walk(walk);
+			return walk(walk);
 		} catch (IOException e) {
 			throw new GitException(e);
 		} finally {
 			walk.release();
 		}
-		return this;
 	}
 
 	/**
