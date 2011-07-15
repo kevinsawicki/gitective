@@ -50,7 +50,7 @@ public class DiffTest extends GitTestCase {
 			protected boolean include(RevCommit commit,
 					Collection<DiffEntry> diffs) {
 				ref.set(diffs);
-				return true;
+				return super.include(commit, diffs);
 			}
 		};
 		new CommitFinder(testRepo).setFilter(filter).find();
@@ -121,5 +121,14 @@ public class DiffTest extends GitTestCase {
 		assertEquals(ChangeType.MODIFY, diff.getChangeType());
 		assertEquals("test.txt", diff.getOldPath());
 		assertEquals("test.txt", diff.getNewPath());
+	}
+
+	/**
+	 * Unit tests of {@link CommitDiffFilter#clone()}
+	 */
+	@Test
+	public void cloneFilter() {
+		CommitDiffFilter filter = new CommitDiffFilter();
+		assertSame(filter, filter.clone());
 	}
 }
