@@ -36,6 +36,15 @@ import org.junit.Test;
 public class PathTest extends GitTestCase {
 
 	/**
+	 * Test creating anonymous class
+	 */
+	@Test
+	public void constructor() {
+		assertNotNull(new PathFilterUtils() {
+		});
+	}
+
+	/**
 	 * Test bugs to paths
 	 * 
 	 * @throws Exception
@@ -211,5 +220,69 @@ public class PathTest extends GitTestCase {
 	@Test(expected = IllegalArgumentException.class)
 	public void emptyAndSuffix() {
 		PathFilterUtils.andSuffix(new String[0]);
+	}
+
+	/**
+	 * Test creation of valid or suffix path filter
+	 */
+	@Test
+	public void singleOrSuffix() {
+		assertNotNull(PathFilterUtils.orSuffix(".java"));
+	}
+
+	/**
+	 * Test creation of valid or suffix path filter
+	 */
+	@Test
+	public void multiOrSuffix() {
+		assertNotNull(PathFilterUtils.orSuffix(".h", ".cpp"));
+	}
+
+	/**
+	 * Test creation of valid and suffix path filter
+	 */
+	@Test
+	public void singleAndSuffix() {
+		assertNotNull(PathFilterUtils.andSuffix(".txt"));
+	}
+
+	/**
+	 * Test creation of valid and suffix path filter
+	 */
+	@Test
+	public void multiAndSuffix() {
+		assertNotNull(PathFilterUtils.andSuffix(".rb", ".erb"));
+	}
+
+	/**
+	 * Test creation of valid or path filter
+	 */
+	@Test
+	public void singleOr() {
+		assertNotNull(PathFilterUtils.or(".java"));
+	}
+
+	/**
+	 * Test creation of valid or path filter
+	 */
+	@Test
+	public void multiOr() {
+		assertNotNull(PathFilterUtils.or(".h", ".cpp"));
+	}
+
+	/**
+	 * Test creation of valid and path filter
+	 */
+	@Test
+	public void singleAnd() {
+		assertNotNull(PathFilterUtils.and(".txt"));
+	}
+
+	/**
+	 * Test creation of valid and path filter
+	 */
+	@Test
+	public void multiAnd() {
+		assertNotNull(PathFilterUtils.and(".rb", ".erb"));
 	}
 }
