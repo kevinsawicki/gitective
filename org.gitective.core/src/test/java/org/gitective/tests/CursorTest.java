@@ -89,4 +89,12 @@ public class CursorTest extends GitTestCase {
 		assertTrue(clone instanceof CommitCursorFilter);
 		assertFalse(clone.include(null, null));
 	}
+
+	/**
+	 * Test creating a cursor filter with a null filter
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void nullFilter() {
+		new CommitCursorFilter(null);
+	}
 }

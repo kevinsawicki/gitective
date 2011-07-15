@@ -24,6 +24,7 @@ package org.gitective.core.filter.commit;
 import java.io.IOException;
 
 import org.eclipse.jgit.errors.StopWalkException;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
@@ -75,6 +76,13 @@ public class CommitCursorFilter extends CommitFilter {
 	}
 
 	@Override
+	public CommitFilter setRepository(final Repository repository) {
+		if (filter instanceof CommitFilter)
+			((CommitFilter) filter).setRepository(repository);
+		return super.setRepository(repository);
+	}
+
+	@Override
 	public CommitFilter reset() {
 		last = null;
 		if (filter instanceof CommitFilter)
@@ -86,5 +94,4 @@ public class CommitCursorFilter extends CommitFilter {
 	public RevFilter clone() {
 		return new CommitCursorFilter(filter.clone());
 	}
-
 }
