@@ -63,8 +63,6 @@ public class RepositoryUtilsTest extends GitTestCase {
 		String[] noteRefs = RepositoryUtils.getNoteRefs(new FileRepository(
 				testRepo));
 		assertNotNull(noteRefs);
-		assertTrue(noteRefs.length > 0);
-		for (String ref : noteRefs)
-			assertNotNull(ref);
+		assertEquals(0, noteRefs.length);
 	}
 }

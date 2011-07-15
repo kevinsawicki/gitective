@@ -52,13 +52,9 @@ public abstract class RepositoryUtils {
 		} catch (IOException e) {
 			throw new GitException(e);
 		}
-		final List<String> notes = new ArrayList<String>(refs.size() + 1);
-		notes.add(Constants.R_NOTES_COMMITS);
-		for (Ref ref : refs) {
-			final String name = ref.getName();
-			if (!Constants.R_NOTES_COMMITS.equals(name))
-				notes.add(name);
-		}
+		final List<String> notes = new ArrayList<String>(refs.size());
+		for (Ref ref : refs)
+			notes.add(ref.getName());
 		return notes.toArray(new String[notes.size()]);
 	}
 }
