@@ -265,8 +265,21 @@ public abstract class GitTestCase extends Assert {
 	 * @throws Exception
 	 */
 	protected Note note(String content) throws Exception {
+		return note(content, "commits");
+	}
+
+	/**
+	 * Add note to latest commit with given content
+	 * 
+	 * @param content
+	 * @param ref
+	 * @return note
+	 * @throws Exception
+	 */
+	protected Note note(String content, String ref) throws Exception {
 		Git git = Git.open(testRepo);
 		Note note = git.notesAdd().setMessage(content)
+				.setNotesRef(Constants.R_NOTES + ref)
 				.setObjectId(CommitUtils.getLatest(git.getRepository())).call();
 		assertNotNull(note);
 		return note;

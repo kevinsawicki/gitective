@@ -22,6 +22,7 @@
 package org.gitective.tests;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -114,14 +115,15 @@ public class NotesTest extends GitTestCase {
 	}
 
 	/**
-	 * Test repository with no notes
+	 * Test repository with a note
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void noNoteInRepository() throws Exception {
+	public void noteInRepository() throws Exception {
 		add("test.txt", "abc");
 		note("a note");
+		add("test.txt", "abcd");
 
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
@@ -236,5 +238,36 @@ public class NotesTest extends GitTestCase {
 		assertNotNull(clone);
 		assertNotSame(filter, clone);
 		assertTrue(clone instanceof NoteContentFilter);
+	}
+
+	/**
+	 * Test filter with multiple note refs
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void multipleNoteRefs() throws Exception {
+		add("test.txt", "abc");
+		String note1 = "note1";
+		String note2 = "note2";
+		note(note1);
+		note(note2, "commit2");
+
+		final List<String> notes = new ArrayList<String>();
+
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(new NoteContentFilter() {
+
+			protected boolean include(RevCommit commit, Note note,
+					String content) {
+				notes.add(content);
+				return super.include(commit, note, content);
+			}
+
+		});
+		finder.find();
+		assertEquals(2, notes.size());
+		assertTrue(notes.contains(note1));
+		assertTrue(notes.contains(note2));
 	}
 }
