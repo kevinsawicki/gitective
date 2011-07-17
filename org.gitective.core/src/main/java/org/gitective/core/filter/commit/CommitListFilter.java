@@ -23,7 +23,6 @@ package org.gitective.core.filter.commit;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jgit.revwalk.RevCommit;
