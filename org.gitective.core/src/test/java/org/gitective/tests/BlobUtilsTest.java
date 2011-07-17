@@ -21,9 +21,26 @@
  */
 package org.gitective.tests;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.LargeObjectException;
+import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.lib.AbbreviatedObjectId;
+import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.lib.ObjectStream;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.BlobUtils;
+import org.gitective.core.GitException;
+import org.gitective.core.filter.commit.CommitDiffFilter;
+import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**
@@ -56,5 +73,68 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test(expected = IllegalArgumentException.class)
 	public void getContentNullObjectId() throws Exception {
 		BlobUtils.getContent(new FileRepository(testRepo), null);
+	}
+
+	/**
+	 * Test get content for missing object
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = GitException.class)
+	public void badObjectLoader() throws Exception {
+		BlobUtils.getContent(new FileRepository(testRepo), ObjectId.zeroId());
+	}
+
+	/**
+	 * Test getting blob content with object load that throws a
+	 * {@link LargeObjectException}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void largeLoader() throws Exception {
+		add("test.txt", "content");
+		final AtomicReference<AbbreviatedObjectId> blob = new AtomicReference<AbbreviatedObjectId>();
+		CommitDiffFilter diffs = new CommitDiffFilter() {
+
+			protected boolean include(RevCommit commit,
+					Collection<DiffEntry> diffs) {
+				blob.set(diffs.iterator().next().getNewId());
+				return true;
+			}
+
+		};
+		new CommitFinder(testRepo).setFilter(diffs).find();
+		assertNotNull(blob.get());
+
+		Repository repo = new FileRepository(testRepo) {
+
+			public ObjectLoader open(AnyObjectId objectId, int typeHint)
+					throws MissingObjectException,
+					IncorrectObjectTypeException, IOException {
+				final ObjectLoader loader = super.open(objectId, typeHint);
+				return new ObjectLoader() {
+
+					public ObjectStream openStream()
+							throws MissingObjectException, IOException {
+						return loader.openStream();
+					}
+
+					public int getType() {
+						return loader.getType();
+					}
+
+					public long getSize() {
+						return loader.getSize();
+					}
+
+					public byte[] getCachedBytes() throws LargeObjectException {
+						throw new LargeObjectException();
+					}
+				};
+			}
+
+		};
+		BlobUtils.getContent(repo, blob.get().toObjectId());
 	}
 }
