@@ -86,6 +86,7 @@ public class CommitDiffFilter extends CommitFilter {
 		return tree;
 	}
 
+	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		final List<DiffEntry> diffs;
