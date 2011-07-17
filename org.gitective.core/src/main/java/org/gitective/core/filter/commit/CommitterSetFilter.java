@@ -40,5 +40,4 @@ public class CommitterSetFilter extends PersonSetFilter {
 	public RevFilter clone() {
 		return new CommitterSetFilter();
 	}
-
 }

@@ -58,5 +58,4 @@ public class AllCommitFilter extends CompositeCommitFilter {
 	public RevFilter clone() {
 		return new AllCommitFilter(cloneFilters());
 	}
-
 }

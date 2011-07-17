@@ -89,5 +89,4 @@ public abstract class PersonSetFilter extends CommitFilter {
 	 * @return person
 	 */
 	protected abstract PersonIdent getPerson(RevCommit commit);
-
 }

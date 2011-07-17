@@ -85,5 +85,4 @@ public abstract class DateFilter extends CommitFilter {
 	 * @return date
 	 */
 	protected abstract Date getDate(RevCommit commit);
-
 }

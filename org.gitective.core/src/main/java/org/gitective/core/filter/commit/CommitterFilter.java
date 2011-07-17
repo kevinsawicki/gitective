@@ -63,5 +63,4 @@ public class CommitterFilter extends PersonFilter {
 	public RevFilter clone() {
 		return new CommitterFilter(person);
 	}
-
 }

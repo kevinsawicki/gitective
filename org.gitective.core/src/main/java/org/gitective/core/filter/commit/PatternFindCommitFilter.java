@@ -88,5 +88,4 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 	 * @return text
 	 */
 	protected abstract CharSequence getText(RevCommit commit);
-
 }

@@ -71,5 +71,4 @@ public class CommitLimitFilter extends CommitFilter {
 	public RevFilter clone() {
 		return new CommitLimitFilter(limit);
 	}
-
 }

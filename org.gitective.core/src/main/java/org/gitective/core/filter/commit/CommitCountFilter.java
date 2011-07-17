@@ -60,5 +60,4 @@ public class CommitCountFilter extends CommitFilter {
 	public RevFilter clone() {
 		return new CommitCountFilter();
 	}
-
 }

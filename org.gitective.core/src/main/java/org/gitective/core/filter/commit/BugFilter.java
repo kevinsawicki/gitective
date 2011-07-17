@@ -33,7 +33,7 @@ public class BugFilter extends CommitMessageFindFilter {
 	/**
 	 * BUG_REGEX
 	 */
-	public static final String BUG_REGEX = "^Bug: (\\w+)$"; //$NON-NLS-1$;
+	public static final String BUG_REGEX = "^Bug: (\\w+)$"; //$NON-NLS-1$
 
 	/**
 	 * Create bug filter
@@ -46,5 +46,4 @@ public class BugFilter extends CommitMessageFindFilter {
 	public RevFilter clone() {
 		return new BugFilter();
 	}
-
 }

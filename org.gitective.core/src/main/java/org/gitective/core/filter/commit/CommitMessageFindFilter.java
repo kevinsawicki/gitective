@@ -58,5 +58,4 @@ public class CommitMessageFindFilter extends PatternFindCommitFilter {
 	public RevFilter clone() {
 		return new CommitMessageFindFilter(pattern, flags);
 	}
-
 }

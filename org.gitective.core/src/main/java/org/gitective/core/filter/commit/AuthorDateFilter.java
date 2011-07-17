@@ -54,5 +54,4 @@ public class AuthorDateFilter extends DateFilter {
 	public RevFilter clone() {
 		return new AuthorDateFilter(time);
 	}
-
 }

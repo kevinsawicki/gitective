@@ -63,5 +63,4 @@ public class LastCommitFilter extends CommitFilter {
 	public RevFilter clone() {
 		return new LastCommitFilter();
 	}
-
 }

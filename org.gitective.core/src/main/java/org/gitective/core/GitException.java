@@ -58,5 +58,4 @@ public class GitException extends RuntimeException {
 	public GitException(final String message) {
 		super(message);
 	}
-
 }

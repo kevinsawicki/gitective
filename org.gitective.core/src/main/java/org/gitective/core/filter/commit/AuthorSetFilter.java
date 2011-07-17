@@ -40,5 +40,4 @@ public class AuthorSetFilter extends PersonSetFilter {
 	public RevFilter clone() {
 		return new AuthorSetFilter();
 	}
-
 }

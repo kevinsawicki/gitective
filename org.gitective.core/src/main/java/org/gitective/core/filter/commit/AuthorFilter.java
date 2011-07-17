@@ -59,5 +59,4 @@ public class AuthorFilter extends PersonFilter {
 	public RevFilter clone() {
 		return new AuthorFilter(person);
 	}
-
 }

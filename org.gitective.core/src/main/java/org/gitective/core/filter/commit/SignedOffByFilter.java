@@ -58,5 +58,4 @@ public class SignedOffByFilter extends CommitMessageFindFilter {
 	public RevFilter clone() {
 		return new SignedOffByFilter(person);
 	}
-
 }

@@ -47,5 +47,4 @@ public class ChangeIdFilter extends CommitMessageFindFilter {
 	public RevFilter clone() {
 		return this;
 	}
-
 }

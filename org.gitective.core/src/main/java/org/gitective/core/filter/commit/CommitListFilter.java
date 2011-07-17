@@ -22,6 +22,7 @@
 package org.gitective.core.filter.commit;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public class CommitListFilter extends CommitFilter {
 
-	private final List<RevCommit> commits = new LinkedList<RevCommit>();
+	private final List<RevCommit> commits = new ArrayList<RevCommit>();
 
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
@@ -62,5 +63,4 @@ public class CommitListFilter extends CommitFilter {
 	public RevFilter clone() {
 		return new CommitListFilter();
 	}
-
 }
