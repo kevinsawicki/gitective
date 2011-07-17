@@ -382,4 +382,24 @@ public class CommitUtilsTest extends GitTestCase {
 		};
 		CommitUtils.getRef(new FileRepository(testRepo), ref);
 	}
+
+	/**
+	 * Get commit base with zero id
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = GitException.class)
+	public void getBaseWithZeroId() throws Exception {
+		CommitUtils.getBase(new FileRepository(testRepo), ObjectId.zeroId());
+	}
+
+	/**
+	 * Get commit with zero id
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = GitException.class)
+	public void getCommitWithZeroId() throws Exception {
+		CommitUtils.getCommit(new FileRepository(testRepo), ObjectId.zeroId());
+	}
 }
