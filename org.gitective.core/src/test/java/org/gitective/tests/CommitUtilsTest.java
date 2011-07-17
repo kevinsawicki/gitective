@@ -294,4 +294,92 @@ public class CommitUtilsTest extends GitTestCase {
 	public void getTagsWithBadRepository() throws IOException {
 		CommitUtils.getTags(new BadRepository(testRepo, new IOException()));
 	}
+
+	/**
+	 * Get commit for ref with null id
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void getRefWithNullId() throws Exception {
+		Ref ref = new Ref() {
+
+			public boolean isSymbolic() {
+				return false;
+			}
+
+			public boolean isPeeled() {
+				return false;
+			}
+
+			public Ref getTarget() {
+				return null;
+			}
+
+			public Storage getStorage() {
+				return null;
+			}
+
+			public ObjectId getPeeledObjectId() {
+				return null;
+			}
+
+			public ObjectId getObjectId() {
+				return null;
+			}
+
+			public String getName() {
+				return null;
+			}
+
+			public Ref getLeaf() {
+				return null;
+			}
+		};
+		assertNull(CommitUtils.getRef(new FileRepository(testRepo), ref));
+	}
+
+	/**
+	 * Get commit for ref with zero id
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = GitException.class)
+	public void getRefWithZeroId() throws Exception {
+		Ref ref = new Ref() {
+
+			public boolean isSymbolic() {
+				return false;
+			}
+
+			public boolean isPeeled() {
+				return false;
+			}
+
+			public Ref getTarget() {
+				return null;
+			}
+
+			public Storage getStorage() {
+				return null;
+			}
+
+			public ObjectId getPeeledObjectId() {
+				return null;
+			}
+
+			public ObjectId getObjectId() {
+				return ObjectId.zeroId();
+			}
+
+			public String getName() {
+				return null;
+			}
+
+			public Ref getLeaf() {
+				return null;
+			}
+		};
+		CommitUtils.getRef(new FileRepository(testRepo), ref);
+	}
 }
