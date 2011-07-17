@@ -27,7 +27,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * Committer date filter
+ * Filter that includes commits until a committed date is encountered that
+ * occurred before the configured date.
  */
 public class CommitterDateFilter extends DateFilter {
 

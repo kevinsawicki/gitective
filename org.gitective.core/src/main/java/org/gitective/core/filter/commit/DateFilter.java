@@ -30,8 +30,9 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.gitective.core.Assert;
 
 /**
- * Date commit filter that includes commit until one if found that is older than
- * the configured date.
+ * Commit filter that includes commits until one is encountered that returns a
+ * date from {@link #getDate(RevCommit)} that has occurred before the configured
+ * date.
  */
 public abstract class DateFilter extends CommitFilter {
 
@@ -65,7 +66,7 @@ public abstract class DateFilter extends CommitFilter {
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		final Date date = getDate(commit);
-		return include(date != null && time <= date.getTime());
+		return include(date != null && date.getTime() >= time);
 	}
 
 	/**
