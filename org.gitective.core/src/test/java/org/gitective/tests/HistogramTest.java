@@ -34,6 +34,9 @@ import org.gitective.core.stat.CommitHistogram;
 import org.gitective.core.stat.CommitHistogramFilter;
 import org.gitective.core.stat.CommitterHistogramFilter;
 import org.gitective.core.stat.EarliestComparator;
+import org.gitective.core.stat.FileCommitActivity;
+import org.gitective.core.stat.FileHistogram;
+import org.gitective.core.stat.FileHistogramFilter;
 import org.gitective.core.stat.LatestComparator;
 import org.gitective.core.stat.UserCommitActivity;
 import org.junit.Test;
@@ -214,7 +217,7 @@ public class HistogramTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void resetFilter() throws Exception {
+	public void resetAuthorFilter() throws Exception {
 		add("test.txt", "content");
 		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		CommitHistogram histogram = filter.getHistogram();
@@ -227,19 +230,128 @@ public class HistogramTest extends GitTestCase {
 	}
 
 	/**
-	 * Unit test of {@link CommitHistogramFilter#clone()}
+	 * Unit test of {@link FileHistogramFilter#reset()}
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void cloneFilter() throws Exception {
+	public void resetFileFilter() throws Exception {
+		add("test.txt", "content");
+		FileHistogramFilter filter = new FileHistogramFilter();
+		FileHistogram histogram = filter.getHistogram();
+		assertNotNull(histogram);
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertSame(histogram, filter.getHistogram());
+		filter.reset();
+		assertNotNull(filter.getHistogram());
+		assertNotSame(histogram, filter.getHistogram());
+	}
+
+	/**
+	 * Unit test of {@link AuthorHistogramFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void authorCloneFilter() throws Exception {
 		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		RevFilter clone = filter.clone();
 		assertNotNull(clone);
 		assertNotSame(filter, clone);
-		assertTrue(clone instanceof CommitHistogramFilter);
-		CommitHistogramFilter clonedFilter = (CommitHistogramFilter) clone;
+		assertTrue(clone instanceof AuthorHistogramFilter);
+		AuthorHistogramFilter clonedFilter = (AuthorHistogramFilter) clone;
 		assertNotNull(clonedFilter.getHistogram());
 		assertNotSame(filter.getHistogram(), clonedFilter.getHistogram());
+	}
+
+	/**
+	 * Unit test of {@link CommitterHistogramFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void committerCloneFilter() throws Exception {
+		CommitHistogramFilter filter = new CommitterHistogramFilter();
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof CommitterHistogramFilter);
+		CommitterHistogramFilter clonedFilter = (CommitterHistogramFilter) clone;
+		assertNotNull(clonedFilter.getHistogram());
+		assertNotSame(filter.getHistogram(), clonedFilter.getHistogram());
+	}
+
+	/**
+	 * Unit test of {@link FileHistogramFilter#clone()}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void fileCloneFilter() throws Exception {
+		FileHistogramFilter filter = new FileHistogramFilter();
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof FileHistogramFilter);
+		FileHistogramFilter clonedFilter = (FileHistogramFilter) clone;
+		assertNotNull(clonedFilter.getHistogram());
+		assertNotSame(filter.getHistogram(), clonedFilter.getHistogram());
+	}
+
+	/**
+	 * Test {@link FileHistogramFilter} with single commit
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void singleCommitFileActivity() throws Exception {
+		add("file.txt", "abcd");
+		FileHistogramFilter filter = new FileHistogramFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(filter).find();
+
+		FileHistogram histogram = filter.getHistogram();
+		assertNotNull(histogram);
+		assertNull(histogram.getActivity(null));
+		FileCommitActivity activity = histogram.getActivity("file.txt");
+		assertNotNull(activity);
+		assertEquals(1, activity.getRevisions());
+		assertEquals(1, activity.getAdds());
+		assertEquals(0, activity.getCopies());
+		assertEquals(0, activity.getEdits());
+		assertEquals(0, activity.getDeletes());
+		assertEquals(0, activity.getRenames());
+		assertEquals("file.txt", activity.getPath());
+		assertNotNull(activity.getPreviousPaths());
+		assertTrue(activity.getPreviousPaths().isEmpty());
+		assertNotNull(histogram.getFileActivity());
+		assertEquals(1, histogram.getFileActivity().length);
+		assertEquals(activity, histogram.getFileActivity()[0]);
+	}
+
+	/**
+	 * Test {@link FileHistogramFilter} with three commits
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void addEditDeleteFileActivity() throws Exception {
+		add("file.txt", "abcd");
+		add("file.txt", "abce");
+		delete("file.txt");
+
+		FileHistogramFilter filter = new FileHistogramFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(filter).find();
+
+		FileHistogram histogram = filter.getHistogram();
+		assertNotNull(histogram);
+		FileCommitActivity activity = histogram.getActivity("file.txt");
+		assertNotNull(activity);
+		assertEquals(3, activity.getRevisions());
+		assertEquals(1, activity.getAdds());
+		assertEquals(1, activity.getEdits());
+		assertEquals(1, activity.getDeletes());
+		assertTrue(activity.getPreviousPaths().isEmpty());
 	}
 }

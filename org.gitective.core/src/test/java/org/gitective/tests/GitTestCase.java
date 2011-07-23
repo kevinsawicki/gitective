@@ -284,4 +284,22 @@ public abstract class GitTestCase extends Assert {
 		assertNotNull(note);
 		return note;
 	}
+
+	/**
+	 * Delete and commit file at path
+	 * 
+	 * @param path
+	 * @return commit
+	 * @throws Exception
+	 */
+	protected RevCommit delete(String path) throws Exception {
+		String message = MessageFormat.format("Committing {0} at {1}", path,
+				new Date());
+		Git git = Git.open(testRepo);
+		git.rm().addFilepattern(path).call();
+		RevCommit commit = git.commit().setOnly(path).setMessage(message)
+				.setAuthor(author).setCommitter(committer).call();
+		assertNotNull(commit);
+		return commit;
+	}
 }
