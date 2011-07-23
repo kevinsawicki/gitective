@@ -29,6 +29,7 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.service.CommitFinder;
+import org.gitective.core.stat.AuthorHistogramFilter;
 import org.gitective.core.stat.CommitCalendar;
 import org.gitective.core.stat.CommitHistogramFilter;
 import org.gitective.core.stat.Month;
@@ -116,11 +117,11 @@ public class CalendarTest extends GitTestCase {
 	public void singleCommit() throws Exception {
 		RevCommit commit = add("test", "test");
 
-		CommitHistogramFilter filter = new CommitHistogramFilter();
+		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
 		finder.setFilter(filter).find();
 
-		CommitCalendar cal = new CommitCalendar(filter.getHistogram().authors());
+		CommitCalendar cal = new CommitCalendar(filter.getHistogram().getUserActivity());
 
 		GregorianCalendar commitTime = new GregorianCalendar();
 		int month = commitTime.get(Calendar.MONTH);

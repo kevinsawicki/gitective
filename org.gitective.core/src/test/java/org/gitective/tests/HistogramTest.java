@@ -28,9 +28,11 @@ import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.service.CommitFinder;
+import org.gitective.core.stat.AuthorHistogramFilter;
+import org.gitective.core.stat.CommitCountComparator;
 import org.gitective.core.stat.CommitHistogram;
 import org.gitective.core.stat.CommitHistogramFilter;
-import org.gitective.core.stat.CountComparator;
+import org.gitective.core.stat.CommitterHistogramFilter;
 import org.gitective.core.stat.EarliestComparator;
 import org.gitective.core.stat.LatestComparator;
 import org.gitective.core.stat.UserCommitActivity;
@@ -47,12 +49,9 @@ public class HistogramTest extends GitTestCase {
 	@Test
 	public void emptyHistogram() {
 		CommitHistogram histogram = new CommitHistogram();
-		assertNull(histogram.author(null));
-		assertNull(histogram.committer(null));
-		assertNotNull(histogram.authors());
-		assertEquals(0, histogram.authors().length);
-		assertNotNull(histogram.committers());
-		assertEquals(0, histogram.committers().length);
+		assertNull(histogram.getActivity(null));
+		assertNotNull(histogram.getUserActivity());
+		assertEquals(0, histogram.getUserActivity().length);
 	}
 
 	/**
@@ -76,21 +75,21 @@ public class HistogramTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void singleCommit() throws Exception {
+	public void singleAuthorCommit() throws Exception {
 		RevCommit commit = add("test.txt", "content");
 		CommitFinder finder = new CommitFinder(testRepo);
-		CommitHistogramFilter filter = new CommitHistogramFilter();
+		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		finder.setFilter(filter).find();
 
 		CommitHistogram histogram = filter.getHistogram();
 		assertNotNull(histogram);
 
-		UserCommitActivity authorActivity = histogram.author(author
+		UserCommitActivity authorActivity = histogram.getActivity(author
 				.getEmailAddress());
 		assertNotNull(authorActivity);
 		assertEquals(author.getName(), authorActivity.name());
 		assertEquals(author.getEmailAddress(), authorActivity.email());
-		assertEquals(authorActivity, histogram.authors()[0]);
+		assertEquals(authorActivity, histogram.getUserActivity()[0]);
 		assertEquals(1, authorActivity.count());
 		assertEquals(commit, authorActivity.first());
 		assertEquals(commit, authorActivity.last());
@@ -100,21 +99,37 @@ public class HistogramTest extends GitTestCase {
 				authorActivity.latest());
 		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
 				authorActivity.times()[0]);
+	}
 
-		UserCommitActivity committerActivity = histogram.committer(committer
+	/**
+	 * Test histogram with single commit
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void singleCommitterCommit() throws Exception {
+		RevCommit commit = add("test.txt", "content");
+		CommitFinder finder = new CommitFinder(testRepo);
+		CommitHistogramFilter filter = new CommitterHistogramFilter();
+		finder.setFilter(filter).find();
+
+		CommitHistogram histogram = filter.getHistogram();
+		assertNotNull(histogram);
+
+		UserCommitActivity committerActivity = histogram.getActivity(committer
 				.getEmailAddress());
 		assertNotNull(committerActivity);
 		assertEquals(committer.getName(), committerActivity.name());
 		assertEquals(committer.getEmailAddress(), committerActivity.email());
-		assertEquals(committerActivity, histogram.committers()[0]);
+		assertEquals(committerActivity, histogram.getUserActivity()[0]);
 		assertEquals(1, committerActivity.count());
 		assertEquals(commit, committerActivity.first());
 		assertEquals(commit, committerActivity.last());
-		assertEquals(commit.getCommitterIdent().getWhen().getTime(),
+		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
 				committerActivity.earliest());
-		assertEquals(commit.getCommitterIdent().getWhen().getTime(),
+		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
 				committerActivity.latest());
-		assertEquals(commit.getCommitterIdent().getWhen().getTime(),
+		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
 				committerActivity.times()[0]);
 	}
 
@@ -130,14 +145,14 @@ public class HistogramTest extends GitTestCase {
 				System.currentTimeMillis() + 5000), TimeZone.getDefault());
 		RevCommit commit2 = add("test.txt", "content2");
 		CommitFinder finder = new CommitFinder(testRepo);
-		CommitHistogramFilter filter = new CommitHistogramFilter();
+		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		finder.setFilter(filter).find();
 
 		CommitHistogram histogram = filter.getHistogram();
 		assertNotNull(histogram);
 
 		UserCommitActivity[] authors = histogram
-				.authors(new LatestComparator());
+				.getUserActivity(new LatestComparator());
 		assertEquals(commit2, authors[0].last());
 		assertEquals(commit, authors[1].last());
 	}
@@ -154,20 +169,20 @@ public class HistogramTest extends GitTestCase {
 				System.currentTimeMillis() + 5000), TimeZone.getDefault());
 		RevCommit commit2 = add("test.txt", "content2");
 		CommitFinder finder = new CommitFinder(testRepo);
-		CommitHistogramFilter filter = new CommitHistogramFilter();
+		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		finder.setFilter(filter).find();
 
 		CommitHistogram histogram = filter.getHistogram();
 		assertNotNull(histogram);
 
 		UserCommitActivity[] authors = histogram
-				.authors(new EarliestComparator());
+				.getUserActivity(new EarliestComparator());
 		assertEquals(commit, authors[0].last());
 		assertEquals(commit2, authors[1].last());
 	}
 
 	/**
-	 * Unit test of {@link CountComparator}
+	 * Unit test of {@link CommitCountComparator}
 	 * 
 	 * @throws Exception
 	 */
@@ -181,13 +196,14 @@ public class HistogramTest extends GitTestCase {
 				System.currentTimeMillis() + 5000), TimeZone.getDefault());
 		RevCommit commit2 = add("test.txt", "content2");
 		CommitFinder finder = new CommitFinder(testRepo);
-		CommitHistogramFilter filter = new CommitHistogramFilter();
+		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		finder.setFilter(filter).find();
 
 		CommitHistogram histogram = filter.getHistogram();
 		assertNotNull(histogram);
 
-		UserCommitActivity[] authors = histogram.authors(new CountComparator());
+		UserCommitActivity[] authors = histogram
+				.getUserActivity(new CommitCountComparator());
 		assertEquals(commit, authors[0].first());
 		assertEquals(commit2, authors[1].last());
 	}
@@ -200,7 +216,7 @@ public class HistogramTest extends GitTestCase {
 	@Test
 	public void resetFilter() throws Exception {
 		add("test.txt", "content");
-		CommitHistogramFilter filter = new CommitHistogramFilter();
+		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		CommitHistogram histogram = filter.getHistogram();
 		assertNotNull(histogram);
 		new CommitFinder(testRepo).setFilter(filter).find();
@@ -217,7 +233,7 @@ public class HistogramTest extends GitTestCase {
 	 */
 	@Test
 	public void cloneFilter() throws Exception {
-		CommitHistogramFilter filter = new CommitHistogramFilter();
+		CommitHistogramFilter filter = new AuthorHistogramFilter();
 		RevFilter clone = filter.clone();
 		assertNotNull(clone);
 		assertNotSame(filter, clone);

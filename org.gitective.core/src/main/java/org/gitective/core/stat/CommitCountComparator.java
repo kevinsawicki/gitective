@@ -27,7 +27,7 @@ import java.util.Comparator;
 /**
  * Comparator that sorts by most user activity first
  */
-public class CountComparator implements Comparator<UserCommitActivity>, Serializable {
+public class CommitCountComparator implements Comparator<UserCommitActivity>, Serializable {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -4952333917951609993L;

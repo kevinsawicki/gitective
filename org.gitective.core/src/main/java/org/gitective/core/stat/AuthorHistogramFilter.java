@@ -21,30 +21,29 @@
  */
 package org.gitective.core.stat;
 
-import org.gitective.core.filter.commit.CommitFilter;
+import java.io.IOException;
+
+import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * Filter that generates a histogram of commits
+ * Author commit histogram filter
  */
-public abstract class CommitHistogramFilter extends CommitFilter {
+public class AuthorHistogramFilter extends CommitHistogramFilter {
 
-	/**
-	 * Histogram
-	 */
-	protected CommitHistogram histogram = new CommitHistogram();
-
-	/**
-	 * Get generated histogram
-	 * 
-	 * @return histogram
-	 */
-	public CommitHistogram getHistogram() {
-		return histogram;
+	@Override
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
+		final PersonIdent author = commit.getAuthorIdent();
+		if (author != null)
+			histogram.include(commit, author);
+		return true;
 	}
 
 	@Override
-	public CommitFilter reset() {
-		histogram = new CommitHistogram();
-		return super.reset();
+	public RevFilter clone() {
+		return new AuthorHistogramFilter();
 	}
 }
