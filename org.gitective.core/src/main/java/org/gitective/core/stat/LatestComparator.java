@@ -33,7 +33,7 @@ public class LatestComparator implements Comparator<UserCommitActivity>, Seriali
 	private static final long serialVersionUID = -1188908635265244096L;
 
 	public int compare(final UserCommitActivity u1, final UserCommitActivity u2) {
-		final long diff = u1.latest() - u2.latest();
+		final long diff = u1.getLatest() - u2.getLatest();
 		if (diff > 0)
 			return -1;
 		if (diff < 0)

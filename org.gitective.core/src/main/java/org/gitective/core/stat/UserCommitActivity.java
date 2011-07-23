@@ -73,7 +73,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return name
 	 */
-	public String name() {
+	public String getName() {
 		return name;
 	}
 
@@ -82,7 +82,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return email
 	 */
-	public String email() {
+	public String getEmail() {
 		return email;
 	}
 
@@ -124,7 +124,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return non-null but possibly empty array
 	 */
-	public long[] times() {
+	public long[] getTimes() {
 		return Arrays.copyOf(times, index);
 	}
 
@@ -133,7 +133,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return non-null but possibly empty array
 	 */
-	public byte[][] rawIds() {
+	public byte[][] getRawIds() {
 		return Arrays.copyOf(commits, index);
 	}
 
@@ -142,7 +142,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return non-null but possibly empty array
 	 */
-	public ObjectId[] ids() {
+	public ObjectId[] getIds() {
 		final ObjectId[] ids = new ObjectId[index];
 		for (int i = 0; i < index; i++)
 			ids[i] = ObjectId.fromRaw(commits[i]);
@@ -154,7 +154,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return commit count
 	 */
-	public int count() {
+	public int getCount() {
 		return index;
 	}
 
@@ -163,7 +163,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return commit id or null if no commits
 	 */
-	public ObjectId first() {
+	public ObjectId getFirst() {
 		return index > 0 ? ObjectId.fromRaw(commits[index - 1]) : null;
 	}
 
@@ -172,7 +172,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return commit id or null if no commits
 	 */
-	public ObjectId last() {
+	public ObjectId getLast() {
 		return index > 0 ? ObjectId.fromRaw(commits[0]) : null;
 	}
 
@@ -181,7 +181,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return time in milliseconds or 0 if no commits
 	 */
-	public long earliest() {
+	public long getEarliest() {
 		return index > 0 ? first : 0;
 	}
 
@@ -190,7 +190,7 @@ public class UserCommitActivity implements Serializable {
 	 * 
 	 * @return time in milliseconds or 0 if no commits
 	 */
-	public long latest() {
+	public long getLatest() {
 		return index > 0 ? last : 0;
 	}
 }

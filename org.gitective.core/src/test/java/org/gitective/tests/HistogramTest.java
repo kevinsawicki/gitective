@@ -60,13 +60,13 @@ public class HistogramTest extends GitTestCase {
 	@Test
 	public void emptyUserActivity() {
 		UserCommitActivity activity = new UserCommitActivity("test", "test2");
-		assertEquals("test", activity.name());
-		assertEquals("test2", activity.email());
-		assertEquals(0, activity.earliest());
-		assertEquals(0, activity.latest());
-		assertEquals(0, activity.count());
-		assertNull(activity.first());
-		assertNull(activity.last());
+		assertEquals("test", activity.getName());
+		assertEquals("test2", activity.getEmail());
+		assertEquals(0, activity.getEarliest());
+		assertEquals(0, activity.getLatest());
+		assertEquals(0, activity.getCount());
+		assertNull(activity.getFirst());
+		assertNull(activity.getLast());
 	}
 
 	/**
@@ -87,18 +87,18 @@ public class HistogramTest extends GitTestCase {
 		UserCommitActivity authorActivity = histogram.getActivity(author
 				.getEmailAddress());
 		assertNotNull(authorActivity);
-		assertEquals(author.getName(), authorActivity.name());
-		assertEquals(author.getEmailAddress(), authorActivity.email());
+		assertEquals(author.getName(), authorActivity.getName());
+		assertEquals(author.getEmailAddress(), authorActivity.getEmail());
 		assertEquals(authorActivity, histogram.getUserActivity()[0]);
-		assertEquals(1, authorActivity.count());
-		assertEquals(commit, authorActivity.first());
-		assertEquals(commit, authorActivity.last());
+		assertEquals(1, authorActivity.getCount());
+		assertEquals(commit, authorActivity.getFirst());
+		assertEquals(commit, authorActivity.getLast());
 		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
-				authorActivity.earliest());
+				authorActivity.getEarliest());
 		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
-				authorActivity.latest());
+				authorActivity.getLatest());
 		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
-				authorActivity.times()[0]);
+				authorActivity.getTimes()[0]);
 	}
 
 	/**
@@ -119,18 +119,18 @@ public class HistogramTest extends GitTestCase {
 		UserCommitActivity committerActivity = histogram.getActivity(committer
 				.getEmailAddress());
 		assertNotNull(committerActivity);
-		assertEquals(committer.getName(), committerActivity.name());
-		assertEquals(committer.getEmailAddress(), committerActivity.email());
+		assertEquals(committer.getName(), committerActivity.getName());
+		assertEquals(committer.getEmailAddress(), committerActivity.getEmail());
 		assertEquals(committerActivity, histogram.getUserActivity()[0]);
-		assertEquals(1, committerActivity.count());
-		assertEquals(commit, committerActivity.first());
-		assertEquals(commit, committerActivity.last());
+		assertEquals(1, committerActivity.getCount());
+		assertEquals(commit, committerActivity.getFirst());
+		assertEquals(commit, committerActivity.getLast());
 		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
-				committerActivity.earliest());
+				committerActivity.getEarliest());
 		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
-				committerActivity.latest());
+				committerActivity.getLatest());
 		assertEquals(commit.getAuthorIdent().getWhen().getTime(),
-				committerActivity.times()[0]);
+				committerActivity.getTimes()[0]);
 	}
 
 	/**
@@ -153,8 +153,8 @@ public class HistogramTest extends GitTestCase {
 
 		UserCommitActivity[] authors = histogram
 				.getUserActivity(new LatestComparator());
-		assertEquals(commit2, authors[0].last());
-		assertEquals(commit, authors[1].last());
+		assertEquals(commit2, authors[0].getLast());
+		assertEquals(commit, authors[1].getLast());
 	}
 
 	/**
@@ -177,8 +177,8 @@ public class HistogramTest extends GitTestCase {
 
 		UserCommitActivity[] authors = histogram
 				.getUserActivity(new EarliestComparator());
-		assertEquals(commit, authors[0].last());
-		assertEquals(commit2, authors[1].last());
+		assertEquals(commit, authors[0].getLast());
+		assertEquals(commit2, authors[1].getLast());
 	}
 
 	/**
@@ -204,8 +204,8 @@ public class HistogramTest extends GitTestCase {
 
 		UserCommitActivity[] authors = histogram
 				.getUserActivity(new CommitCountComparator());
-		assertEquals(commit, authors[0].first());
-		assertEquals(commit2, authors[1].last());
+		assertEquals(commit, authors[0].getFirst());
+		assertEquals(commit2, authors[1].getLast());
 	}
 
 	/**

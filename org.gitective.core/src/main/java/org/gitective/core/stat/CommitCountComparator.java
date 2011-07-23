@@ -33,6 +33,6 @@ public class CommitCountComparator implements Comparator<UserCommitActivity>, Se
 	private static final long serialVersionUID = -4952333917951609993L;
 
 	public int compare(final UserCommitActivity u1, final UserCommitActivity u2) {
-		return u2.count() - u1.count();
+		return u2.getCount() - u1.getCount();
 	}
 }

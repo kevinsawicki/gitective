@@ -81,8 +81,8 @@ public class YearCommitActivity {
 	 * 
 	 * @return array of monthly activity
 	 */
-	public int[] months() {
-		return months(new int[MONTHS]);
+	public int[] getMonths() {
+		return getMonths(new int[MONTHS]);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class YearCommitActivity {
 	 * @param months
 	 * @return specified months array
 	 */
-	public int[] months(int[] months) {
+	public int[] getMonths(int[] months) {
 		final int[][][] commits = this.commits;
 		for (int i = 0; i < MONTHS; i++)
 			for (int j = 0; j < commits[i].length; j++)
@@ -105,8 +105,8 @@ public class YearCommitActivity {
 	 * 
 	 * @return array of daily activity
 	 */
-	public int[] days() {
-		return days(new int[DAYS]);
+	public int[] getDays() {
+		return getDays(new int[DAYS]);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class YearCommitActivity {
 	 * @param days
 	 * @return specified array of days
 	 */
-	public int[] days(final int[] days) {
+	public int[] getDays(final int[] days) {
 		final int[][][] commits = this.commits;
 		for (int i = 0; i < MONTHS; i++)
 			for (int j = 0; j < commits[i].length; j++)
@@ -129,8 +129,8 @@ public class YearCommitActivity {
 	 * 
 	 * @return array of hourly activity
 	 */
-	public int[] hours() {
-		return hours(new int[HOURS]);
+	public int[] getHours() {
+		return getHours(new int[HOURS]);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class YearCommitActivity {
 	 * @param hours
 	 * @return specified array of hours
 	 */
-	public int[] hours(final int[] hours) {
+	public int[] getHours(final int[] hours) {
 		final int[][][] commits = this.commits;
 		for (int i = 0; i < MONTHS; i++)
 			for (int j = 0; j < commits[i].length; j++)
@@ -154,8 +154,8 @@ public class YearCommitActivity {
 	 * @param month
 	 * @return number of commits
 	 */
-	public int monthCount(final Month month) {
-		return monthCount(month.number);
+	public int getMonthCount(final Month month) {
+		return getMonthCount(month.number);
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class YearCommitActivity {
 	 * @param month
 	 * @return number of commits
 	 */
-	public int monthCount(final int month) {
+	public int getMonthCount(final int month) {
 		int total = 0;
 		final int[][] monthly = commits[month];
 		for (int i = 0; i < monthly.length; i++)
@@ -179,7 +179,7 @@ public class YearCommitActivity {
 	 * @param hour
 	 * @return number of commits
 	 */
-	public int hourCount(final int hour) {
+	public int getHourCount(final int hour) {
 		final int[][][] commits = this.commits;
 		int total = 0;
 		for (int i = 0; i < MONTHS; i++)
@@ -194,7 +194,7 @@ public class YearCommitActivity {
 	 * @param dayOfMonth
 	 * @return number of commits
 	 */
-	public int dayCount(final int dayOfMonth) {
+	public int getDayCount(final int dayOfMonth) {
 		final int[][][] commits = this.commits;
 		int total = 0;
 		for (int i = 0; i < MONTHS; i++) {
@@ -213,7 +213,7 @@ public class YearCommitActivity {
 	 * 
 	 * @return year
 	 */
-	public int year() {
+	public int getYear() {
 		return year;
 	}
 
@@ -222,7 +222,7 @@ public class YearCommitActivity {
 	 * 
 	 * @return total commit count
 	 */
-	public int count() {
+	public int getCount() {
 		return total;
 	}
 }

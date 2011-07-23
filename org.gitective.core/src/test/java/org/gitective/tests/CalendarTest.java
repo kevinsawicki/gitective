@@ -49,26 +49,26 @@ public class CalendarTest extends GitTestCase {
 	public void emptyCalendar() {
 		CommitCalendar calendar = new CommitCalendar(new UserCommitActivity[0]);
 
-		assertEquals(0, calendar.countDay(0));
-		assertEquals(0, calendar.countHour(0));
-		assertEquals(0, calendar.countMonth(0));
+		assertEquals(0, calendar.getDayCount(0));
+		assertEquals(0, calendar.getHourCount(0));
+		assertEquals(0, calendar.getMonthCount(0));
 
 		assertNotNull(calendar.years());
 		assertEquals(0, calendar.years().length);
 
-		assertNotNull(calendar.days());
-		assertEquals(YearCommitActivity.DAYS, calendar.days().length);
-		for (int day : calendar.days())
+		assertNotNull(calendar.getDays());
+		assertEquals(YearCommitActivity.DAYS, calendar.getDays().length);
+		for (int day : calendar.getDays())
 			assertEquals(0, day);
 
-		assertNotNull(calendar.months());
-		assertEquals(YearCommitActivity.MONTHS, calendar.months().length);
-		for (int month : calendar.months())
+		assertNotNull(calendar.getMonths());
+		assertEquals(YearCommitActivity.MONTHS, calendar.getMonths().length);
+		for (int month : calendar.getMonths())
 			assertEquals(0, month);
 
-		assertNotNull(calendar.hours());
-		assertEquals(YearCommitActivity.HOURS, calendar.hours().length);
-		for (int hour : calendar.hours())
+		assertNotNull(calendar.getHours());
+		assertEquals(YearCommitActivity.HOURS, calendar.getHours().length);
+		for (int hour : calendar.getHours())
 			assertEquals(0, hour);
 	}
 
@@ -78,13 +78,13 @@ public class CalendarTest extends GitTestCase {
 	@Test
 	public void emptyYear() {
 		YearCommitActivity year = new YearCommitActivity(2000);
-		assertEquals(0, year.count());
+		assertEquals(0, year.getCount());
 		for (int i = 0; i < YearCommitActivity.MONTHS; i++)
-			assertEquals(0, year.monthCount(i));
+			assertEquals(0, year.getMonthCount(i));
 		for (int i = 0; i < YearCommitActivity.DAYS; i++)
-			assertEquals(0, year.dayCount(i));
+			assertEquals(0, year.getDayCount(i));
 		for (int i = 0; i < YearCommitActivity.HOURS; i++)
-			assertEquals(0, year.hourCount(i));
+			assertEquals(0, year.getHourCount(i));
 	}
 
 	/**
@@ -99,12 +99,12 @@ public class CalendarTest extends GitTestCase {
 		final int size = (UserCommitActivity.SIZE * UserCommitActivity.GROWTH) + 2;
 		for (int i = 0; i < size; i++)
 			user.include(commit, author);
-		assertEquals(size, user.count());
+		assertEquals(size, user.getCount());
 		byte[] commitId = new byte[Constants.OBJECT_ID_LENGTH];
 		commit.copyRawTo(commitId, 0);
-		for (byte[] id : user.rawIds())
+		for (byte[] id : user.getRawIds())
 			assertTrue(Arrays.equals(commitId, id));
-		for (ObjectId id : user.ids())
+		for (ObjectId id : user.getIds())
 			assertEquals(commit, id);
 	}
 
@@ -128,24 +128,24 @@ public class CalendarTest extends GitTestCase {
 		int day = commitTime.get(Calendar.DAY_OF_MONTH) - 1;
 		int hour = commitTime.get(Calendar.HOUR_OF_DAY);
 		commitTime.setTime(commit.getAuthorIdent().getWhen());
-		assertEquals(1, cal.countDay(day));
-		assertEquals(1, cal.countMonth(month));
-		assertEquals(1, cal.countHour(hour));
+		assertEquals(1, cal.getDayCount(day));
+		assertEquals(1, cal.getMonthCount(month));
+		assertEquals(1, cal.getHourCount(hour));
 
-		assertEquals(1, cal.days()[day]);
-		assertEquals(1, cal.months()[month]);
-		assertEquals(1, cal.hours()[hour]);
+		assertEquals(1, cal.getDays()[day]);
+		assertEquals(1, cal.getMonths()[month]);
+		assertEquals(1, cal.getHours()[hour]);
 
 		assertEquals(1, cal.years().length);
 		YearCommitActivity year = cal.years()[0];
-		assertEquals(1, year.count());
-		assertEquals(commitTime.get(Calendar.YEAR), year.year());
-		assertNotNull(year.months());
-		assertEquals(1, year.months()[month]);
-		assertEquals(1, year.monthCount(Month.month(month)));
-		assertNotNull(year.days());
-		assertEquals(1, year.days()[day]);
-		assertNotNull(year.hours());
-		assertEquals(1, year.hours()[hour]);
+		assertEquals(1, year.getCount());
+		assertEquals(commitTime.get(Calendar.YEAR), year.getYear());
+		assertNotNull(year.getMonths());
+		assertEquals(1, year.getMonths()[month]);
+		assertEquals(1, year.getMonthCount(Month.month(month)));
+		assertNotNull(year.getDays());
+		assertEquals(1, year.getDays()[day]);
+		assertNotNull(year.getHours());
+		assertEquals(1, year.getHours()[hour]);
 	}
 }

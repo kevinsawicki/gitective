@@ -48,7 +48,7 @@ public class CommitCalendar implements Serializable {
 		final GregorianCalendar calendar = new GregorianCalendar(Locale.US);
 		final int length = activity.length;
 		for (int i = 0; i < length; i++)
-			for (long time : activity[i].times()) {
+			for (long time : activity[i].getTimes()) {
 				calendar.setTimeInMillis(time);
 				final int year = calendar.get(Calendar.YEAR);
 				YearCommitActivity yearly = years.get(year);
@@ -74,10 +74,10 @@ public class CommitCalendar implements Serializable {
 	 * 
 	 * @return monthly counts
 	 */
-	public int[] months() {
+	public int[] getMonths() {
 		final int[] months = new int[YearCommitActivity.MONTHS];
 		for (YearCommitActivity year : years.values())
-			year.months(months);
+			year.getMonths(months);
 		return months;
 	}
 
@@ -86,10 +86,10 @@ public class CommitCalendar implements Serializable {
 	 * 
 	 * @return day of month counts
 	 */
-	public int[] days() {
+	public int[] getDays() {
 		final int[] days = new int[YearCommitActivity.DAYS];
 		for (YearCommitActivity year : years.values())
-			year.days(days);
+			year.getDays(days);
 		return days;
 	}
 
@@ -98,10 +98,10 @@ public class CommitCalendar implements Serializable {
 	 * 
 	 * @return hourly counts
 	 */
-	public int[] hours() {
+	public int[] getHours() {
 		final int[] hours = new int[YearCommitActivity.HOURS];
 		for (YearCommitActivity year : years.values())
-			year.hours(hours);
+			year.getHours(hours);
 		return hours;
 	}
 
@@ -111,10 +111,10 @@ public class CommitCalendar implements Serializable {
 	 * @param month
 	 * @return monthly count
 	 */
-	public int countMonth(final int month) {
+	public int getMonthCount(final int month) {
 		int total = 0;
 		for (YearCommitActivity year : years.values())
-			total += year.monthCount(month);
+			total += year.getMonthCount(month);
 		return total;
 	}
 
@@ -124,10 +124,10 @@ public class CommitCalendar implements Serializable {
 	 * @param hour
 	 * @return hourly count
 	 */
-	public int countHour(final int hour) {
+	public int getHourCount(final int hour) {
 		int total = 0;
 		for (YearCommitActivity year : years.values())
-			total += year.hourCount(hour);
+			total += year.getHourCount(hour);
 		return total;
 	}
 
@@ -137,10 +137,10 @@ public class CommitCalendar implements Serializable {
 	 * @param dayOfMonth
 	 * @return day of month count
 	 */
-	public int countDay(final int dayOfMonth) {
+	public int getDayCount(final int dayOfMonth) {
 		int total = 0;
 		for (YearCommitActivity year : years.values())
-			total += year.dayCount(dayOfMonth);
+			total += year.getDayCount(dayOfMonth);
 		return total;
 	}
 }
