@@ -48,6 +48,7 @@ public class CalendarTest extends GitTestCase {
 	@Test
 	public void emptyCalendar() {
 		CommitCalendar calendar = new CommitCalendar(new UserCommitActivity[0]);
+		assertEquals(0, calendar.getCount());
 
 		assertEquals(0, calendar.getDayCount(0));
 		assertEquals(0, calendar.getHourCount(0));
@@ -121,7 +122,9 @@ public class CalendarTest extends GitTestCase {
 		CommitFinder finder = new CommitFinder(testRepo);
 		finder.setFilter(filter).find();
 
-		CommitCalendar cal = new CommitCalendar(filter.getHistogram().getUserActivity());
+		CommitCalendar cal = new CommitCalendar(filter.getHistogram()
+				.getUserActivity());
+		assertEquals(1, cal.getCount());
 
 		GregorianCalendar commitTime = new GregorianCalendar();
 		int month = commitTime.get(Calendar.MONTH);

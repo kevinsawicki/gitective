@@ -38,6 +38,7 @@ import org.gitective.core.stat.FileCommitActivity;
 import org.gitective.core.stat.FileHistogram;
 import org.gitective.core.stat.FileHistogramFilter;
 import org.gitective.core.stat.LatestComparator;
+import org.gitective.core.stat.RevisionCountComparator;
 import org.gitective.core.stat.UserCommitActivity;
 import org.junit.Test;
 
@@ -353,5 +354,36 @@ public class HistogramTest extends GitTestCase {
 		assertEquals(1, activity.getEdits());
 		assertEquals(1, activity.getDeletes());
 		assertTrue(activity.getPreviousPaths().isEmpty());
+	}
+
+	/**
+	 * Test of {@link RevisionCountComparator}
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void sortFileActivity() throws Exception {
+		// File 1 has three revisions
+		add("file1.txt", "1");
+		add("file1.txt", "2");
+		add("file1.txt", "3");
+		// File 2 has one revision
+		add("file2.txt", "1");
+		// File 3 has 2 revsions
+		add("file3.txt", "1");
+		add("file3.txt", "2");
+
+		FileHistogramFilter filter = new FileHistogramFilter();
+		CommitFinder finder = new CommitFinder(testRepo);
+		finder.setFilter(filter).find();
+		FileHistogram histogram = filter.getHistogram();
+		assertNotNull(histogram);
+		FileCommitActivity[] files = histogram
+				.getFileActivity(new RevisionCountComparator());
+		assertNotNull(files);
+		assertEquals(3, files.length);
+		assertEquals("file1.txt", files[0].getPath());
+		assertEquals("file3.txt", files[1].getPath());
+		assertEquals("file2.txt", files[2].getPath());
 	}
 }
