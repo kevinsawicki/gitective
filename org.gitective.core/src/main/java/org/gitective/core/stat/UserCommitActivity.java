@@ -30,7 +30,9 @@ import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
- * Commit user activity class
+ * Activity class for storing all the commits attributed to a specific user.
+ * 
+ * This class provides the IDs and times for all commits attributed.
  */
 public class UserCommitActivity implements Serializable {
 

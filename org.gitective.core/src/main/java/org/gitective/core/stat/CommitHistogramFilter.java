@@ -24,7 +24,9 @@ package org.gitective.core.stat;
 import org.gitective.core.filter.commit.CommitFilter;
 
 /**
- * Filter that generates a histogram of commits
+ * Base filter that generates a histogram of commits. The current histogram is
+ * can be accessed through the {@link #getHistogram()} and can be reset through
+ * invoking {@link #reset()} on this filter.
  */
 public abstract class CommitHistogramFilter extends CommitFilter {
 

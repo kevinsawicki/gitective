@@ -31,7 +31,8 @@ import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
- * Commit histogram class
+ * Commit histogram class that stores and provides commit activity by user
+ * e-mail address.
  */
 public class CommitHistogram implements Serializable {
 
