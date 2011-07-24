@@ -53,8 +53,8 @@ public class CalendarTest extends GitTestCase {
 		assertEquals(0, calendar.getHourCount(0));
 		assertEquals(0, calendar.getMonthCount(0));
 
-		assertNotNull(calendar.years());
-		assertEquals(0, calendar.years().length);
+		assertNotNull(calendar.getYears());
+		assertEquals(0, calendar.getYears().length);
 
 		assertNotNull(calendar.getDays());
 		assertEquals(YearCommitActivity.DAYS, calendar.getDays().length);
@@ -136,8 +136,8 @@ public class CalendarTest extends GitTestCase {
 		assertEquals(1, cal.getMonths()[month]);
 		assertEquals(1, cal.getHours()[hour]);
 
-		assertEquals(1, cal.years().length);
-		YearCommitActivity year = cal.years()[0];
+		assertEquals(1, cal.getYears().length);
+		YearCommitActivity year = cal.getYears()[0];
 		assertEquals(1, year.getCount());
 		assertEquals(commitTime.get(Calendar.YEAR), year.getYear());
 		assertNotNull(year.getMonths());

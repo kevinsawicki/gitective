@@ -29,7 +29,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Commit calendar class
+ * Commit calendar class that stores yearly commit activity.
+ * 
+ * This class supports obtaining the number of commits in a given month, day or
+ * hour of the day across all years. Also supported is obtaining the number of
+ * commits in each month, day or hour of the day as an array of integers.
  */
 public class CommitCalendar implements Serializable {
 
@@ -65,7 +69,7 @@ public class CommitCalendar implements Serializable {
 	 * 
 	 * @return non-null but possibly empty array
 	 */
-	public YearCommitActivity[] years() {
+	public YearCommitActivity[] getYears() {
 		return years.values().toArray(new YearCommitActivity[years.size()]);
 	}
 
@@ -142,5 +146,17 @@ public class CommitCalendar implements Serializable {
 		for (YearCommitActivity year : years.values())
 			total += year.getDayCount(dayOfMonth);
 		return total;
+	}
+
+	/**
+	 * Get total number of commits for all years
+	 * 
+	 * @return number of commits
+	 */
+	public int getCount() {
+		int count = 0;
+		for (YearCommitActivity year : years.values())
+			count += year.getCount();
+		return count;
 	}
 }
