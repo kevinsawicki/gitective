@@ -29,7 +29,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * Author commit histogram filter
+ * Filter that generates a commit histogram based on the committer date of each
+ * commit visited.
  */
 public class CommitterHistogramFilter extends CommitHistogramFilter {
 
