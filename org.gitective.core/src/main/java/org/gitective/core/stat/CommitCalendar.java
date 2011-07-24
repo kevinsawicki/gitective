@@ -154,9 +154,9 @@ public class CommitCalendar implements Serializable {
 	 * @return number of commits
 	 */
 	public int getCount() {
-		int count = 0;
+		int total = 0;
 		for (YearCommitActivity year : years.values())
-			count += year.getCount();
-		return count;
+			total += year.getCount();
+		return total;
 	}
 }
