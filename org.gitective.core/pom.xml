@@ -20,6 +20,7 @@
 	<scm>
 		<url>https://github.com/kevinsawicki/gitective</url>
 		<connection>scm:git:git://github.com/kevinsawicki/gitective.git</connection>
+		<developerConnection>scm:git:git@github.com:kevinsawicki/gitective.git</developerConnection>
 		<tag>v0.7</tag>
 	</scm>
 	<developers>
