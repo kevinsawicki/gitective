@@ -27,16 +27,18 @@ import java.util.Comparator;
 /**
  * Comparator that sorts by latest user activity first
  */
-public class LatestComparator implements Comparator<UserCommitActivity>, Serializable {
+public class LatestComparator implements Comparator<UserCommitActivity>,
+		Serializable {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -1188908635265244096L;
 
 	public int compare(final UserCommitActivity u1, final UserCommitActivity u2) {
-		final long diff = u1.getLatest() - u2.getLatest();
-		if (diff > 0)
+		final long l1 = u1.getLatest();
+		final long l2 = u2.getLatest();
+		if (l1 > l2)
 			return -1;
-		if (diff < 0)
+		if (l1 < l2)
 			return 1;
 		return 0;
 	}

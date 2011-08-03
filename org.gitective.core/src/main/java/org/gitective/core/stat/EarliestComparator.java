@@ -34,10 +34,11 @@ public class EarliestComparator implements Comparator<UserCommitActivity>,
 	private static final long serialVersionUID = 6380867895281659637L;
 
 	public int compare(final UserCommitActivity u1, final UserCommitActivity u2) {
-		final long diff = u1.getEarliest() - u2.getEarliest();
-		if (diff > 0)
+		final long e1 = u1.getEarliest();
+		final long e2 = u2.getEarliest();
+		if (e1 > e2)
 			return 1;
-		if (diff < 0)
+		if (e1 < e2)
 			return -1;
 		return 0;
 	}

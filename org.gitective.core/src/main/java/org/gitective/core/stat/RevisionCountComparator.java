@@ -34,6 +34,12 @@ public class RevisionCountComparator implements Comparator<FileCommitActivity>,
 	private static final long serialVersionUID = 3211628170171642223L;
 
 	public int compare(final FileCommitActivity f1, final FileCommitActivity f2) {
-		return f2.getRevisions() - f1.getRevisions();
+		final int r1 = f1.getRevisions();
+		final int r2 = f2.getRevisions();
+		if (r1 > r2)
+			return -1;
+		if (r1 < r2)
+			return 1;
+		return 0;
 	}
 }

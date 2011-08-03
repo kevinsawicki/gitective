@@ -372,6 +372,8 @@ public class HistogramTest extends GitTestCase {
 		// File 3 has 2 revsions
 		add("file3.txt", "1");
 		add("file3.txt", "2");
+		// File 4 has one revision
+		add("file4.txt", "1");
 
 		FileHistogramFilter filter = new FileHistogramFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
@@ -381,9 +383,10 @@ public class HistogramTest extends GitTestCase {
 		FileCommitActivity[] files = histogram
 				.getFileActivity(new RevisionCountComparator());
 		assertNotNull(files);
-		assertEquals(3, files.length);
+		assertEquals(4, files.length);
 		assertEquals("file1.txt", files[0].getPath());
 		assertEquals("file3.txt", files[1].getPath());
 		assertEquals("file2.txt", files[2].getPath());
+		assertEquals("file4.txt", files[3].getPath());
 	}
 }

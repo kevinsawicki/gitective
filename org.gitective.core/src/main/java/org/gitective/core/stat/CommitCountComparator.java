@@ -27,12 +27,19 @@ import java.util.Comparator;
 /**
  * Comparator that sorts by most user activity first
  */
-public class CommitCountComparator implements Comparator<UserCommitActivity>, Serializable {
+public class CommitCountComparator implements Comparator<UserCommitActivity>,
+		Serializable {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -4952333917951609993L;
 
 	public int compare(final UserCommitActivity u1, final UserCommitActivity u2) {
-		return u2.getCount() - u1.getCount();
+		final int c1 = u1.getCount();
+		final int c2 = u2.getCount();
+		if (c1 > c2)
+			return -1;
+		if (c1 < c2)
+			return 1;
+		return 0;
 	}
 }
