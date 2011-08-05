@@ -37,6 +37,12 @@
 			<url>http://download.eclipse.org/jgit/maven</url>
 		</repository>
 	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>github-maven-plugins</id>
+			<url>http://github.github.com/maven-plugins/repository</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<build>
 		<plugins>
 			<plugin>
@@ -58,6 +64,47 @@
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.maven.plugins</groupId>
+				<artifactId>github-downloads-plugin</artifactId>
+				<executions>
+					<execution>
+						<configuration>
+							<description>${project.version} release</description>
+							<override>true</override>
+							<includeAttached>true</includeAttached>
+						</configuration>
+						<goals>
+							<goal>perform</goal>
+						</goals>
+						<phase>release</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
