@@ -99,7 +99,7 @@
 							<includeAttached>true</includeAttached>
 						</configuration>
 						<goals>
-							<goal>perform</goal>
+							<goal>prepare</goal>
 						</goals>
 						<phase>release</phase>
 					</execution>
