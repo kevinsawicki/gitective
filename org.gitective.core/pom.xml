@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>gitective</groupId>
 	<artifactId>gitective-core</artifactId>
@@ -36,12 +37,6 @@
 			<url>http://download.eclipse.org/jgit/maven</url>
 		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>github-maven-plugins</id>
-			<url>http://github.github.com/maven-plugins/repository</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<build>
 		<plugins>
 			<plugin>
@@ -69,7 +64,6 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
@@ -81,27 +75,9 @@
 				<artifactId>maven-source-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>attach-sources</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.github.maven.plugins</groupId>
-				<artifactId>github-downloads-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<description>${project.version} release</description>
-							<override>true</override>
-							<includeAttached>true</includeAttached>
-						</configuration>
-						<goals>
-							<goal>prepare</goal>
-						</goals>
-						<phase>release</phase>
 					</execution>
 				</executions>
 			</plugin>
