@@ -178,12 +178,14 @@ finder.setFilter(notes).find();
 This examples prints out how many commits happened each year in August.
 
 ```java
-CommitHistogramFilter filter = new CommitHistogramFilter();
+AuthorHistogramFilter filter = new AuthorHistogramFilter();
 CommitFinder finder = new CommitFinder("/repos/redis/.git");
 finder.setFilter(filter).find();
-CommitCalendar commits = new CommitCalendar(filter.getHistogram().authors());
-for(YearCommitActivity year : commits.years())
-     System.out.println(year.monthCount(7) + " commits in August, " + year.year());
+UserCommitActivity[] activity = filter.getHistogram().getUserActivity();
+CommitCalendar commits = new CommitCalendar(activity);
+for(YearCommitActivity year : commits.getYears())
+     System.out.println(year.getMonthCount(Month.AUGUST) 
+                          + " commits in August, " + year.getYear());
 ```
 
 ## Building from source
