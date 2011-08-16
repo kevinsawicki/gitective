@@ -67,7 +67,8 @@ public class NoteFilter extends CommitFilter {
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		show.setObjectId(commit);
-		for (int i = 0; i < noteRefs.length; i++)
+		final int refLength = noteRefs.length;
+		for (int i = 0; i < refLength; i++)
 			if (show.setNotesRef(noteRefs[i]).call() != null)
 				return true;
 		return include(false);
