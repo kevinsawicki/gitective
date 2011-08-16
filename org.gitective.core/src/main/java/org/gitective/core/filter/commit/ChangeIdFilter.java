@@ -45,6 +45,6 @@ public class ChangeIdFilter extends CommitMessageFindFilter {
 
 	@Override
 	public RevFilter clone() {
-		return this;
+		return new ChangeIdFilter();
 	}
 }
