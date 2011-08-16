@@ -121,6 +121,7 @@ public class NoteContentFilter extends CommitFilter {
 		return true;
 	}
 
+	@Override
 	public RevFilter clone() {
 		return new NoteContentFilter();
 	}

@@ -74,6 +74,7 @@ public class NoteFilter extends CommitFilter {
 		return include(false);
 	}
 
+	@Override
 	public RevFilter clone() {
 		return new NoteFilter();
 	}
