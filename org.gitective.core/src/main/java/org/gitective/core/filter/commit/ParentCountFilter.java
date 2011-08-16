@@ -72,7 +72,9 @@ public class ParentCountFilter extends CommitFilter {
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		final int parents = commit.getParentCount();
-		return include(parents >= min && parents <= max);
+		if (parents < min || parents > max)
+			return include(false);
+		return true;
 	}
 
 	@Override
