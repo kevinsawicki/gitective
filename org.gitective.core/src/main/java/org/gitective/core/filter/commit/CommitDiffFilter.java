@@ -48,18 +48,8 @@ public class CommitDiffFilter extends CommitFilter {
 	private static class LocalDiffEntry extends DiffEntry {
 
 		public LocalDiffEntry(final String path) {
-			setOldPath(path);
-			setNewPath(path);
-		}
-
-		private LocalDiffEntry setOldPath(final String path) {
 			oldPath = path;
-			return this;
-		}
-
-		private LocalDiffEntry setNewPath(final String path) {
 			newPath = path;
-			return this;
 		}
 
 		private LocalDiffEntry setNewMode(final FileMode mode) {
