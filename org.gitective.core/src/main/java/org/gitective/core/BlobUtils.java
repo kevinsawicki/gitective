@@ -21,18 +21,42 @@
  */
 package org.gitective.core;
 
-import java.io.IOException;
+import static java.lang.Integer.MAX_VALUE;
+import static org.eclipse.jgit.diff.RawTextComparator.DEFAULT;
+import static org.eclipse.jgit.lib.Constants.CHARSET;
+import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 
-import org.eclipse.jgit.lib.Constants;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.eclipse.jgit.diff.Edit;
+import org.eclipse.jgit.diff.HistogramDiff;
+import org.eclipse.jgit.diff.RawText;
+import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.util.IO;
 
 /**
  * Blob utilities
  */
 public abstract class BlobUtils {
+
+	/**
+	 * Get blob as byte array
+	 * 
+	 * @param repository
+	 * @param id
+	 * @return blob bytes
+	 */
+	private static byte[] getBytes(final Repository repository,
+			final ObjectId id) {
+		try {
+			return repository.open(id, OBJ_BLOB).getCachedBytes(MAX_VALUE);
+		} catch (IOException e) {
+			throw new GitException(e);
+		}
+	}
 
 	/**
 	 * Get blob content from given repository as string
@@ -49,18 +73,63 @@ public abstract class BlobUtils {
 		if (id == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Object id"));
-		final byte[] data;
-		try {
-			final ObjectLoader loader = repository.open(id, Constants.OBJ_BLOB);
-			if (loader.isLarge())
-				data = IO.readWholeStream(loader.openStream(),
-						(int) loader.getSize()).array();
-			else
-				data = loader.getCachedBytes();
-		} catch (IOException e) {
-			throw new GitException(e);
-		}
-		return new String(data, Constants.CHARSET);
+		return new String(getBytes(repository, id), CHARSET);
 	}
 
+	/**
+	 * Diff blobs at given object ids
+	 * 
+	 * @param repository
+	 * @param blob1
+	 * @param blob2
+	 * @return list of edits
+	 */
+	public static Collection<Edit> diff(final Repository repository,
+			final ObjectId blob1, final ObjectId blob2) {
+		return diff(repository, blob1, blob2, DEFAULT);
+	}
+
+	/**
+	 * Diff blobs at given object ids
+	 * 
+	 * @param repository
+	 * @param blob1
+	 * @param blob2
+	 * @param comparator
+	 * @return list of edits
+	 */
+	public static Collection<Edit> diff(final Repository repository,
+			final ObjectId blob1, final ObjectId blob2,
+			final RawTextComparator comparator) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (blob1 == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Blob id 1"));
+		if (blob2 == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Blob id 2"));
+		if (comparator == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Comparator"));
+
+		if (blob1.equals(blob2))
+			return Collections.emptyList();
+
+		final byte[] data1;
+		if (!blob1.equals(ObjectId.zeroId()))
+			data1 = getBytes(repository, blob1);
+		else
+			data1 = new byte[0];
+
+		final byte[] data2;
+		if (!blob2.equals(ObjectId.zeroId()))
+			data2 = getBytes(repository, blob2);
+		else
+			data2 = new byte[0];
+
+		final HistogramDiff diff = new HistogramDiff();
+		return diff.diff(comparator, new RawText(data1), new RawText(data2));
+	}
 }

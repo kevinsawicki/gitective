@@ -22,10 +22,13 @@
 package org.gitective.tests;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -136,5 +139,86 @@ public class BlobUtilsTest extends GitTestCase {
 
 		};
 		BlobUtils.getContent(repo, blob.get().toObjectId());
+	}
+
+	/**
+	 * Diff blobs that are different
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void diffBlobs() throws Exception {
+		add("file.txt", "a\\nb");
+		add("file.txt", "c\\nb");
+		final List<AbbreviatedObjectId> ids = new ArrayList<AbbreviatedObjectId>();
+		CommitDiffFilter filter = new CommitDiffFilter() {
+
+			protected boolean include(RevCommit commit,
+					Collection<DiffEntry> diffs) {
+				for (DiffEntry diff : diffs)
+					ids.add(diff.getNewId());
+				return true;
+			}
+
+		};
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertEquals(2, ids.size());
+		Collection<Edit> diffs = BlobUtils.diff(new FileRepository(testRepo),
+				ids.get(0).toObjectId(), ids.get(1).toObjectId());
+		assertNotNull(diffs);
+		assertEquals(1, diffs.size());
+		assertNotNull(diffs.toArray()[0]);
+	}
+
+	/**
+	 * Diff blobs with zero object ids
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void diffWithZeroObjectIds() throws IOException {
+		Collection<Edit> edits = BlobUtils.diff(new FileRepository(testRepo),
+				ObjectId.zeroId(), ObjectId.zeroId());
+		assertNotNull(edits);
+		assertTrue(edits.isEmpty());
+	}
+
+	/**
+	 * Diff blobs with null repo
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void diffWithNullRepo() {
+		BlobUtils.diff(null, ObjectId.zeroId(), ObjectId.zeroId());
+	}
+
+	/**
+	 * Diff blobs with null object id
+	 * 
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void diffWithNullObjectId1() throws IOException {
+		BlobUtils.diff(new FileRepository(testRepo), null, ObjectId.zeroId());
+	}
+
+	/**
+	 * Diff blobs with null object id
+	 * 
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void diffWithNullObjectId2() throws IOException {
+		BlobUtils.diff(new FileRepository(testRepo), ObjectId.zeroId(), null);
+	}
+
+	/**
+	 * Diff blobs with null comparator
+	 * 
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void diffWithNullComparator() throws IOException {
+		BlobUtils.diff(new FileRepository(testRepo), ObjectId.zeroId(),
+				ObjectId.zeroId(), null);
 	}
 }
