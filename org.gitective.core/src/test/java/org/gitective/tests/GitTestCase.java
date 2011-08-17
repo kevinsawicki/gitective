@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeResult;
@@ -239,6 +240,43 @@ public abstract class GitTestCase extends Assert {
 		git.add().addFilepattern(path).call();
 		RevCommit commit = git.commit().setOnly(path).setMessage(message)
 				.setAuthor(author).setCommitter(committer).call();
+		assertNotNull(commit);
+		return commit;
+	}
+
+	/**
+	 * Add files to test repository
+	 * 
+	 * @param repo
+	 * @param paths
+	 * @param contents
+	 * @param message
+	 * @return commit
+	 * @throws Exception
+	 */
+	protected RevCommit add(File repo, List<String> paths,
+			List<String> contents, String message) throws Exception {
+		Git git = Git.open(repo);
+		for (int i = 0; i < paths.size(); i++) {
+			String path = paths.get(i);
+			String content = contents.get(i);
+			File file = new File(repo.getParentFile(), path);
+			if (!file.getParentFile().exists())
+				assertTrue(file.getParentFile().mkdirs());
+			if (!file.exists())
+				assertTrue(file.createNewFile());
+			PrintWriter writer = new PrintWriter(file);
+			if (content == null)
+				content = "";
+			try {
+				writer.print(content);
+			} finally {
+				writer.close();
+			}
+			git.add().addFilepattern(path).call();
+		}
+		RevCommit commit = git.commit().setMessage(message).setAuthor(author)
+				.setCommitter(committer).call();
 		assertNotNull(commit);
 		return commit;
 	}
