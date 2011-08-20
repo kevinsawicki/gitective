@@ -46,11 +46,20 @@ public class DiffSizeFilter extends CommitDiffFilter {
 		total = diffTotal;
 	}
 
+	/**
+	 * Get configured difference total
+	 *
+	 * @return total
+	 */
+	public int getTotal() {
+		return total;
+	}
+
 	@Override
 	protected boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		int count = 0;
-		for (DiffEntry diff : diffs) {
+		for (DiffEntry diff : diffs)
 			for (Edit edit : BlobUtils.diff(repository, diff.getOldId()
 					.toObjectId(), diff.getNewId().toObjectId()))
 				switch (edit.getType()) {
@@ -67,7 +76,6 @@ public class DiffSizeFilter extends CommitDiffFilter {
 				default:
 					break;
 				}
-		}
 		return include(false);
 	}
 

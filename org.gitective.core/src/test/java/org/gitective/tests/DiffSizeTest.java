@@ -22,6 +22,7 @@
 package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.AllCommitFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
@@ -51,5 +52,18 @@ public class DiffSizeTest extends GitTestCase {
 		assertTrue(commits.getCommits().contains(commit1));
 		assertFalse(commits.getCommits().contains(commit2));
 		assertTrue(commits.getCommits().contains(commit3));
+	}
+
+	/**
+	 * Test of {@link DiffSizeFilter#clone()}
+	 */
+	@Test
+	public void cloneFilter() {
+		DiffSizeFilter filter = new DiffSizeFilter(10);
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof DiffSizeFilter);
+		assertEquals(filter.getTotal(), ((DiffSizeFilter) clone).getTotal());
 	}
 }
