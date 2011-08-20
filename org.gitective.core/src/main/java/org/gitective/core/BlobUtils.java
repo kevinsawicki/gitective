@@ -44,7 +44,7 @@ public abstract class BlobUtils {
 
 	/**
 	 * Get blob as byte array
-	 * 
+	 *
 	 * @param repository
 	 * @param id
 	 * @return blob bytes
@@ -60,7 +60,7 @@ public abstract class BlobUtils {
 
 	/**
 	 * Get blob content from given repository as string
-	 * 
+	 *
 	 * @param repository
 	 * @param id
 	 * @return blob as UTF-8 string
@@ -78,7 +78,7 @@ public abstract class BlobUtils {
 
 	/**
 	 * Diff blobs at given object ids
-	 * 
+	 *
 	 * @param repository
 	 * @param blob1
 	 * @param blob2
@@ -91,7 +91,7 @@ public abstract class BlobUtils {
 
 	/**
 	 * Diff blobs at given object ids
-	 * 
+	 *
 	 * @param repository
 	 * @param blob1
 	 * @param blob2
@@ -128,6 +128,9 @@ public abstract class BlobUtils {
 			data2 = getBytes(repository, blob2);
 		else
 			data2 = new byte[0];
+
+		if (RawText.isBinary(data1) || RawText.isBinary(data2))
+			return Collections.emptyList();
 
 		final HistogramDiff diff = new HistogramDiff();
 		return diff.diff(comparator, new RawText(data1), new RawText(data2));
