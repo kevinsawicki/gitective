@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
+import org.eclipse.jgit.diff.Edit.Type;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -70,7 +71,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Test get content with null object id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -80,7 +81,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Test get content for missing object
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = GitException.class)
@@ -91,7 +92,7 @@ public class BlobUtilsTest extends GitTestCase {
 	/**
 	 * Test getting blob content with object load that throws a
 	 * {@link LargeObjectException}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -143,7 +144,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs that are different
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -172,7 +173,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs with zero object ids
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -181,6 +182,88 @@ public class BlobUtilsTest extends GitTestCase {
 				ObjectId.zeroId(), ObjectId.zeroId());
 		assertNotNull(edits);
 		assertTrue(edits.isEmpty());
+	}
+
+	/**
+	 * Diff valid blob against zero id blob
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void diffWithEmptyObjectId2() throws Exception {
+		add("file.txt", "a");
+		final List<AbbreviatedObjectId> ids = new ArrayList<AbbreviatedObjectId>();
+		CommitDiffFilter filter = new CommitDiffFilter() {
+
+			protected boolean include(RevCommit commit,
+					Collection<DiffEntry> diffs) {
+				for (DiffEntry diff : diffs)
+					ids.add(diff.getNewId());
+				return true;
+			}
+
+		};
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertEquals(1, ids.size());
+		Collection<Edit> diffs = BlobUtils.diff(new FileRepository(testRepo),
+				ids.get(0).toObjectId(), ObjectId.zeroId());
+		assertNotNull(diffs);
+		assertEquals(1, diffs.size());
+		assertEquals(Type.DELETE, diffs.iterator().next().getType());
+	}
+
+	/**
+	 * Diff with binary blob as first object id
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void diffWithBinaryObject1() throws Exception {
+		add("file.txt", Character.toString('\0'));
+		final List<AbbreviatedObjectId> ids = new ArrayList<AbbreviatedObjectId>();
+		CommitDiffFilter filter = new CommitDiffFilter() {
+
+			protected boolean include(RevCommit commit,
+					Collection<DiffEntry> diffs) {
+				for (DiffEntry diff : diffs)
+					ids.add(diff.getNewId());
+				return true;
+			}
+
+		};
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertEquals(1, ids.size());
+		Collection<Edit> diffs = BlobUtils.diff(new FileRepository(testRepo),
+				ids.get(0).toObjectId(), ObjectId.zeroId());
+		assertNotNull(diffs);
+		assertTrue(diffs.isEmpty());
+	}
+
+	/**
+	 * Diff with binary blob as second object id
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void diffWithBinaryObject2() throws Exception {
+		add("file.txt", Character.toString('\0'));
+		final List<AbbreviatedObjectId> ids = new ArrayList<AbbreviatedObjectId>();
+		CommitDiffFilter filter = new CommitDiffFilter() {
+
+			protected boolean include(RevCommit commit,
+					Collection<DiffEntry> diffs) {
+				for (DiffEntry diff : diffs)
+					ids.add(diff.getNewId());
+				return true;
+			}
+
+		};
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertEquals(1, ids.size());
+		Collection<Edit> diffs = BlobUtils.diff(new FileRepository(testRepo),
+				ObjectId.zeroId(), ids.get(0).toObjectId());
+		assertNotNull(diffs);
+		assertTrue(diffs.isEmpty());
 	}
 
 	/**
@@ -193,7 +276,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs with null object id
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -203,7 +286,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs with null object id
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -213,7 +296,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs with null comparator
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = IllegalArgumentException.class)
