@@ -11,7 +11,7 @@
 	<groupId>gitective</groupId>
 	<artifactId>gitective-core</artifactId>
 	<version>0.9-SNAPSHOT</version>
-	<name>gitective - core</name>
+	<name>gitective core</name>
 	<description>gitective core library</description>
 	<url>http://gitective.org</url>
 	
