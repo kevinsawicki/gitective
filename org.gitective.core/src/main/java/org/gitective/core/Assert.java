@@ -21,7 +21,6 @@
  */
 package org.gitective.core;
 
-
 /**
  * Assert utilities that all throw {@link IllegalArgumentException} that will
  * have a non-null/non-empty message.
@@ -31,7 +30,7 @@ public abstract class Assert {
 	/**
 	 * Throw an {@link IllegalArgumentException} with the message if the object
 	 * is null.
-	 * 
+	 *
 	 * @param message
 	 * @param object
 	 * @return object
@@ -48,7 +47,7 @@ public abstract class Assert {
 	/**
 	 * Throw an {@link IllegalArgumentException} with a default message if the
 	 * object is null.
-	 * 
+	 *
 	 * @param object
 	 * @return object
 	 * @throws IllegalArgumentException
@@ -60,7 +59,7 @@ public abstract class Assert {
 	/**
 	 * Throw an {@link IllegalArgumentException} with the message if the
 	 * {@link Object} array has a length of zero.
-	 * 
+	 *
 	 * @param message
 	 * @param objects
 	 * @return objects
@@ -78,7 +77,7 @@ public abstract class Assert {
 	/**
 	 * Throw an {@link IllegalArgumentException} with a default message if the
 	 * {@link Object} array has a length of zero.
-	 * 
+	 *
 	 * @param objects
 	 * @return objects
 	 * @throws IllegalArgumentException
@@ -91,7 +90,7 @@ public abstract class Assert {
 	/**
 	 * Throw an {@link IllegalArgumentException} with the message if the string
 	 * has a length of zero.
-	 * 
+	 *
 	 * @param message
 	 * @param string
 	 * @return string
@@ -109,7 +108,7 @@ public abstract class Assert {
 	/**
 	 * Throw an {@link IllegalArgumentException} with a default message if the
 	 * string has a length of zero.
-	 * 
+	 *
 	 * @param string
 	 * @return string
 	 * @throws IllegalArgumentException
@@ -121,7 +120,7 @@ public abstract class Assert {
 
 	/**
 	 * Return formatted not null message with given prefix
-	 * 
+	 *
 	 * @param prefix
 	 * @return non-null message
 	 */
@@ -131,7 +130,7 @@ public abstract class Assert {
 
 	/**
 	 * Return formatted not empty message with given prefix
-	 * 
+	 *
 	 * @param prefix
 	 * @return non-empty message
 	 */
