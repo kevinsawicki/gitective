@@ -47,8 +47,7 @@ public class DiffTest extends GitTestCase {
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
 
-			protected boolean include(RevCommit commit,
-					Collection<DiffEntry> diffs) {
+			public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
 				ref.set(diffs);
 				return super.include(commit, diffs);
 			}
@@ -75,8 +74,7 @@ public class DiffTest extends GitTestCase {
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
 
-			protected boolean include(RevCommit commit,
-					Collection<DiffEntry> diffs) {
+			public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
 				ref.set(diffs);
 				return false;
 			}
@@ -107,8 +105,7 @@ public class DiffTest extends GitTestCase {
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
 
-			protected boolean include(RevCommit commit,
-					Collection<DiffEntry> diffs) {
+			public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
 				ref.set(diffs);
 				return false;
 			}

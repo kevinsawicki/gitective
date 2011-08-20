@@ -47,7 +47,7 @@ public class FileHistogramFilter extends CommitDiffFilter {
 	}
 
 	@Override
-	protected boolean include(final RevCommit commit,
+	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		for (DiffEntry diff : diffs)
 			histogram.include(commit, diff);

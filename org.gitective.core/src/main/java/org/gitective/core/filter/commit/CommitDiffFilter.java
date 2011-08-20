@@ -141,21 +141,24 @@ public class CommitDiffFilter extends CommitFilter {
 
 	/**
 	 * Handle the differences introduced by given commit.
-	 * 
-	 * Sub-classes should override this method.
-	 * 
+	 *
+	 * Sub-classes should override this method. The default implementation
+	 * returns true in all cases.
+	 *
 	 * @param commit
+	 *            non-null
 	 * @param diffs
+	 *            non-null
 	 * @return true to continue, false to abort
 	 */
-	protected boolean include(final RevCommit commit,
+	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		return true;
 	}
 
 	/**
 	 * Returns this filter.
-	 * 
+	 *
 	 * Sub-classes should override to return an actual cloned filter.
 	 */
 	@Override

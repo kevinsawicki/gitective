@@ -59,7 +59,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Include id and path as possible duplicate
-		 *
+		 * 
 		 * @param id
 		 * @param path
 		 * @return this container
@@ -77,7 +77,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Validate that this container contains at least one duplicate blob
-		 *
+		 * 
 		 * @return true if duplicates exist, false otherwise
 		 */
 		private boolean validate() {
@@ -90,7 +90,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Get commits that these duplicates occurred in
-		 *
+		 * 
 		 * @return non-null commit
 		 */
 		public RevCommit getCommit() {
@@ -99,7 +99,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Get duplicate blobs ids mapped paths
-		 *
+		 * 
 		 * @return non-null and non-empty map of duplicates
 		 */
 		public Map<AbbreviatedObjectId, List<String>> getDuplicates() {
@@ -108,7 +108,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Get iterator over all duplicate blobs
-		 *
+		 * 
 		 * @return iterator over blobs and paths
 		 */
 		public Iterator<Entry<AbbreviatedObjectId, List<String>>> iterator() {
@@ -119,7 +119,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 	private final Map<RevCommit, DuplicateContainer> duplicates = new HashMap<RevCommit, DuplicateContainer>();
 
 	@Override
-	protected boolean include(final RevCommit commit,
+	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		final DuplicateContainer dupes = new DuplicateContainer(commit);
 		for (DiffEntry diff : diffs) {
@@ -134,7 +134,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 	/**
 	 * Get duplicates
-	 *
+	 * 
 	 * @return non-null but possibly empty map
 	 */
 	public Map<RevCommit, DuplicateContainer> getDuplicates() {

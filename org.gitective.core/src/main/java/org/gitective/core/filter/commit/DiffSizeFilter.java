@@ -39,7 +39,7 @@ public class DiffSizeFilter extends CommitDiffFilter {
 
 	/**
 	 * Create filter that introduced given number of line differences
-	 *
+	 * 
 	 * @param diffTotal
 	 */
 	public DiffSizeFilter(final int diffTotal) {
@@ -48,7 +48,7 @@ public class DiffSizeFilter extends CommitDiffFilter {
 
 	/**
 	 * Get configured difference total
-	 *
+	 * 
 	 * @return total
 	 */
 	public int getTotal() {
@@ -56,7 +56,7 @@ public class DiffSizeFilter extends CommitDiffFilter {
 	}
 
 	@Override
-	protected boolean include(final RevCommit commit,
+	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		int count = 0;
 		for (DiffEntry diff : diffs)

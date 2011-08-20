@@ -37,7 +37,7 @@ public class DiffSizeTest extends GitTestCase {
 
 	/**
 	 * Test selecting commits where only one file differs
-	 *
+	 * 
 	 * @throws Exception
 	 */
 	@Test
