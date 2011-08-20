@@ -133,7 +133,8 @@ public class FileCommitActivity implements Serializable {
 	 * @param entry
 	 * @return this activity
 	 */
-	public FileCommitActivity include(final RevCommit commit, final DiffEntry entry) {
+	public FileCommitActivity include(final RevCommit commit,
+			final DiffEntry entry) {
 		switch (entry.getChangeType()) {
 		case ADD:
 			adds++;
