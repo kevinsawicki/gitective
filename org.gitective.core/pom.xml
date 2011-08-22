@@ -8,7 +8,7 @@
 		<version>7</version>
 	</parent>
 	
-	<groupId>gitective</groupId>
+	<groupId>org.gitective</groupId>
 	<artifactId>gitective-core</artifactId>
 	<version>0.9-SNAPSHOT</version>
 	<name>gitective core</name>
