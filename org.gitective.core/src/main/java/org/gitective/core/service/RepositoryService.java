@@ -42,7 +42,7 @@ public class RepositoryService {
 
 	/**
 	 * Create a service for the repositories at the specified directory paths.
-	 * 
+	 *
 	 * @param gitDirs
 	 */
 	public RepositoryService(final String... gitDirs) {
@@ -58,13 +58,13 @@ public class RepositoryService {
 			for (int i = 0; i < length; i++)
 				repositories[i] = new FileRepository(gitDirs[i]);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 
 	/**
 	 * Create a service for the repositories at the specified directory files.
-	 * 
+	 *
 	 * @param gitDirs
 	 */
 	public RepositoryService(final File... gitDirs) {
@@ -80,13 +80,13 @@ public class RepositoryService {
 			for (int i = 0; i < length; i++)
 				repositories[i] = new FileRepository(gitDirs[i]);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 
 	/**
 	 * Create a service for the specified repositories
-	 * 
+	 *
 	 * @param repositories
 	 */
 	public RepositoryService(final Repository... repositories) {

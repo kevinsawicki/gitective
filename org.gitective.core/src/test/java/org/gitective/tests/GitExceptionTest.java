@@ -21,32 +21,35 @@
  */
 package org.gitective.tests;
 
+import java.io.IOException;
+
+import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.GitException;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Unit tests of {@link GitException}
  */
-public class GitExceptionTest extends Assert {
+public class GitExceptionTest extends GitTestCase {
 
 	/**
 	 * Test constructors
+	 *
+	 * @throws IOException
 	 */
 	@Test
-	public void constructors() {
+	public void constructors() throws IOException {
 		String message = "test";
 		NullPointerException cause = new NullPointerException();
+		FileRepository repo = new FileRepository(testRepo);
 
-		GitException exception = new GitException(message);
+		GitException exception = new GitException(message, repo);
+		assertEquals(repo, exception.getRepository());
 		assertEquals(message, exception.getMessage());
 
-		exception = new GitException(cause);
+		exception = new GitException(message, cause, repo);
+		assertEquals(repo, exception.getRepository());
 		assertEquals(cause, exception.getCause());
-
-		exception = new GitException(message, cause);
 		assertEquals(message, exception.getMessage());
-		assertEquals(cause, exception.getCause());
 	}
-
 }

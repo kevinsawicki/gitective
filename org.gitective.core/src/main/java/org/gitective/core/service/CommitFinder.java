@@ -81,7 +81,7 @@ public class CommitFinder extends RepositoryService {
 
 	/**
 	 * Set the {@link RevFilter} to use to filter commits during searches.
-	 * 
+	 *
 	 * @param filter
 	 * @return this service
 	 */
@@ -92,7 +92,7 @@ public class CommitFinder extends RepositoryService {
 
 	/**
 	 * Set the {@link RevFilter} to use to match filtered commits.
-	 * 
+	 *
 	 * @param filter
 	 * @return this service
 	 */
@@ -103,7 +103,7 @@ public class CommitFinder extends RepositoryService {
 
 	/**
 	 * Set the {@link TreeFilter} to use to limit commits visited.
-	 * 
+	 *
 	 * @param filter
 	 * @return this service
 	 */
@@ -114,7 +114,7 @@ public class CommitFinder extends RepositoryService {
 
 	/**
 	 * Create new rev walk
-	 * 
+	 *
 	 * @param repository
 	 * @return rev walk
 	 */
@@ -132,11 +132,12 @@ public class CommitFinder extends RepositoryService {
 
 	/**
 	 * Traverse commits in given rev walk
-	 * 
+	 *
 	 * @param walk
 	 * @return this finder
+	 * @throws IOException
 	 */
-	protected CommitFinder walk(final RevWalk walk) {
+	protected CommitFinder walk(final RevWalk walk) throws IOException {
 		try {
 			final RevFilter filter = postFilter;
 			if (filter != null) {
@@ -147,8 +148,6 @@ public class CommitFinder extends RepositoryService {
 			} else
 				while (walk.next() != null)
 					;
-		} catch (IOException e) {
-			throw new GitException(e);
 		} catch (StopWalkException ignored) {
 			// Ignored
 		}
@@ -158,7 +157,7 @@ public class CommitFinder extends RepositoryService {
 	/**
 	 * Walk commits between the start commit id and end commit id. Starting
 	 * commit and filter cannot be null.
-	 * 
+	 *
 	 * @param repository
 	 * @param start
 	 * @param end
@@ -174,17 +173,18 @@ public class CommitFinder extends RepositoryService {
 			walk.markStart(walk.parseCommit(start));
 			if (end != null)
 				walk.markUninteresting(walk.parseCommit(end));
-			return walk(walk);
+			walk(walk);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		} finally {
 			walk.release();
 		}
+		return this;
 	}
 
 	/**
 	 * Search commits starting from the given commit id.
-	 * 
+	 *
 	 * @param start
 	 * @return this service
 	 */
@@ -195,7 +195,7 @@ public class CommitFinder extends RepositoryService {
 
 	/**
 	 * Search commits starting from the given revision string.
-	 * 
+	 *
 	 * @param start
 	 * @return this service
 	 */
@@ -206,7 +206,7 @@ public class CommitFinder extends RepositoryService {
 	/**
 	 * Search commits starting at the commit that {@link Constants#HEAD}
 	 * currently points to.
-	 * 
+	 *
 	 * @return this service
 	 */
 	public CommitFinder find() {
@@ -215,7 +215,7 @@ public class CommitFinder extends RepositoryService {
 
 	/**
 	 * Search commits starting at the commit that each tag is pointing to
-	 * 
+	 *
 	 * @return this finder
 	 */
 	public CommitFinder findInTags() {
@@ -230,17 +230,17 @@ public class CommitFinder extends RepositoryService {
 			final RevWalk walk = createWalk(repo);
 			try {
 				walk.markStart(commits);
+				walk(walk);
 			} catch (IOException e) {
-				throw new GitException(e);
+				throw new GitException(e, repo);
 			}
-			walk(walk);
 		}
 		return this;
 	}
 
 	/**
 	 * Search commits starting at the commit that each branch is pointing to
-	 * 
+	 *
 	 * @return this finder
 	 */
 	public CommitFinder findInBranches() {
@@ -255,17 +255,19 @@ public class CommitFinder extends RepositoryService {
 			final RevWalk walk = createWalk(repo);
 			try {
 				walk.markStart(commits);
+				walk(walk);
 			} catch (IOException e) {
-				throw new GitException(e);
+				throw new GitException(e, repo);
+			} finally {
+				walk.release();
 			}
-			walk(walk);
 		}
 		return this;
 	}
 
 	/**
 	 * Search commits between the given start and end commits.
-	 * 
+	 *
 	 * @param start
 	 * @param end
 	 * @return this service
@@ -281,7 +283,7 @@ public class CommitFinder extends RepositoryService {
 	/**
 	 * Search commits between the given start revision string and the given end
 	 * commit id.
-	 * 
+	 *
 	 * @param start
 	 * @param end
 	 * @return this service
@@ -300,7 +302,7 @@ public class CommitFinder extends RepositoryService {
 	/**
 	 * Search commits between the given start commit id and the given end
 	 * revision string.
-	 * 
+	 *
 	 * @param start
 	 * @param end
 	 * @return this service
@@ -319,7 +321,7 @@ public class CommitFinder extends RepositoryService {
 	/**
 	 * Search commits between the given start revision string and the given end
 	 * revision string.
-	 * 
+	 *
 	 * @param start
 	 * @param end
 	 * @return this service

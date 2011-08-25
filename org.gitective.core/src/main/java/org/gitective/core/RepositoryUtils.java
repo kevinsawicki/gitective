@@ -37,7 +37,7 @@ public abstract class RepositoryUtils {
 
 	/**
 	 * Get note references
-	 * 
+	 *
 	 * @param repository
 	 * @return non-null but possibly empty array of note references
 	 */
@@ -50,7 +50,7 @@ public abstract class RepositoryUtils {
 			refs = repository.getRefDatabase().getRefs(Constants.R_NOTES)
 					.values();
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		}
 		final List<String> notes = new ArrayList<String>(refs.size());
 		for (Ref ref : refs)

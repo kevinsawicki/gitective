@@ -21,6 +21,8 @@
  */
 package org.gitective.core;
 
+import org.eclipse.jgit.lib.Repository;
+
 /**
  * Git exception class.
  */
@@ -31,31 +33,56 @@ public class GitException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = -9119190921390161715L;
 
+	private final Repository repository;
+
 	/**
 	 * Create a Git exception with a message and cause
-	 * 
+	 *
 	 * @param message
 	 * @param cause
+	 * @param repository
 	 */
-	public GitException(final String message, final Throwable cause) {
+	public GitException(final String message, final Throwable cause,
+			final Repository repository) {
 		super(message, cause);
+		this.repository = repository;
 	}
 
 	/**
 	 * Create a Git exception with a cause
-	 * 
+	 *
 	 * @param cause
+	 * @param repository
 	 */
-	public GitException(final Throwable cause) {
-		super(cause);
+	public GitException(final Throwable cause, final Repository repository) {
+		this(null, cause, repository);
 	}
 
 	/**
 	 * Create a Git exception with a message
-	 * 
+	 *
 	 * @param message
+	 * @param repository
 	 */
-	public GitException(final String message) {
-		super(message);
+	public GitException(final String message, final Repository repository) {
+		this(message, null, repository);
+	}
+
+	/**
+	 * Create a Git exception
+	 *
+	 * @param repository
+	 */
+	public GitException(final Repository repository) {
+		this(null, null, repository);
+	}
+
+	/**
+	 * Get repository where exception occurred
+	 *
+	 * @return repository
+	 */
+	public Repository getRepository() {
+		return repository;
 	}
 }

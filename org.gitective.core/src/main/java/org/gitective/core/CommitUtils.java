@@ -42,7 +42,7 @@ public abstract class CommitUtils {
 
 	/**
 	 * Get commit that revision points to
-	 * 
+	 *
 	 * @param repository
 	 * @param revision
 	 * @return commit
@@ -62,7 +62,7 @@ public abstract class CommitUtils {
 
 	/**
 	 * Get commit with id
-	 * 
+	 *
 	 * @param repository
 	 * @param commitId
 	 * @return commit
@@ -81,7 +81,7 @@ public abstract class CommitUtils {
 	/**
 	 * Get latest commit. This will be the commit that {@link Constants#HEAD} is
 	 * pointing to.
-	 * 
+	 *
 	 * @param repository
 	 * @return commit never null
 	 */
@@ -91,7 +91,7 @@ public abstract class CommitUtils {
 
 	/**
 	 * Get the common base commit of the given commits.
-	 * 
+	 *
 	 * @param repository
 	 * @param commits
 	 * @return base commit or null if none
@@ -110,7 +110,7 @@ public abstract class CommitUtils {
 
 	/**
 	 * Get the common base commit between the given revisions.
-	 * 
+	 *
 	 * @param repository
 	 * @param revisions
 	 * @return base commit or null if none
@@ -135,7 +135,7 @@ public abstract class CommitUtils {
 
 	/**
 	 * Get commit that given ref points to
-	 * 
+	 *
 	 * @param repository
 	 * @param refName
 	 * @return commit, may be null
@@ -154,14 +154,14 @@ public abstract class CommitUtils {
 		try {
 			ref = repository.getRef(refName);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		}
 		return ref != null ? lookupRef(repository, ref) : null;
 	}
 
 	/**
 	 * Get commit that given ref points to
-	 * 
+	 *
 	 * @param repository
 	 * @param ref
 	 * @return commit, may be null
@@ -177,7 +177,7 @@ public abstract class CommitUtils {
 
 	/**
 	 * Get all commits that tags in the given repository point to
-	 * 
+	 *
 	 * @param repository
 	 * @return non-null but possibly empty collection of commits
 	 */
@@ -191,7 +191,7 @@ public abstract class CommitUtils {
 		try {
 			getRefCommits(walk, refDb, Constants.R_TAGS, commits);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		} finally {
 			walk.release();
 		}
@@ -200,7 +200,7 @@ public abstract class CommitUtils {
 
 	/**
 	 * Get all commits that branches in the given repository point to
-	 * 
+	 *
 	 * @param repository
 	 * @return non-null but possibly empty collection of commits
 	 */
@@ -215,15 +215,16 @@ public abstract class CommitUtils {
 			getRefCommits(walk, refDb, Constants.R_HEADS, commits);
 			getRefCommits(walk, refDb, Constants.R_REMOTES, commits);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		} finally {
 			walk.release();
 		}
 		return commits;
 	}
 
-	private static void getRefCommits(RevWalk walk, RefDatabase refDb,
-			String prefix, Collection<RevCommit> commits) throws IOException {
+	private static void getRefCommits(final RevWalk walk,
+			final RefDatabase refDb, final String prefix,
+			final Collection<RevCommit> commits) throws IOException {
 		for (Ref ref : refDb.getRefs(prefix).values()) {
 			final RevCommit commit = getRef(walk, ref);
 			if (commit != null)
@@ -236,22 +237,19 @@ public abstract class CommitUtils {
 		final RevWalk walk = new RevWalk(repository);
 		try {
 			return getRef(walk, ref);
+		} catch (IOException e) {
+			throw new GitException(e, repository);
 		} finally {
 			walk.release();
 		}
 	}
 
-	private static RevCommit getRef(final RevWalk walk, final Ref ref) {
+	private static RevCommit getRef(final RevWalk walk, final Ref ref)
+			throws IOException {
 		ObjectId id = ref.getPeeledObjectId();
 		if (id == null)
 			id = ref.getObjectId();
-		if (id != null)
-			try {
-				return walk.parseCommit(id);
-			} catch (IOException e) {
-				throw new GitException(e);
-			}
-		return null;
+		return id != null ? walk.parseCommit(id) : null;
 	}
 
 	private static ObjectId resolve(final Repository repository,
@@ -260,12 +258,12 @@ public abstract class CommitUtils {
 		try {
 			id = repository.resolve(revision);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		}
 		if (id != null)
 			return id;
 		throw new GitException(MessageFormat.format(
-				"Revision ''{0}'' could not be resolved", revision));
+				"Revision ''{0}'' could not be resolved", revision), repository);
 	}
 
 	private static RevCommit walkToBase(final Repository repository,
@@ -280,7 +278,7 @@ public abstract class CommitUtils {
 				walk.parseBody(base);
 			return base;
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		} finally {
 			walk.release();
 		}
@@ -293,7 +291,7 @@ public abstract class CommitUtils {
 		try {
 			return walk.parseCommit(commit);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		} finally {
 			walk.release();
 		}

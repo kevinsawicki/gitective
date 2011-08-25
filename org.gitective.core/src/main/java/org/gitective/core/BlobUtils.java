@@ -54,7 +54,7 @@ public abstract class BlobUtils {
 		try {
 			return repository.open(id, OBJ_BLOB).getCachedBytes(MAX_VALUE);
 		} catch (IOException e) {
-			throw new GitException(e);
+			throw new GitException(e, repository);
 		}
 	}
 
