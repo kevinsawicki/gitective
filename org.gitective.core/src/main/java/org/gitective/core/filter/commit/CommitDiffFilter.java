@@ -135,8 +135,7 @@ public class CommitDiffFilter extends CommitFilter {
 				diffs.add(diff);
 			}
 		}
-
-		return include(include(commit, diffs));
+		return include(commit, diffs) ? true : include(false);
 	}
 
 	/**
