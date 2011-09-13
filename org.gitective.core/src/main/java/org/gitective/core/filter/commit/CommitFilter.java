@@ -40,7 +40,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	/**
 	 * Set whether the search should be stopped when a commit visited is not
 	 * included.
-	 * 
+	 *
 	 * @param stop
 	 * @return this filter
 	 */
@@ -51,7 +51,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 
 	/**
 	 * Set the repository for the walk that is about to begin.
-	 * 
+	 *
 	 * @param repository
 	 * @return this filter
 	 */
@@ -62,10 +62,10 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 
 	/**
 	 * Resets the filter state.
-	 * 
+	 *
 	 * The base implementation does nothing by default and sub-classes should
 	 * override if custom reset logic exists.
-	 * 
+	 *
 	 * @return this filter
 	 */
 	public CommitFilter reset() {
@@ -75,7 +75,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	/**
 	 * Return the include value given unless include is false and this filter is
 	 * configured to stop the search when a commit is not included.
-	 * 
+	 *
 	 * @param include
 	 * @return include parameter value
 	 */
@@ -83,5 +83,17 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 		if (!include && stop)
 			throw StopWalkException.INSTANCE;
 		return include;
+	}
+
+	/**
+	 * Clones this filter.
+	 *
+	 * The default implementation throws a {@link UnsupportedOperationException}
+	 * and sub-classes should override if filter cloning is supported.
+	 *
+	 * @see RevFilter#clone()
+	 */
+	public RevFilter clone() {
+		throw new UnsupportedOperationException("Clone not supported");
 	}
 }
