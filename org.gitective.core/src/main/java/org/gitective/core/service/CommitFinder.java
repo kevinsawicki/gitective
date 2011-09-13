@@ -37,6 +37,7 @@ import org.gitective.core.Assert;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.GitException;
 import org.gitective.core.filter.commit.CommitFilter;
+import org.gitective.core.filter.tree.BaseTreeFilter;
 
 /**
  * Commit locator class
@@ -44,19 +45,19 @@ import org.gitective.core.filter.commit.CommitFilter;
 public class CommitFinder extends RepositoryService {
 
 	/**
-	 * Filter for selecting commits to match
+	 * Commit filter for selecting commits to match
 	 */
-	protected RevFilter preFilter;
+	protected RevFilter commitFilter;
 
 	/**
-	 * Tree filter
+	 * Tree filter for selecting commits to match
 	 */
 	protected TreeFilter treeFilter;
 
 	/**
-	 * Filter for matches
+	 * Commit filter for matches
 	 */
-	protected RevFilter postFilter;
+	protected RevFilter commitMatcher;
 
 	/**
 	 * @param gitDirs
@@ -86,7 +87,7 @@ public class CommitFinder extends RepositoryService {
 	 * @return this service
 	 */
 	public CommitFinder setFilter(final RevFilter filter) {
-		preFilter = filter;
+		commitFilter = filter;
 		return this;
 	}
 
@@ -97,7 +98,7 @@ public class CommitFinder extends RepositoryService {
 	 * @return this service
 	 */
 	public CommitFinder setMatcher(final RevFilter filter) {
-		postFilter = filter;
+		commitMatcher = filter;
 		return this;
 	}
 
@@ -121,12 +122,14 @@ public class CommitFinder extends RepositoryService {
 	protected RevWalk createWalk(final Repository repository) {
 		final RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
-		walk.setRevFilter(preFilter);
+		walk.setRevFilter(commitFilter);
 		walk.setTreeFilter(treeFilter);
-		if (preFilter instanceof CommitFilter)
-			((CommitFilter) preFilter).setRepository(repository);
-		if (postFilter instanceof CommitFilter)
-			((CommitFilter) postFilter).setRepository(repository);
+		if (commitFilter instanceof CommitFilter)
+			((CommitFilter) commitFilter).setRepository(repository);
+		if (commitMatcher instanceof CommitFilter)
+			((CommitFilter) commitMatcher).setRepository(repository);
+		if (treeFilter instanceof BaseTreeFilter)
+			((BaseTreeFilter) treeFilter).setRepository(repository);
 		return walk;
 	}
 
@@ -138,8 +141,8 @@ public class CommitFinder extends RepositoryService {
 	 * @throws IOException
 	 */
 	protected CommitFinder walk(final RevWalk walk) throws IOException {
+		final RevFilter filter = commitMatcher;
 		try {
-			final RevFilter filter = postFilter;
 			if (filter != null) {
 				RevCommit commit;
 				while ((commit = walk.next()) != null)
