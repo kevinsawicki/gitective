@@ -36,7 +36,30 @@ import org.gitective.core.filter.commit.CommitFilter;
  */
 public class CommitTreeFilter extends CommitFilter {
 
-	private final TreeFilter filter;
+	/**
+	 * Class that wraps a {@link TreeFilter} in a {@link BaseTreeFilter} so that
+	 * {@link BaseTreeFilter#include(RevWalk, RevCommit, TreeWalk)} can always
+	 * be called from {@link CommitTreeFilter#include(RevWalk, RevCommit)}
+	 */
+	protected static class FilterWrapper extends BaseTreeFilter {
+
+		private final TreeFilter filter;
+
+		/**
+		 * Wrap tree filter in a {@link BaseTreeFilter}
+		 *
+		 * @param filter
+		 */
+		protected FilterWrapper(final TreeFilter filter) {
+			this.filter = filter;
+		}
+
+		public boolean include(final TreeWalk walker) throws IOException {
+			return filter.include(walker);
+		}
+	}
+
+	private final BaseTreeFilter filter;
 
 	/**
 	 * Create commit filter for given tree filter
@@ -46,20 +69,21 @@ public class CommitTreeFilter extends CommitFilter {
 	public CommitTreeFilter(final TreeFilter filter) {
 		if (filter == null)
 			throw new IllegalArgumentException("Filter cannot be null");
-		this.filter = filter;
+		if (filter instanceof BaseTreeFilter)
+			this.filter = (BaseTreeFilter) filter;
+		else
+			this.filter = new FilterWrapper(filter);
 	}
 
 	@Override
 	public CommitFilter setRepository(final Repository repository) {
-		if (filter instanceof BaseTreeFilter)
-			((BaseTreeFilter) filter).setRepository(repository);
+		filter.setRepository(repository);
 		return super.setRepository(repository);
 	}
 
 	@Override
 	public CommitFilter reset() {
-		if (filter instanceof BaseTreeFilter)
-			((BaseTreeFilter) filter).reset();
+		filter.reset();
 		return super.reset();
 	}
 
@@ -69,7 +93,7 @@ public class CommitTreeFilter extends CommitFilter {
 		final TreeWalk walk = new TreeWalk(walker.getObjectReader());
 		walk.addTree(commit.getTree());
 		while (walk.next()) {
-			if (!filter.include(walk))
+			if (!filter.include(walker, commit, walk))
 				return include(false);
 			if (walk.isSubtree())
 				walk.enterSubtree();

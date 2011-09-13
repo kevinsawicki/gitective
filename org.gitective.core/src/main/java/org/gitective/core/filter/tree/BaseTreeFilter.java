@@ -21,8 +21,13 @@
  */
 package org.gitective.core.filter.tree;
 
+import java.io.IOException;
+
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 /**
@@ -58,6 +63,21 @@ public abstract class BaseTreeFilter extends TreeFilter {
 	public BaseTreeFilter setRepository(final Repository repository) {
 		this.repository = repository;
 		return this;
+	}
+
+	/**
+	 * Include tree walk from commit and rev walk
+	 *
+	 * @see TreeFilter#include(TreeWalk)
+	 * @param commitWalk
+	 * @param commit
+	 * @param treeWalk
+	 * @return true to include, false to abort
+	 * @throws IOException
+	 */
+	public boolean include(final RevWalk commitWalk, final RevCommit commit,
+			final TreeWalk treeWalk) throws IOException {
+		return include(treeWalk);
 	}
 
 	/**
