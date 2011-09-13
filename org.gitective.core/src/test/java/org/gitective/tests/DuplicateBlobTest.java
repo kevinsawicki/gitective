@@ -40,7 +40,7 @@ public class DuplicateBlobTest extends GitTestCase {
 
 	/**
 	 * Test commit with a duplicated file
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -79,7 +79,7 @@ public class DuplicateBlobTest extends GitTestCase {
 
 	/**
 	 * Test commit with no duplicates
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -102,7 +102,7 @@ public class DuplicateBlobTest extends GitTestCase {
 
 	/**
 	 * Test of {@link DuplicateBlobFilter#clone()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -111,6 +111,6 @@ public class DuplicateBlobTest extends GitTestCase {
 		RevFilter clone = filter.clone();
 		assertNotNull(clone);
 		assertNotSame(filter, clone);
-		assertTrue(filter instanceof DuplicateBlobFilter);
+		assertTrue(clone instanceof DuplicateBlobFilter);
 	}
 }
