@@ -52,14 +52,19 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		private final Map<AbbreviatedObjectId, List<String>> blobs;
 
-		private DuplicateContainer(final RevCommit commit) {
+		/**
+		 * Create duplicate container
+		 *
+		 * @param commit
+		 */
+		protected DuplicateContainer(final RevCommit commit) {
 			this.commit = commit;
 			blobs = new HashMap<AbbreviatedObjectId, List<String>>();
 		}
 
 		/**
 		 * Include id and path as possible duplicate
-		 * 
+		 *
 		 * @param id
 		 * @param path
 		 * @return this container
@@ -77,7 +82,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Validate that this container contains at least one duplicate blob
-		 * 
+		 *
 		 * @return true if duplicates exist, false otherwise
 		 */
 		private boolean validate() {
@@ -90,7 +95,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Get commits that these duplicates occurred in
-		 * 
+		 *
 		 * @return non-null commit
 		 */
 		public RevCommit getCommit() {
@@ -99,7 +104,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Get duplicate blobs ids mapped paths
-		 * 
+		 *
 		 * @return non-null and non-empty map of duplicates
 		 */
 		public Map<AbbreviatedObjectId, List<String>> getDuplicates() {
@@ -108,7 +113,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 		/**
 		 * Get iterator over all duplicate blobs
-		 * 
+		 *
 		 * @return iterator over blobs and paths
 		 */
 		public Iterator<Entry<AbbreviatedObjectId, List<String>>> iterator() {
@@ -134,11 +139,20 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 	/**
 	 * Get duplicates
-	 * 
+	 *
 	 * @return non-null but possibly empty map
 	 */
 	public Map<RevCommit, DuplicateContainer> getDuplicates() {
 		return duplicates;
+	}
+
+	/**
+	 * Were any duplicate blobs detected for all commits visited?
+	 *
+	 * @return true if duplicates exist, false otherwise
+	 */
+	public boolean hasDuplicates() {
+		return !duplicates.isEmpty();
 	}
 
 	@Override

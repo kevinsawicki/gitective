@@ -55,7 +55,9 @@ public class DuplicateBlobTest extends GitTestCase {
 		contents.add("not");
 		RevCommit commit = add(testRepo, names, contents, "duplicates");
 		DuplicateBlobFilter filter = new DuplicateBlobFilter();
+		assertFalse(filter.hasDuplicates());
 		new CommitFinder(testRepo).setFilter(filter).find();
+		assertTrue(filter.hasDuplicates());
 		Map<RevCommit, DuplicateContainer> dupes = filter.getDuplicates();
 		assertNotNull(dupes);
 		assertTrue(dupes.containsKey(commit));
@@ -95,6 +97,7 @@ public class DuplicateBlobTest extends GitTestCase {
 		add(testRepo, names, contents, "duplicates");
 		DuplicateBlobFilter filter = new DuplicateBlobFilter();
 		new CommitFinder(testRepo).setFilter(filter).find();
+		assertFalse(filter.hasDuplicates());
 		Map<RevCommit, DuplicateContainer> dupes = filter.getDuplicates();
 		assertNotNull(dupes);
 		assertTrue(dupes.isEmpty());
