@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jgit.lib.AbbreviatedObjectId;
+import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.filter.commit.DuplicateBlobFilter;
-import org.gitective.core.filter.commit.DuplicateBlobFilter.DuplicateContainer;
+import org.gitective.core.filter.commit.DuplicateContainer;
 import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
@@ -64,8 +64,7 @@ public class DuplicateBlobTest extends GitTestCase {
 		DuplicateContainer container = dupes.get(commit);
 		assertNotNull(container);
 		assertEquals(commit, container.getCommit());
-		Map<AbbreviatedObjectId, List<String>> files = container
-				.getDuplicates();
+		Map<AnyObjectId, List<String>> files = container.getDuplicates();
 		assertNotNull(files);
 		assertEquals(1, files.size());
 		List<String> paths = files.values().iterator().next();
@@ -85,7 +84,7 @@ public class DuplicateBlobTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void noDuplicate() throws Exception {
+	public void noDuplicates() throws Exception {
 		List<String> names = new ArrayList<String>();
 		names.add("file1.txt");
 		names.add("file2.txt");

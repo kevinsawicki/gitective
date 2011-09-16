@@ -21,8 +21,13 @@
  */
 package org.gitective.core.filter.commit;
 
+import java.io.IOException;
+
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
@@ -36,6 +41,22 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	 * Repository for current walk
 	 */
 	protected Repository repository;
+
+	/**
+	 * Get tree associated with commit
+	 *
+	 * @param walk
+	 * @param commit
+	 * @return tree
+	 * @throws IOException
+	 */
+	protected RevTree getTree(final RevWalk walk, final RevCommit commit)
+			throws IOException {
+		RevTree tree = commit.getTree();
+		if (tree == null)
+			tree = walk.parseCommit(commit).getTree();
+		return tree;
+	}
 
 	/**
 	 * Set whether the search should be stopped when a commit visited is not

@@ -21,32 +21,62 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.util.Collection;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffEntry.ChangeType;
+import org.eclipse.jgit.lib.MutableObjectId;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.eclipse.jgit.treewalk.EmptyTreeIterator;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 /**
- * Filter that tracks commits where files with the same content were modified.
- * This filter traverses all the diff entries in each commit visited and tracks
- * any instances where the different paths reference the same blob object id.
+ * Filter that tracks any duplicate trees introduced in a visited commit.
  */
-public class DuplicateBlobFilter extends CommitDiffFilter {
+public class DuplicateTreeFilter extends CommitFilter {
 
 	private final Map<RevCommit, DuplicateContainer> duplicates = new HashMap<RevCommit, DuplicateContainer>();
 
-	@Override
-	public boolean include(final RevCommit commit,
-			final Collection<DiffEntry> diffs) {
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
+		final TreeWalk walk = new TreeWalk(walker.getObjectReader());
+		walk.setFilter(TreeFilter.ANY_DIFF);
+
+		switch (commit.getParentCount()) {
+		case 0:
+			walk.addTree(new EmptyTreeIterator());
+			walk.addTree(commit.getTree());
+			break;
+		case 1:
+			walk.addTree(getTree(walker, commit.getParent(0)));
+			walk.addTree(commit.getTree());
+			break;
+		default:
+			final RevCommit[] parents = commit.getParents();
+			final int parentCount = parents.length;
+
+			// Add all parent trees with current commit tree last
+			for (int i = 0; i < parentCount; i++)
+				walk.addTree(getTree(walker, parents[i]));
+			walk.addTree(commit.getTree());
+		}
+		final MutableObjectId id = new MutableObjectId();
+		final ObjectId zero = ObjectId.zeroId();
 		final DuplicateContainer dupes = new DuplicateContainer(commit);
-		for (DiffEntry diff : diffs) {
-			if (diff.getChangeType() == ChangeType.DELETE)
+		while (walk.next()) {
+			if (!walk.isSubtree())
 				continue;
-			dupes.include(diff.getNewId().toObjectId(), diff.getNewPath());
+			final String path = walk.getPathString();
+			for (int i = 0; i < walk.getTreeCount(); i++) {
+				walk.getObjectId(id, i);
+				if (!zero.equals(id))
+					dupes.include(id.toObjectId(), path);
+			}
+			walk.enterSubtree();
 		}
 		if (dupes.validate())
 			duplicates.put(commit, dupes);
@@ -79,6 +109,6 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new DuplicateBlobFilter();
+		return new DuplicateTreeFilter();
 	}
 }

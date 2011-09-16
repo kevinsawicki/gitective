@@ -38,7 +38,7 @@ public class DiffTest extends GitTestCase {
 
 	/**
 	 * Test diffs introduced by first commit
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -64,7 +64,7 @@ public class DiffTest extends GitTestCase {
 
 	/**
 	 * Test diffs introduced by second commit
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -91,7 +91,7 @@ public class DiffTest extends GitTestCase {
 
 	/**
 	 * Test diffs introduced by second commit
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -118,14 +118,5 @@ public class DiffTest extends GitTestCase {
 		assertEquals(ChangeType.MODIFY, diff.getChangeType());
 		assertEquals("test.txt", diff.getOldPath());
 		assertEquals("test.txt", diff.getNewPath());
-	}
-
-	/**
-	 * Unit tests of {@link CommitDiffFilter#clone()}
-	 */
-	@Test
-	public void cloneFilter() {
-		CommitDiffFilter filter = new CommitDiffFilter();
-		assertSame(filter, filter.clone());
 	}
 }

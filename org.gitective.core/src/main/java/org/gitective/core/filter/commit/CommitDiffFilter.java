@@ -32,9 +32,7 @@ import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
@@ -66,14 +64,6 @@ public class CommitDiffFilter extends CommitFilter {
 			newId = id;
 			return this;
 		}
-	}
-
-	private static RevTree getTree(final RevWalk walk, final RevCommit commit)
-			throws IOException {
-		RevTree tree = commit.getTree();
-		if (tree == null)
-			tree = walk.parseCommit(commit).getTree();
-		return tree;
 	}
 
 	@Override
@@ -153,15 +143,5 @@ public class CommitDiffFilter extends CommitFilter {
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		return true;
-	}
-
-	/**
-	 * Returns this filter.
-	 *
-	 * Sub-classes should override to return an actual cloned filter.
-	 */
-	@Override
-	public RevFilter clone() {
-		return this;
 	}
 }
