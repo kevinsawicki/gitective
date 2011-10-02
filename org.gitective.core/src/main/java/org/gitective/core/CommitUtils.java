@@ -252,7 +252,14 @@ public abstract class CommitUtils {
 		return id != null ? walk.parseCommit(id) : null;
 	}
 
-	private static ObjectId resolve(final Repository repository,
+	/**
+	 * Resolve revision string to commit object id
+	 *
+	 * @param repository
+	 * @param revision
+	 * @return commit id
+	 */
+	protected static ObjectId resolve(final Repository repository,
 			final String revision) {
 		final ObjectId id;
 		try {
@@ -284,7 +291,14 @@ public abstract class CommitUtils {
 		}
 	}
 
-	private static RevCommit parse(final Repository repository,
+	/**
+	 * Parse commit from repository
+	 *
+	 * @param repository
+	 * @param commit
+	 * @return commit
+	 */
+	protected static RevCommit parse(final Repository repository,
 			final ObjectId commit) {
 		final RevWalk walk = new RevWalk(repository);
 		walk.setRetainBody(true);
