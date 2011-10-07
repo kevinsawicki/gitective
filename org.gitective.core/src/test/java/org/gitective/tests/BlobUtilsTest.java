@@ -71,7 +71,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Test get content with null object id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -81,7 +81,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Test get content for missing object
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = GitException.class)
@@ -92,7 +92,7 @@ public class BlobUtilsTest extends GitTestCase {
 	/**
 	 * Test getting blob content with object load that throws a
 	 * {@link LargeObjectException}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -138,12 +138,13 @@ public class BlobUtilsTest extends GitTestCase {
 			}
 
 		};
-		BlobUtils.getContent(repo, blob.get().toObjectId());
+		assertEquals("content",
+				BlobUtils.getContent(repo, blob.get().toObjectId()));
 	}
 
 	/**
 	 * Diff blobs that are different
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -171,7 +172,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs with zero object ids
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -184,7 +185,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff valid blob against zero id blob
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -211,7 +212,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff with binary blob as first object id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -237,7 +238,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff with binary blob as second object id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -271,7 +272,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs with null object id
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -281,7 +282,7 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs with null object id
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -291,12 +292,408 @@ public class BlobUtilsTest extends GitTestCase {
 
 	/**
 	 * Diff blobs with null comparator
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void diffWithNullComparator() throws IOException {
 		BlobUtils.diff(new FileRepository(testRepo), ObjectId.zeroId(),
 				ObjectId.zeroId(), null);
+	}
+
+	/**
+	 * Get raw content with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentNullRepo() {
+		BlobUtils.getRawContent(null, ObjectId.zeroId(), "test.txt");
+	}
+
+	/**
+	 * Get raw content with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentNullRepo2() {
+		BlobUtils.getRawContent(null, "master", "test.txt");
+	}
+
+	/**
+	 * Get raw content with null commit id
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentNullCommitId() throws IOException {
+		BlobUtils.getRawContent(new FileRepository(testRepo), (ObjectId) null,
+				"test.txt");
+	}
+
+	/**
+	 * Get raw content with null revision
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentNullRevision() throws IOException {
+		BlobUtils.getRawContent(new FileRepository(testRepo), (String) null,
+				"test.txt");
+	}
+
+	/**
+	 * Get raw content with empty revision
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentEmptyRevision() throws IOException {
+		BlobUtils.getRawContent(new FileRepository(testRepo), "", "test.txt");
+	}
+
+	/**
+	 * Get raw content with null path
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentNullPath() throws IOException {
+		BlobUtils.getRawContent(new FileRepository(testRepo),
+				ObjectId.zeroId(), null);
+	}
+
+	/**
+	 * Get raw content with null path
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentNullPath2() throws IOException {
+		BlobUtils.getRawContent(new FileRepository(testRepo), "master", null);
+	}
+
+	/**
+	 * Get raw content with empty path
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentEmptyPath() throws IOException {
+		BlobUtils.getRawContent(new FileRepository(testRepo),
+				ObjectId.zeroId(), "");
+	}
+
+	/**
+	 * Get raw content with empty path
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getRawContentEmptyPath2() throws IOException {
+		BlobUtils.getRawContent(new FileRepository(testRepo), "master", "");
+	}
+
+	/**
+	 * Get content at path
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getContent() throws Exception {
+		RevCommit commit = add("test.txt", "content");
+		assertEquals("content", BlobUtils.getContent(new FileRepository(
+				testRepo), commit, "test.txt"));
+	}
+
+	/**
+	 * Get stream at path
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getStream() throws Exception {
+		RevCommit commit = add("test.txt", "content");
+		assertNotNull("content", BlobUtils.getStream(new FileRepository(
+				testRepo), commit, "test.txt"));
+	}
+
+	/**
+	 * Get stream at non-existent path
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getStreamNonExistentPath() throws Exception {
+		RevCommit commit = add("test.txt", "content");
+		assertNull("content", BlobUtils.getStream(new FileRepository(testRepo),
+				commit, "test2.txt"));
+	}
+
+	/**
+	 * Get HEAD stream at non-existent path
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadStreamNonExistentPath() throws Exception {
+		add("test.txt", "content");
+		assertNull("content", BlobUtils.getHeadStream(new FileRepository(
+				testRepo), "test2.txt"));
+	}
+
+	/**
+	 * Get HEAD stream at path
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadStream() throws Exception {
+		add("test.txt", "content");
+		assertNotNull("content", BlobUtils.getHeadStream(new FileRepository(
+				testRepo), "test.txt"));
+	}
+
+	/**
+	 * Get stream with null repository
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamNullRepo() throws Exception {
+		BlobUtils.getStream(null, ObjectId.zeroId(), "test.txt");
+	}
+
+	/**
+	 * Get stream with null repository
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamNullRepo2() throws Exception {
+		BlobUtils.getStream(null, "master", "test.txt");
+	}
+
+	/**
+	 * Get stream with null commit id
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamNullId() throws Exception {
+		BlobUtils.getStream(new FileRepository(testRepo), (ObjectId) null,
+				"test.txt");
+	}
+
+	/**
+	 * Get stream with null revision
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamNullRevision() throws Exception {
+		BlobUtils.getStream(new FileRepository(testRepo), (String) null,
+				"test.txt");
+	}
+
+	/**
+	 * Get stream with empty revision
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamEmptyRevision() throws Exception {
+		BlobUtils.getStream(new FileRepository(testRepo), "", "test.txt");
+	}
+
+	/**
+	 * Get stream with null path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamNullPath() throws Exception {
+		BlobUtils.getStream(new FileRepository(testRepo), ObjectId.zeroId(),
+				null);
+	}
+
+	/**
+	 * Get stream with null path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamNullPath2() throws Exception {
+		BlobUtils.getStream(new FileRepository(testRepo), "master", null);
+	}
+
+	/**
+	 * Get stream with empty path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamEmptyPath() throws Exception {
+		BlobUtils
+				.getStream(new FileRepository(testRepo), ObjectId.zeroId(), "");
+	}
+
+	/**
+	 * Get stream with empty path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getStreamEmptyPath2() throws Exception {
+		BlobUtils.getStream(new FileRepository(testRepo), "master", "");
+	}
+
+	/**
+	 * Get HEAD content at path
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadContent() throws Exception {
+		add("test.txt", "content");
+		assertEquals("content", BlobUtils.getHeadContent(new FileRepository(
+				testRepo), "test.txt"));
+	}
+
+	/**
+	 * Get HEAD content at path with no content
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadContentNonExistentPath() throws Exception {
+		add("test.txt", "content");
+		assertNull(BlobUtils.getHeadContent(new FileRepository(testRepo),
+				"test2.txt"));
+	}
+
+	/**
+	 * Get HEAD content at path that is a directory
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadContentDirectoryPath() throws Exception {
+		add("src/test.txt", "content");
+		assertNull(BlobUtils
+				.getHeadContent(new FileRepository(testRepo), "src"));
+	}
+
+	/**
+	 * Get blob id with null repository
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullRepository() throws Exception {
+		BlobUtils.getId(null, ObjectId.zeroId(), "test.txt");
+	}
+
+	/**
+	 * Get blob id with null repository
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullRepository2() throws Exception {
+		BlobUtils.getId(null, "master", "test.txt");
+	}
+
+	/**
+	 * Get blob id with null revision
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullRevision() throws Exception {
+		BlobUtils
+				.getId(new FileRepository(testRepo), (String) null, "test.txt");
+	}
+
+	/**
+	 * Get blob id with empty revision
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdEmptyRevision() throws Exception {
+		BlobUtils.getId(new FileRepository(testRepo), "", "test.txt");
+	}
+
+	/**
+	 * Get blob id with null commit id
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullId() throws Exception {
+		BlobUtils.getId(new FileRepository(testRepo), (ObjectId) null,
+				"test.txt");
+	}
+
+	/**
+	 * Get blob id with null path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullPath() throws Exception {
+		BlobUtils.getId(new FileRepository(testRepo), ObjectId.zeroId(), null);
+	}
+
+	/**
+	 * Get blob id with null path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullPath2() throws Exception {
+		BlobUtils.getId(new FileRepository(testRepo), "master", null);
+	}
+
+	/**
+	 * Get blob id with null path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdEmptyPath() throws Exception {
+		BlobUtils.getId(new FileRepository(testRepo), ObjectId.zeroId(), "");
+	}
+
+	/**
+	 * Get blob id with null path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdEmptyPath2() throws Exception {
+		BlobUtils.getId(new FileRepository(testRepo), "master", "");
+	}
+
+	/**
+	 * Get HEAD id of blob
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadId() throws Exception {
+		add("test.txt", "content");
+		assertNotNull(BlobUtils.getHeadId(new FileRepository(testRepo),
+				"test.txt"));
+	}
+
+	/**
+	 * Get id of blob in commit
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getId() throws Exception {
+		RevCommit commit = add("test.txt", "content");
+		assertNotNull(BlobUtils.getId(new FileRepository(testRepo), commit,
+				"test.txt"));
 	}
 }
