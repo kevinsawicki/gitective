@@ -42,7 +42,7 @@ System.out.println(bugCommits.getCount() + " total bugs fixed");
 
   * You want to generate stats or reports based on the commit activity in Git repositories and are looking to use Java/JGit and want a head-start in writing the code that finds the commits needed.
 
-## Examples
+## Commit Examples
 Shown below are several examples of using the gitective filters and commit service classes, more examples can be found in the [unit tests](https://github.com/kevinsawicki/gitective/tree/master/org.gitective.core/src/test/java/org/gitective/tests).
 
 ### Get the latest commit in a repository
@@ -186,6 +186,24 @@ CommitCalendar commits = new CommitCalendar(activity);
 for(YearCommitActivity year : commits.getYears())
      System.out.println(year.getMonthCount(Month.AUGUST) 
                           + " commits in August, " + year.getYear());
+```
+
+## Blob Examples
+
+### Get content of file in HEAD commit
+
+```java
+Repository repo = new FileRepository("/repos/jgit/.git");
+String content = BlobUtils.getHeadContent(repo, "src/Buffer.java");
+```
+
+### Diff two files
+
+```java
+Repository repo = new FileRepository("/repos/jgit/.git");
+ObjectId current = BlobUtils.getId(repo, "master", "Main.java");
+ObjectId previous = BlobUtils.getId(repo, "master~1", "Main.java");
+Collection<Edit> edit = BlobUtils.diff(repo, previous, current);
 ```
 
 ## Building from source
