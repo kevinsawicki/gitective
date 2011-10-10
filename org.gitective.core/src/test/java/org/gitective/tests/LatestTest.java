@@ -28,7 +28,7 @@ import org.gitective.core.GitException;
 import org.junit.Test;
 
 /**
- * Unit tests of {@link CommitUtils#getLatest(org.eclipse.jgit.lib.Repository)}
+ * Unit tests of {@link CommitUtils#getHead(org.eclipse.jgit.lib.Repository)}
  */
 public class LatestTest extends GitTestCase {
 
@@ -41,7 +41,7 @@ public class LatestTest extends GitTestCase {
 	public void latest() throws Exception {
 		RevCommit commit = add("file.txt", "content");
 		assertEquals(commit,
-				CommitUtils.getLatest(new FileRepository(testRepo)));
+				CommitUtils.getHead(new FileRepository(testRepo)));
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class LatestTest extends GitTestCase {
 	 */
 	@Test(expected = GitException.class)
 	public void latestOnEmptyRepository() throws Exception {
-		CommitUtils.getLatest(new FileRepository(testRepo));
+		CommitUtils.getHead(new FileRepository(testRepo));
 	}
 
 	/**

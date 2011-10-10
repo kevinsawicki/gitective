@@ -318,7 +318,7 @@ public abstract class GitTestCase extends Assert {
 		Git git = Git.open(testRepo);
 		Note note = git.notesAdd().setMessage(content)
 				.setNotesRef(Constants.R_NOTES + ref)
-				.setObjectId(CommitUtils.getLatest(git.getRepository())).call();
+				.setObjectId(CommitUtils.getHead(git.getRepository())).call();
 		assertNotNull(note);
 		return note;
 	}

@@ -61,7 +61,7 @@ public class CursorTest extends GitTestCase {
 				limit, bucket));
 		service.setFilter(cursor);
 		int chunks = 0;
-		RevCommit commit = CommitUtils.getLatest(new FileRepository(testRepo));
+		RevCommit commit = CommitUtils.getHead(new FileRepository(testRepo));
 		while (commit != null) {
 			service.findFrom(commit);
 			assertEquals(limit.getLimit(), bucket.getCommits().size());

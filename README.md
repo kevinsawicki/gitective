@@ -45,12 +45,12 @@ System.out.println(bugCommits.getCount() + " total bugs fixed");
 ## Commit Examples
 Shown below are several examples of using the gitective filters and commit service classes, more examples can be found in the [unit tests](https://github.com/kevinsawicki/gitective/tree/master/org.gitective.core/src/test/java/org/gitective/tests).
 
-### Get the latest commit in a repository
+### Get the HEAD commit in a repository
 
 ```java
 Repository repo = new FileRepository("/repos/myrepo/.git");
-RevCommit latestCommit = CommitUtils.getLatest(repo);
-System.out.println("Latest commit is " + latestCommit.name());
+RevCommit latestCommit = CommitUtils.getHead(repo);
+System.out.println("HEAD commit is " + latestCommit.name());
 ```
 
 ### Find the number of commits you authored but weren't the committer of
@@ -122,7 +122,7 @@ CommitCursorFilter cursor = new CommitCursorFilter(filters);
 Repository repo = new FileRepository("/repos/jgit/.git");
 CommitFinder finder = new CommitFinder(repo);
 finder.setFilter(cursor);
-RevCommit commit = CommitUtils.getLatest(repo);
+RevCommit commit = CommitUtils.getHead(repo);
 while (commit != null) {
      finder.findFrom(commit);
 

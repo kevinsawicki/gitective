@@ -79,14 +79,23 @@ public abstract class CommitUtils {
 	}
 
 	/**
-	 * Get latest commit. This will be the commit that {@link Constants#HEAD} is
-	 * pointing to.
+	 * Get the HEAD commit in the given repository
 	 *
 	 * @param repository
 	 * @return commit never null
 	 */
-	public static RevCommit getLatest(final Repository repository) {
+	public static RevCommit getHead(final Repository repository) {
 		return getCommit(repository, Constants.HEAD);
+	}
+
+	/**
+	 * Get the commit at the tip of the master branch in the given repository
+	 *
+	 * @param repository
+	 * @return commit never null
+	 */
+	public static RevCommit getMaster(final Repository repository) {
+		return getCommit(repository, Constants.MASTER);
 	}
 
 	/**
