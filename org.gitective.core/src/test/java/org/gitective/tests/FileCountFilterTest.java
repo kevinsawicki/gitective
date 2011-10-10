@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.filter.tree.CommitTreeFilter;
-import org.gitective.core.filter.tree.FileCountFilter;
+import org.gitective.core.filter.tree.TypeCountFilter;
 import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
@@ -42,7 +42,7 @@ public class FileCountFilterTest extends GitTestCase {
 	@Test
 	public void oneFile() throws Exception {
 		add("file.txt", "content");
-		FileCountFilter filter = new FileCountFilter();
+		TypeCountFilter filter = TypeCountFilter.file();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
 		assertEquals(1, filter.getCount());
@@ -57,7 +57,7 @@ public class FileCountFilterTest extends GitTestCase {
 	public void twoFiles() throws Exception {
 		add(testRepo, Arrays.asList("a.txt", "c/b.txt"),
 				Arrays.asList("c1", "c2"), "message");
-		FileCountFilter filter = new FileCountFilter();
+		TypeCountFilter filter = TypeCountFilter.file();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
 		assertEquals(2, filter.getCount());
@@ -71,7 +71,7 @@ public class FileCountFilterTest extends GitTestCase {
 	@Test
 	public void resetFilter() throws Exception {
 		add("f.txt", "content");
-		FileCountFilter filter = new FileCountFilter();
+		TypeCountFilter filter = TypeCountFilter.file();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
 		assertEquals(1, filter.getCount());
@@ -86,10 +86,11 @@ public class FileCountFilterTest extends GitTestCase {
 	 */
 	@Test
 	public void cloneFilter() throws Exception {
-		FileCountFilter filter = new FileCountFilter();
+		TypeCountFilter filter = TypeCountFilter.file();
 		TreeFilter clone = filter.clone();
 		assertNotNull(clone);
 		assertNotSame(filter, clone);
-		assertTrue(filter instanceof FileCountFilter);
+		assertTrue(filter instanceof TypeCountFilter);
+		assertEquals(filter.getType(), ((TypeCountFilter) clone).getType());
 	}
 }

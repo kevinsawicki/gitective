@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.filter.tree.CommitTreeFilter;
-import org.gitective.core.filter.tree.DirectoryCountFilter;
+import org.gitective.core.filter.tree.TypeCountFilter;
 import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
@@ -42,7 +42,7 @@ public class DirectoryCountFilterTest extends GitTestCase {
 	@Test
 	public void zeroDirectories() throws Exception {
 		add("f.txt", "content");
-		DirectoryCountFilter filter = new DirectoryCountFilter();
+		TypeCountFilter filter = TypeCountFilter.tree();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
 		assertEquals(0, filter.getCount());
@@ -57,7 +57,7 @@ public class DirectoryCountFilterTest extends GitTestCase {
 	public void oneDirectory() throws Exception {
 		add(testRepo, Arrays.asList("a/b.txt", "a/c.txt"),
 				Arrays.asList("f1", "f2"), "commit");
-		DirectoryCountFilter filter = new DirectoryCountFilter();
+		TypeCountFilter filter = TypeCountFilter.tree();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
 		assertEquals(1, filter.getCount());
@@ -72,7 +72,7 @@ public class DirectoryCountFilterTest extends GitTestCase {
 	public void twoDirectories() throws Exception {
 		add(testRepo, Arrays.asList("a/b.txt", "c/d.txt"),
 				Arrays.asList("f1", "f2"), "commit");
-		DirectoryCountFilter filter = new DirectoryCountFilter();
+		TypeCountFilter filter = TypeCountFilter.tree();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
 		assertEquals(2, filter.getCount());
@@ -87,7 +87,7 @@ public class DirectoryCountFilterTest extends GitTestCase {
 	public void nestedDirectories() throws Exception {
 		add(testRepo, Arrays.asList("a/b.txt", "a/g/h.txt", "a/u/x.txt"),
 				Arrays.asList("f1", "f2", "f3"), "commit");
-		DirectoryCountFilter filter = new DirectoryCountFilter();
+		TypeCountFilter filter = TypeCountFilter.tree();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
 		assertEquals(3, filter.getCount());
@@ -101,7 +101,7 @@ public class DirectoryCountFilterTest extends GitTestCase {
 	@Test
 	public void resetFilter() throws Exception {
 		add("a/b.txt", "content");
-		DirectoryCountFilter filter = new DirectoryCountFilter();
+		TypeCountFilter filter = TypeCountFilter.tree();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
 		assertEquals(1, filter.getCount());
@@ -116,10 +116,11 @@ public class DirectoryCountFilterTest extends GitTestCase {
 	 */
 	@Test
 	public void cloneFilter() throws Exception {
-		DirectoryCountFilter filter = new DirectoryCountFilter();
+		TypeCountFilter filter = TypeCountFilter.tree();
 		TreeFilter clone = filter.clone();
 		assertNotNull(clone);
 		assertNotSame(filter, clone);
-		assertTrue(clone instanceof DirectoryCountFilter);
+		assertTrue(clone instanceof TypeCountFilter);
+		assertEquals(filter.getType(), ((TypeCountFilter) clone).getType());
 	}
 }

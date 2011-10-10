@@ -21,25 +21,87 @@
  */
 package org.gitective.core.filter.tree;
 
+import static org.eclipse.jgit.lib.FileMode.TYPE_FILE;
+import static org.eclipse.jgit.lib.FileMode.TYPE_GITLINK;
+import static org.eclipse.jgit.lib.FileMode.TYPE_MASK;
+import static org.eclipse.jgit.lib.FileMode.TYPE_SYMLINK;
+import static org.eclipse.jgit.lib.FileMode.TYPE_TREE;
+
 import java.io.IOException;
 
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 /**
- * Tree filter that counts all directories visited
+ * Tree filter that counts entries visited of the configured type
  */
-public class DirectoryCountFilter extends BaseTreeFilter {
+public class TypeCountFilter extends BaseTreeFilter {
+
+	/**
+	 * Count filter that counts submodules
+	 *
+	 * @return submodule type filter
+	 */
+	public static TypeCountFilter submodule() {
+		return new TypeCountFilter(TYPE_GITLINK);
+	}
+
+	/**
+	 * Create filter that counts files
+	 *
+	 * @return file type filter
+	 */
+	public static TypeCountFilter file() {
+		return new TypeCountFilter(TYPE_FILE);
+	}
+
+	/**
+	 * Create filter that counts symbolic links
+	 *
+	 * @return symbolic link type filter
+	 */
+	public static TypeCountFilter symlink() {
+		return new TypeCountFilter(TYPE_SYMLINK);
+	}
+
+	/**
+	 * Create filter that counts trees
+	 *
+	 * @return tree type filter
+	 */
+	public static TypeCountFilter tree() {
+		return new TypeCountFilter(TYPE_TREE);
+	}
+
+	private final int type;
 
 	private long count;
 
 	/**
-	 * Get directory count
+	 * Create filter that counts the configured type
+	 *
+	 * @param type
+	 */
+	public TypeCountFilter(final int type) {
+		this.type = type;
+	}
+
+	/**
+	 * Get entry type count
 	 *
 	 * @return count
 	 */
 	public long getCount() {
 		return count;
+	}
+
+	/**
+	 * Get type being counted
+	 *
+	 * @return type
+	 */
+	public int getType() {
+		return type;
 	}
 
 	@Override
@@ -50,13 +112,13 @@ public class DirectoryCountFilter extends BaseTreeFilter {
 
 	@Override
 	public boolean include(final TreeWalk walker) throws IOException {
-		if (walker.isSubtree())
+		if (type == (walker.getRawMode(0) & TYPE_MASK))
 			count++;
 		return true;
 	}
 
 	@Override
 	public TreeFilter clone() {
-		return new DirectoryCountFilter();
+		return new TypeCountFilter(type);
 	}
 }
