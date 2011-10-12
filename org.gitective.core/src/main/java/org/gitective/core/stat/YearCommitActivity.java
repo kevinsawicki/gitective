@@ -51,7 +51,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Create activity for given year
-	 * 
+	 *
 	 * @param year
 	 */
 	public YearCommitActivity(final int year) {
@@ -63,7 +63,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Add time of calendar to this year
-	 * 
+	 *
 	 * @param calendar
 	 * @return this year
 	 */
@@ -78,7 +78,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get commit activity in each month
-	 * 
+	 *
 	 * @return array of monthly activity
 	 */
 	public int[] getMonths() {
@@ -87,11 +87,11 @@ public class YearCommitActivity {
 
 	/**
 	 * Get commit activity in each month
-	 * 
+	 *
 	 * @param months
 	 * @return specified months array
 	 */
-	public int[] getMonths(int[] months) {
+	public int[] getMonths(final int[] months) {
 		final int[][][] commits = this.commits;
 		for (int i = 0; i < MONTHS; i++)
 			for (int j = 0; j < commits[i].length; j++)
@@ -102,7 +102,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get commit activity in each day of the month
-	 * 
+	 *
 	 * @return array of daily activity
 	 */
 	public int[] getDays() {
@@ -111,7 +111,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get commit activity in each day of the month
-	 * 
+	 *
 	 * @param days
 	 * @return specified array of days
 	 */
@@ -126,7 +126,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get commit activity in each hour of the day
-	 * 
+	 *
 	 * @return array of hourly activity
 	 */
 	public int[] getHours() {
@@ -135,7 +135,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get commit activity in each hour of the day
-	 * 
+	 *
 	 * @param hours
 	 * @return specified array of hours
 	 */
@@ -150,7 +150,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get number of commits in given month
-	 * 
+	 *
 	 * @param month
 	 * @return number of commits
 	 */
@@ -160,7 +160,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get number of commits in given month
-	 * 
+	 *
 	 * @param month
 	 * @return number of commits
 	 */
@@ -175,7 +175,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get number of commits in given hour of the day
-	 * 
+	 *
 	 * @param hour
 	 * @return number of commits
 	 */
@@ -190,7 +190,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get number commits in given day
-	 * 
+	 *
 	 * @param dayOfMonth
 	 * @return number of commits
 	 */
@@ -210,7 +210,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get year
-	 * 
+	 *
 	 * @return year
 	 */
 	public int getYear() {
@@ -219,7 +219,7 @@ public class YearCommitActivity {
 
 	/**
 	 * Get total number of commits in this year
-	 * 
+	 *
 	 * @return total commit count
 	 */
 	public int getCount() {
