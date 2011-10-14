@@ -21,8 +21,19 @@
  */
 package org.gitective.tests;
 
+import java.io.File;
+import java.util.Collection;
+
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefUpdate;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.transport.RemoteConfig;
+import org.eclipse.jgit.transport.URIish;
 import org.gitective.core.RepositoryUtils;
+import org.gitective.core.RepositoryUtils.RefDiff;
 import org.junit.Test;
 
 /**
@@ -55,7 +66,7 @@ public class RepositoryUtilsTest extends GitTestCase {
 
 	/**
 	 * Test getting note refs for empty repository
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -64,5 +75,100 @@ public class RepositoryUtilsTest extends GitTestCase {
 				testRepo));
 		assertNotNull(noteRefs);
 		assertEquals(0, noteRefs.length);
+	}
+
+	/**
+	 * Test no remote changes
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void noRemoteChanges() throws Exception {
+		add("test.txt", "content");
+		Repository repo = new FileRepository(testRepo);
+		Collection<RefDiff> diffs = RepositoryUtils.diffRemoteRefs(repo,
+				testRepo.toURI().toString());
+		assertNotNull(diffs);
+		assertTrue(diffs.isEmpty());
+	}
+
+	/**
+	 * Test one remote change using URI
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void oneRemoteChangeUsingUri() throws Exception {
+		RevCommit commit1 = add("test.txt", "content");
+		File repo2 = initRepo();
+		RevCommit commit2 = add(repo2, "test2.txt", "content2.txt");
+		Repository repo = new FileRepository(testRepo);
+		Collection<RefDiff> diffs = RepositoryUtils.diffRemoteRefs(repo, repo2
+				.toURI().toString());
+		assertNotNull(diffs);
+		assertFalse(diffs.isEmpty());
+		assertNotNull(diffs.iterator().next().getLocal());
+		assertNotNull(diffs.iterator().next().getRemote());
+		assertEquals(commit1, diffs.iterator().next().getLocal().getObjectId());
+		assertEquals(commit2, diffs.iterator().next().getRemote().getObjectId());
+	}
+
+	/**
+	 * Test one origin change
+	 *
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void oneOriginChange() throws Exception {
+		RevCommit commit1 = add("test.txt", "content");
+		File repo2 = initRepo();
+		RevCommit commit2 = add(repo2, "test2.txt", "content2.txt");
+		Repository repo = new FileRepository(testRepo);
+		RefUpdate originMaster = repo.updateRef(Constants.R_REMOTES
+				+ Constants.DEFAULT_REMOTE_NAME + "/" + Constants.MASTER);
+		originMaster.setNewObjectId(commit1);
+		originMaster.forceUpdate();
+		RemoteConfig config = new RemoteConfig(repo.getConfig(),
+				Constants.DEFAULT_REMOTE_NAME);
+		config.addURI(new URIish(repo2.toURI().toString()));
+		config.update(repo.getConfig());
+		Collection<RefDiff> diffs = RepositoryUtils.diffOriginRefs(repo);
+		assertNotNull(diffs);
+		assertFalse(diffs.isEmpty());
+		assertNotNull(diffs.iterator().next().getLocal());
+		assertNotNull(diffs.iterator().next().getRemote());
+		assertEquals(commit1, diffs.iterator().next().getLocal().getObjectId());
+		assertEquals(commit2, diffs.iterator().next().getRemote().getObjectId());
+	}
+
+	/**
+	 * Test remote changes with null repository
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void noRemoteChangesNullRepository() throws Exception {
+		RepositoryUtils.diffRemoteRefs(null, "");
+	}
+
+	/**
+	 * Test remote changes with null remote
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void noRemoteChangesNullRemote() throws Exception {
+		RepositoryUtils.diffRemoteRefs(new FileRepository(testRepo), null);
+	}
+
+	/**
+	 * Test remote changes with empty remote
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void noRemoteChangesEmptyRemote() throws Exception {
+		RepositoryUtils.diffRemoteRefs(new FileRepository(testRepo), "");
 	}
 }

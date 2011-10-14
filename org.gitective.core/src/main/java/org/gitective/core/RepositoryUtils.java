@@ -21,19 +21,66 @@
  */
 package org.gitective.core;
 
+import static org.eclipse.jgit.lib.Constants.DEFAULT_REMOTE_NAME;
+import static org.eclipse.jgit.lib.Constants.R_HEADS;
+import static org.eclipse.jgit.lib.Constants.R_NOTES;
+import static org.eclipse.jgit.lib.Constants.R_REMOTES;
+import static org.eclipse.jgit.lib.Constants.R_TAGS;
+
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.api.LsRemoteCommand;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.transport.RemoteConfig;
 
 /**
  * Repository utilities
  */
 public abstract class RepositoryUtils {
+
+	/**
+	 * Wrapper class for a remote and local ref that are different
+	 */
+	public static class RefDiff {
+
+		private final Ref local;
+
+		private final Ref remote;
+
+		/**
+		 * Create ref diff
+		 *
+		 * @param local
+		 * @param remote
+		 */
+		protected RefDiff(final Ref local, final Ref remote) {
+			this.local = local;
+			this.remote = remote;
+		}
+
+		/**
+		 * Get local ref. This will be null if the ref only exists remotely.
+		 *
+		 * @return ref
+		 */
+		public Ref getLocal() {
+			return local;
+		}
+
+		/**
+		 * Get non-null remote ref
+		 *
+		 * @return ref
+		 */
+		public Ref getRemote() {
+			return remote;
+		}
+	}
 
 	/**
 	 * Get note references
@@ -47,8 +94,7 @@ public abstract class RepositoryUtils {
 					Assert.formatNotNull("Repository"));
 		Collection<Ref> refs;
 		try {
-			refs = repository.getRefDatabase().getRefs(Constants.R_NOTES)
-					.values();
+			refs = repository.getRefDatabase().getRefs(R_NOTES).values();
 		} catch (IOException e) {
 			throw new GitException(e, repository);
 		}
@@ -56,5 +102,81 @@ public abstract class RepositoryUtils {
 		for (Ref ref : refs)
 			notes.add(ref.getName());
 		return notes.toArray(new String[notes.size()]);
+	}
+
+	/**
+	 * List origin remote references and return all remote references that are
+	 * missing locally or have a different object id than the local ref.
+	 *
+	 * @param repository
+	 * @return non-null but possibly empty collection of {@link RefDiff}
+	 */
+	public static Collection<RefDiff> diffOriginRefs(final Repository repository) {
+		return diffRemoteRefs(repository, DEFAULT_REMOTE_NAME);
+	}
+
+	/**
+	 * Does the given remote exist in the repository?
+	 *
+	 * @param repository
+	 * @param remote
+	 * @return true if exists, false otherwise
+	 * @throws URISyntaxException
+	 */
+	protected static boolean hasRemote(final Repository repository,
+			final String remote) throws URISyntaxException {
+		RemoteConfig config = new RemoteConfig(repository.getConfig(), remote);
+		return !config.getURIs().isEmpty() || !config.getPushURIs().isEmpty();
+	}
+
+	/**
+	 * List remote references and return all remote references that are missing
+	 * locally or have a different object id than the local ref.
+	 *
+	 * @param repository
+	 * @param remote
+	 * @return non-null but possibly collection of {@link RefDiff}
+	 */
+	public static Collection<RefDiff> diffRemoteRefs(
+			final Repository repository, final String remote) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (remote == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Remote"));
+		if (remote.length() == 0)
+			throw new IllegalArgumentException(Assert.formatNotEmpty("Remote"));
+
+		final LsRemoteCommand lsRemote = new LsRemoteCommand(repository);
+		lsRemote.setRemote(remote);
+		try {
+			final Collection<Ref> remoteRefs = lsRemote.call();
+			final List<RefDiff> diffs = new ArrayList<RefDiff>();
+			if (hasRemote(repository, remote)) {
+				final String refPrefix = R_REMOTES + remote + "/";
+				for (Ref remoteRef : remoteRefs) {
+					String name = remoteRef.getName();
+					if (name.startsWith(R_HEADS))
+						name = refPrefix + name.substring(R_HEADS.length());
+					else if (!name.startsWith(R_TAGS))
+						name = refPrefix + name;
+					final Ref localRef = repository.getRef(name);
+					if (localRef == null
+							|| !remoteRef.getObjectId().equals(
+									localRef.getObjectId()))
+						diffs.add(new RefDiff(localRef, remoteRef));
+				}
+			} else
+				for (Ref remoteRef : remoteRefs) {
+					final Ref localRef = repository.getRef(remoteRef.getName());
+					if (localRef == null
+							|| !remoteRef.getObjectId().equals(
+									localRef.getObjectId()))
+						diffs.add(new RefDiff(localRef, remoteRef));
+				}
+			return diffs;
+		} catch (Exception e) {
+			throw new GitException(e, repository);
+		}
 	}
 }
