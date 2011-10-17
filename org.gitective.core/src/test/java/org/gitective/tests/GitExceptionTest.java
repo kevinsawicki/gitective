@@ -51,5 +51,10 @@ public class GitExceptionTest extends GitTestCase {
 		assertEquals(repo, exception.getRepository());
 		assertEquals(cause, exception.getCause());
 		assertEquals(message, exception.getMessage());
+
+		exception = new GitException(repo);
+		assertEquals(repo, exception.getRepository());
+		assertNull(exception.getCause());
+		assertNull(exception.getMessage());
 	}
 }
