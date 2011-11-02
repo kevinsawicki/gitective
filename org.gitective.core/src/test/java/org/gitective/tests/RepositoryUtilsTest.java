@@ -64,6 +64,43 @@ public class RepositoryUtilsTest extends GitTestCase {
 	}
 
 	/**
+	 * Get branches for null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void branchesForNullRepository() {
+		RepositoryUtils.getBranches(null);
+	}
+
+	/**
+	 * Get branches for empty repository
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void branchesForEmptyRepository() throws Exception {
+		Collection<String> branches = RepositoryUtils
+				.getBranches(new FileRepository(testRepo));
+		assertNotNull(branches);
+		assertTrue(branches.isEmpty());
+	}
+
+	/**
+	 * Get branches for repository
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void branchesForRepository() throws Exception {
+		add("test.txt", "content");
+		Collection<String> branches = RepositoryUtils
+				.getBranches(new FileRepository(testRepo));
+		assertNotNull(branches);
+		assertFalse(branches.isEmpty());
+		assertEquals(Constants.R_HEADS + Constants.MASTER, branches.iterator()
+				.next());
+	}
+
+	/**
 	 * Test getting note refs for empty repository
 	 *
 	 * @throws Exception
