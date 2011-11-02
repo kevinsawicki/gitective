@@ -92,7 +92,8 @@ public abstract class RepositoryUtils {
 		if (repository == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Repository"));
-		Collection<Ref> refs;
+
+		final Collection<Ref> refs;
 		try {
 			refs = repository.getRefDatabase().getRefs(R_NOTES).values();
 		} catch (IOException e) {
