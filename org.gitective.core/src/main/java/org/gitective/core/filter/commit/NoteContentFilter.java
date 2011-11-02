@@ -43,6 +43,7 @@ public class NoteContentFilter extends CommitFilter {
 
 	private String[] noteRefs;
 
+	@Override
 	public CommitFilter setRepository(final Repository repository) {
 		super.setRepository(repository);
 		if (repository != null) {
@@ -57,7 +58,7 @@ public class NoteContentFilter extends CommitFilter {
 
 	/**
 	 * Get note refs from repository to use during commit walks.
-	 * 
+	 *
 	 * @param repository
 	 *            non-null
 	 * @return non-null array of ref names
@@ -81,7 +82,7 @@ public class NoteContentFilter extends CommitFilter {
 
 	/**
 	 * Get content of note as string
-	 * 
+	 *
 	 * @param note
 	 * @return string
 	 */
@@ -91,11 +92,11 @@ public class NoteContentFilter extends CommitFilter {
 
 	/**
 	 * Handle note associate with given commit.
-	 * 
+	 *
 	 * This method calls {@link #include(RevCommit, Note, String)} by default
 	 * with the content read from the blob associated with the note, sub-classes
 	 * should override if needed.
-	 * 
+	 *
 	 * @param commit
 	 * @param note
 	 *            non-null note
@@ -107,10 +108,10 @@ public class NoteContentFilter extends CommitFilter {
 
 	/**
 	 * Handle note content associated with given commit.
-	 * 
+	 *
 	 * This method always returns true by default and sub-classes should
 	 * override.
-	 * 
+	 *
 	 * @param commit
 	 * @param note
 	 * @param content
