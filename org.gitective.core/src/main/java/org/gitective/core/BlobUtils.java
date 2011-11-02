@@ -212,7 +212,7 @@ public abstract class BlobUtils {
 	 */
 	public static String getHeadContent(final Repository repository,
 			final String path) {
-		return getContent(repository, Constants.HEAD, path);
+		return getContent(repository, HEAD, path);
 	}
 
 	/**
@@ -224,7 +224,7 @@ public abstract class BlobUtils {
 	 */
 	public static byte[] getRawHeadContent(final Repository repository,
 			final String path) {
-		return getRawContent(repository, Constants.HEAD, path);
+		return getRawContent(repository, HEAD, path);
 	}
 
 	/**
