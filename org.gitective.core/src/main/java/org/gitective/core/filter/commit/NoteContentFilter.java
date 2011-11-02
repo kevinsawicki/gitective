@@ -22,6 +22,7 @@
 package org.gitective.core.filter.commit;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ShowNoteCommand;
@@ -64,7 +65,8 @@ public class NoteContentFilter extends CommitFilter {
 	 * @return non-null array of ref names
 	 */
 	protected String[] getNoteRefs(final Repository repository) {
-		return RepositoryUtils.getNoteRefs(repository);
+		Collection<String> refs = RepositoryUtils.getNoteRefs(repository);
+		return refs.toArray(new String[refs.size()]);
 	}
 
 	@Override

@@ -104,7 +104,7 @@ public abstract class RepositoryUtils {
 	 * @param repository
 	 * @return non-null but possibly empty array of note references
 	 */
-	public static String[] getNoteRefs(final Repository repository) {
+	public static Collection<String> getNoteRefs(final Repository repository) {
 		if (repository == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Repository"));
@@ -113,7 +113,7 @@ public abstract class RepositoryUtils {
 		final List<String> notes = new ArrayList<String>(refs.size());
 		for (Ref ref : refs)
 			notes.add(ref.getName());
-		return notes.toArray(new String[notes.size()]);
+		return notes;
 	}
 
 	/**

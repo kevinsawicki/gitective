@@ -25,7 +25,6 @@ import java.io.File;
 import java.util.Collection;
 
 import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.RefUpdate;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -71,10 +70,10 @@ public class RepositoryUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void noteRefsForEmptyRepository() throws Exception {
-		String[] noteRefs = RepositoryUtils.getNoteRefs(new FileRepository(
-				testRepo));
+		Collection<String> noteRefs = RepositoryUtils
+				.getNoteRefs(new FileRepository(testRepo));
 		assertNotNull(noteRefs);
-		assertEquals(0, noteRefs.length);
+		assertTrue(noteRefs.isEmpty());
 	}
 
 	/**
