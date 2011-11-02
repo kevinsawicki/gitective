@@ -83,6 +83,22 @@ public abstract class RepositoryUtils {
 	}
 
 	/**
+	 * Get refs with prefix in repository
+	 *
+	 * @param repository
+	 * @param prefix
+	 * @return collection of refs
+	 */
+	protected static Collection<Ref> getRefs(final Repository repository,
+			final String prefix) {
+		try {
+			return repository.getRefDatabase().getRefs(prefix).values();
+		} catch (IOException e) {
+			throw new GitException(e, repository);
+		}
+	}
+
+	/**
 	 * Get note references
 	 *
 	 * @param repository
@@ -93,16 +109,30 @@ public abstract class RepositoryUtils {
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Repository"));
 
-		final Collection<Ref> refs;
-		try {
-			refs = repository.getRefDatabase().getRefs(R_NOTES).values();
-		} catch (IOException e) {
-			throw new GitException(e, repository);
-		}
+		final Collection<Ref> refs = getRefs(repository, R_NOTES);
 		final List<String> notes = new ArrayList<String>(refs.size());
 		for (Ref ref : refs)
 			notes.add(ref.getName());
 		return notes.toArray(new String[notes.size()]);
+	}
+
+	/**
+	 * Get local and remote tracking branch references
+	 *
+	 * @param repository
+	 * @return non-null but possibly array of branch reference names
+	 */
+	public static Collection<String> getBranches(final Repository repository) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+
+		final List<String> branches = new ArrayList<String>();
+		for (Ref ref : getRefs(repository, R_HEADS))
+			branches.add(ref.getName());
+		for (Ref ref : getRefs(repository, R_REMOTES))
+			branches.add(ref.getName());
+		return branches;
 	}
 
 	/**
