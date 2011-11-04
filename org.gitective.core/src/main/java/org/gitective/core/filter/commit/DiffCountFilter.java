@@ -31,7 +31,7 @@ import org.gitective.core.BlobUtils;
 
 /**
  * Filter that include commits based on number of differences introduced in each
- * commit.
+ * commit visited.
  */
 public class DiffCountFilter extends CommitDiffFilter {
 
