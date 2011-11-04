@@ -171,6 +171,26 @@ public class CommitPipelineFilter extends CommitFilter {
 		return this;
 	}
 
+	/**
+	 * Add filter to pipeline
+	 *
+	 * @param treeFilter
+	 * @return this pipeline
+	 */
+	public CommitPipelineFilter add(final TreeFilter treeFilter) {
+		return add(null, treeFilter);
+	}
+
+	/**
+	 * Add filter to pipeline
+	 *
+	 * @param commitFilter
+	 * @return this pipeline
+	 */
+	public CommitPipelineFilter add(final RevFilter commitFilter) {
+		return add(commitFilter, null);
+	}
+
 	@Override
 	public CommitFilter setRepository(final Repository repository) {
 		for (Pipe pipe : pipes)
