@@ -81,7 +81,7 @@ for (PersonIdent author : authors.getPersons())
      System.out.println(author);
 ```
 
-### Find the number of number of commits that occurred in master since a branch was created
+### Find the number of commits that occurred in master since a branch was created
 This example assumes two current branches,  _master_ and a  _release1_ branch that was created from master some time ago. Both branches have had subsequent commits since the _release1_ branch was created.
 
 ```java
