@@ -221,3 +221,8 @@ JGit 1.0+
 ## License
 
 [MIT License](http://www.opensource.org/licenses/mit-license.php)
+
+## Contributors
+
+* [Kevin Sawicki](https://github.com/kevinsawicki) :: [contributions](https://github.com/kevinsawicki/gitective/commits?author=kevinsawicki)
+* [Mykola Nikishov](https://github.com/manandbytes) :: [contributions](https://github.com/kevinsawicki/gitective/commits?author=manandbytes)
