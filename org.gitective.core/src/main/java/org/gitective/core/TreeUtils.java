@@ -112,7 +112,7 @@ public abstract class TreeUtils {
 			return withParents(reader, walk, walk.parseCommit(commitId));
 		} catch (IOException e) {
 			walk.release();
-			throw new GitException(e, null);
+			throw new GitException(e, repository);
 		}
 	}
 
@@ -142,6 +142,27 @@ public abstract class TreeUtils {
 			return withParents(reader, walk, walk.parseCommit(commit));
 		} catch (IOException e) {
 			walk.release();
+			throw new GitException(e, repository);
+		}
+	}
+
+	/**
+	 * Create a tree walk with all the trees from the given commit's parents.
+	 *
+	 * @param walk
+	 * @param commit
+	 * @return tree walk
+	 */
+	public static TreeWalk withParents(final RevWalk walk,
+			final RevCommit commit) {
+		if (walk == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Walk"));
+		if (commit == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Commit"));
+
+		try {
+			return withParents(walk.getObjectReader(), walk, commit);
+		} catch (IOException e) {
 			throw new GitException(e, null);
 		}
 	}
@@ -159,6 +180,21 @@ public abstract class TreeUtils {
 		final TreeWalk walk = withParents(repository, commitId);
 		walk.setFilter(ANY_DIFF);
 		return walk;
+	}
+
+	/**
+	 * Create a tree walk configured to diff the given commit against all the
+	 * parent commits.
+	 *
+	 * @param walk
+	 * @param commit
+	 * @return tree walk
+	 */
+	public static TreeWalk diffWithParents(final RevWalk walk,
+			final RevCommit commit) {
+		final TreeWalk treeWalk = withParents(walk, commit);
+		treeWalk.setFilter(ANY_DIFF);
+		return treeWalk;
 	}
 
 	/**
