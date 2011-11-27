@@ -23,13 +23,14 @@ package org.gitective.core;
 
 import static java.lang.Integer.MAX_VALUE;
 import static org.eclipse.jgit.diff.RawTextComparator.DEFAULT;
-import static org.eclipse.jgit.lib.Constants.CHARSET;
+import static org.eclipse.jgit.lib.Constants.CHARACTER_ENCODING;
 import static org.eclipse.jgit.lib.Constants.HEAD;
 import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 import static org.eclipse.jgit.lib.FileMode.TYPE_FILE;
 import static org.eclipse.jgit.lib.FileMode.TYPE_MASK;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -71,6 +72,24 @@ public abstract class BlobUtils {
 	}
 
 	/**
+	 * Convert byte array to UTF-8 {@link String}
+	 *
+	 * @param repository
+	 * @param raw
+	 * @return UTF-8 string or null if bytes are null
+	 */
+	protected static String toString(final Repository repository,
+			final byte[] raw) {
+		if (raw == null)
+			return null;
+		try {
+			return new String(raw, CHARACTER_ENCODING);
+		} catch (UnsupportedEncodingException e) {
+			throw new GitException(e, repository);
+		}
+	}
+
+	/**
 	 * Get the contents of the the blob with the given id as a UTF-8
 	 * {@link String}.
 	 *
@@ -86,7 +105,8 @@ public abstract class BlobUtils {
 		if (id == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Object id"));
-		return new String(getBytes(repository, id), CHARSET);
+
+		return toString(repository, getBytes(repository, id));
 	}
 
 	/**
@@ -191,8 +211,7 @@ public abstract class BlobUtils {
 	 */
 	public static String getContent(final Repository repository,
 			final ObjectId commitId, final String path) {
-		final byte[] raw = getRawContent(repository, commitId, path);
-		return raw != null ? new String(raw, CHARSET) : null;
+		return toString(repository, getRawContent(repository, commitId, path));
 	}
 
 	/**
@@ -206,8 +225,7 @@ public abstract class BlobUtils {
 	 */
 	public static String getContent(final Repository repository,
 			final String revision, final String path) {
-		final byte[] raw = getRawContent(repository, revision, path);
-		return raw != null ? new String(raw, CHARSET) : null;
+		return toString(repository, getRawContent(repository, revision, path));
 	}
 
 	/**
