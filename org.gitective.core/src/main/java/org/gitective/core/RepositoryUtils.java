@@ -39,7 +39,13 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.RemoteConfig;
 
 /**
- * Repository utilities
+ * Utilities for dealing with Git repositories.
+ * <p>
+ * This class provides helpers for getting the branches, tags, and note
+ * references in a repository.
+ * <p>
+ * This class also provides helpers for knowing which references differ between
+ * a local and remote repository.
  */
 public abstract class RepositoryUtils {
 
@@ -83,7 +89,7 @@ public abstract class RepositoryUtils {
 	}
 
 	/**
-	 * Get refs with prefix in repository
+	 * Get the refs with prefix in repository
 	 *
 	 * @param repository
 	 * @param prefix
@@ -99,7 +105,7 @@ public abstract class RepositoryUtils {
 	}
 
 	/**
-	 * Get note references
+	 * Get all the note references in the given repository.
 	 *
 	 * @param repository
 	 * @return non-null but possibly empty array of note references
@@ -117,7 +123,8 @@ public abstract class RepositoryUtils {
 	}
 
 	/**
-	 * Get local and remote tracking branch references
+	 * Get all the local and remote tracking branch references in the given
+	 * repository.
 	 *
 	 * @param repository
 	 * @return non-null but possibly array of branch reference names
@@ -136,8 +143,23 @@ public abstract class RepositoryUtils {
 	}
 
 	/**
-	 * List origin remote references and return all remote references that are
-	 * missing locally or have a different object id than the local ref.
+	 * Get all the tag references in the given repository.
+	 *
+	 * @param repository
+	 * @return non-null but possibly array of branch reference names
+	 */
+	public static Collection<String> getTags(final Repository repository) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+
+		return repository.getTags().keySet();
+	}
+
+	/**
+	 * List the origin remote references and return all remote references that
+	 * are missing locally or have a different remote object id than the local
+	 * reference.
 	 *
 	 * @param repository
 	 * @return non-null but possibly empty collection of {@link RefDiff}
@@ -156,13 +178,14 @@ public abstract class RepositoryUtils {
 	 */
 	protected static boolean hasRemote(final Repository repository,
 			final String remote) throws URISyntaxException {
-		RemoteConfig config = new RemoteConfig(repository.getConfig(), remote);
+		final RemoteConfig config = new RemoteConfig(repository.getConfig(),
+				remote);
 		return !config.getURIs().isEmpty() || !config.getPushURIs().isEmpty();
 	}
 
 	/**
 	 * List remote references and return all remote references that are missing
-	 * locally or have a different object id than the local ref.
+	 * locally or have a different remote object id than the local reference.
 	 *
 	 * @param repository
 	 * @param remote
