@@ -44,12 +44,18 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
- * Blob utilities
+ * Utilities for dealing with Git blobs.
+ * <p>
+ * This class provides helpers for getting the content and the ids of blobs at
+ * different paths and commits.
+ * <p>
+ * This class also provides helpers for computing the differences between the
+ * content of blobs.
  */
 public abstract class BlobUtils {
 
 	/**
-	 * Get blob as byte array
+	 * Get the contents of the the blob with the given id as a byte array.
 	 *
 	 * @param repository
 	 * @param id
@@ -65,11 +71,12 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get blob content from given repository as string
+	 * Get the contents of the the blob with the given id as a UTF-8
+	 * {@link String}.
 	 *
 	 * @param repository
 	 * @param id
-	 * @return blob as UTF-8 string
+	 * @return content of blob as UTF-8 string
 	 */
 	public static String getContent(final Repository repository,
 			final ObjectId id) {
@@ -83,12 +90,12 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get id of blob at path in given commit
+	 * Get the id of the blob at the path in the given commit.
 	 *
 	 * @param repository
 	 * @param commit
 	 * @param path
-	 * @return raw content
+	 * @return blob id, null if not present
 	 */
 	protected static ObjectId lookupId(final Repository repository,
 			final RevCommit commit, final String path) {
@@ -106,7 +113,8 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get raw content
+	 * Get the contents of the the blob in the commit located at the given path
+	 * as a byte array.
 	 *
 	 * @param repository
 	 * @param commit
@@ -120,13 +128,13 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get raw contents of blob at given path in commit that given revision
-	 * points to
+	 * Get raw contents of the blob at the given path in the commit that the
+	 * revision references.
 	 *
 	 * @param repository
 	 * @param revision
 	 * @param path
-	 * @return raw content or null if no blob with path at given commit
+	 * @return raw content or null if no blob with path at given revision
 	 */
 	public static byte[] getRawContent(final Repository repository,
 			final String revision, final String path) {
@@ -149,7 +157,7 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get raw contents of blob at given path in commit that given ref points to
+	 * Get the raw contents of the blob in the commit located at the given path.
 	 *
 	 * @param repository
 	 * @param commitId
@@ -174,12 +182,12 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get contents of blob at given path in given commit
+	 * Get the contents of the blob in the commit located at the given path.
 	 *
 	 * @param repository
 	 * @param commitId
 	 * @param path
-	 * @return content or null if no blob with path at given commit
+	 * @return contents or null if no blob with path at given commit
 	 */
 	public static String getContent(final Repository repository,
 			final ObjectId commitId, final String path) {
@@ -188,13 +196,13 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get contents of blob at given path in commit that given revision points
-	 * to
+	 * Get the contents of the blob at the given path in the commit that the
+	 * revision references.
 	 *
 	 * @param repository
 	 * @param revision
 	 * @param path
-	 * @return content or null if no blob with path at given commit
+	 * @return contents or null if no blob with path at given revision
 	 */
 	public static String getContent(final Repository repository,
 			final String revision, final String path) {
@@ -203,11 +211,12 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get contents of blob at given path in commit that HEAD points to
+	 * Get the contents of the blob at the given path in the commit that HEAD
+	 * references.
 	 *
 	 * @param repository
 	 * @param path
-	 * @return content or null if no blob with path at given commit
+	 * @return content or null if no blob with path at HEAD commit
 	 */
 	public static String getHeadContent(final Repository repository,
 			final String path) {
@@ -215,11 +224,12 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get raw contents of blob at given path in commit that HEAD points to
+	 * Get the raw contents of the blob at the given path in the commit that
+	 * HEAD references.
 	 *
 	 * @param repository
 	 * @param path
-	 * @return content or null if no blob with path at given commit
+	 * @return content or null if no blob with path at HEAD commit
 	 */
 	public static byte[] getRawHeadContent(final Repository repository,
 			final String path) {
@@ -227,7 +237,8 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get id of blob at path in commit that given revision points to
+	 * Get the id of the blob at the path in the commit that the given revision
+	 * references.
 	 *
 	 * @param repository
 	 * @param revision
@@ -255,7 +266,8 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get id of blob at path in commit that HEAD currently points to
+	 * Get the id of the blob at the path in the commit that HEAD currently
+	 * references.
 	 *
 	 * @param repository
 	 * @param path
@@ -267,7 +279,8 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Get id of blob at path in commit that given revision points to
+	 * Get the id of the blob at the path in the commit that the given revision
+	 * references.
 	 *
 	 * @param repository
 	 * @param commitId
@@ -292,7 +305,7 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Open stream to contents of blob at path in given commit
+	 * Open a stream to the contents of the blob at the path in the given commit
 	 *
 	 * @param repository
 	 * @param commitId
@@ -324,8 +337,8 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Open stream to contents of blob at path in commit that HEAD currently
-	 * points to
+	 * Open a stream to the contents of the blob at the path in the commit that
+	 * HEAD currently references.
 	 *
 	 * @param repository
 	 * @param path
@@ -337,8 +350,8 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Open stream to contents of blob at path in commit that given revision
-	 * points to
+	 * Open a stream to the contents of the blob at the path in the commit that
+	 * the given revision references.
 	 *
 	 * @param repository
 	 * @param revision
@@ -373,8 +386,8 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Diff blobs at given object ids using the
-	 * {@link RawTextComparator#DEFAULT} comparator
+	 * Diff the blobs at the given object ids using the
+	 * {@link RawTextComparator#DEFAULT} comparator.
 	 *
 	 * @see #diff(Repository, ObjectId, ObjectId, RawTextComparator)
 	 * @param repository
@@ -388,7 +401,7 @@ public abstract class BlobUtils {
 	}
 
 	/**
-	 * Diff blobs at given object ids.
+	 * Diff the blobs at the given object ids.
 	 *
 	 * <p>
 	 * This method will return an empty list if the content of either blob is
@@ -398,7 +411,7 @@ public abstract class BlobUtils {
 	 * @param blob1
 	 * @param blob2
 	 * @param comparator
-	 * @return list of edits
+	 * @return list of edits, never null
 	 */
 	public static Collection<Edit> diff(final Repository repository,
 			final ObjectId blob1, final ObjectId blob2,
