@@ -26,6 +26,7 @@ import static org.eclipse.jgit.treewalk.filter.TreeFilter.ANY_DIFF;
 import java.io.IOException;
 
 import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -134,11 +135,11 @@ public abstract class TreeUtils {
 			throw new IllegalArgumentException(
 					Assert.formatNotEmpty("Revision"));
 
+		final ObjectId commit = CommitUtils.resolve(repository, revision);
 		final ObjectReader reader = repository.newObjectReader();
 		final RevWalk walk = new RevWalk(reader);
 		try {
-			return withParents(reader, walk,
-					walk.parseCommit(CommitUtils.resolve(repository, revision)));
+			return withParents(reader, walk, walk.parseCommit(commit));
 		} catch (IOException e) {
 			walk.release();
 			throw new GitException(e, null);
