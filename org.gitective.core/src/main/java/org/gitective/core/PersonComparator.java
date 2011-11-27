@@ -28,9 +28,10 @@ import org.eclipse.jgit.lib.PersonIdent;
 
 /**
  * {@link PersonIdent} comparator that compares the name and email address.
- * 
- * This class compares {@link PersonIdent#getName()	} first and if they are
- * identical it will compare {@link PersonIdent#getEmailAddress()} next.
+ * <p>
+ * This class compares {@link PersonIdent#getName()} values first and if they
+ * are identical then it will compare the {@link PersonIdent#getEmailAddress()}
+ * values next.
  */
 public class PersonComparator implements Comparator<PersonIdent>, Serializable {
 
@@ -45,7 +46,7 @@ public class PersonComparator implements Comparator<PersonIdent>, Serializable {
 	/**
 	 * Check if the two given {@link PersonIdent} objects are equal according to
 	 * the semantics of {@link #compare(PersonIdent, PersonIdent)}.
-	 * 
+	 *
 	 * @param p1
 	 * @param p2
 	 * @return true if equal, false otherwise
