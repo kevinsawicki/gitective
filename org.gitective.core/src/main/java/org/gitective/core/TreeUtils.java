@@ -35,12 +35,12 @@ import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
- * Utilities for dealing with trees
+ * Utilities for dealing with Git trees.
  */
 public abstract class TreeUtils {
 
 	/**
-	 * Get tree associated with commit
+	 * Get the tree associated with the given commit.
 	 *
 	 * @param walk
 	 * @param commit
@@ -57,7 +57,7 @@ public abstract class TreeUtils {
 	}
 
 	/**
-	 * Create tree walk
+	 * Create a tree walk with the commit's parents.
 	 *
 	 * @param reader
 	 * @param rWalk
@@ -90,7 +90,7 @@ public abstract class TreeUtils {
 	}
 
 	/**
-	 * Create tree walk with all parent trees
+	 * Create a tree walk with all the trees from the given commit's parents.
 	 *
 	 * @param repository
 	 * @param commitId
@@ -116,7 +116,8 @@ public abstract class TreeUtils {
 	}
 
 	/**
-	 * Create tree walk with all parent trees
+	 * Create a tree walk with all the trees from the given revision's commit
+	 * parents.
 	 *
 	 * @param repository
 	 * @param revision
@@ -145,8 +146,8 @@ public abstract class TreeUtils {
 	}
 
 	/**
-	 * Create a tree walk configured to diff the given commit against the parent
-	 * commit(s)
+	 * Create a tree walk configured to diff the given commit against all the
+	 * parent commits.
 	 *
 	 * @param repository
 	 * @param commitId
@@ -160,8 +161,8 @@ public abstract class TreeUtils {
 	}
 
 	/**
-	 * Create a tree walk configured to diff the given commit against the parent
-	 * commit(s)
+	 * Create a tree walk configured to diff the given revision against all the
+	 * parent commits.
 	 *
 	 * @param repository
 	 * @param revision
