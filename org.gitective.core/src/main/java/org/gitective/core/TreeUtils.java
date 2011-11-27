@@ -82,7 +82,7 @@ public abstract class TreeUtils {
 				for (int i = 0; i < parentCount; i++)
 					walk.addTree(getTree(rWalk, parents[i]));
 			}
-			walk.addTree(commit.getTree());
+			walk.addTree(getTree(rWalk, commit));
 		} catch (IOException e) {
 			throw new GitException(e, null);
 		}
