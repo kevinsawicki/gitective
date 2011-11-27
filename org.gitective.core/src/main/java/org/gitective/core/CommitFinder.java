@@ -21,12 +21,13 @@
  */
 package org.gitective.core;
 
+import static org.eclipse.jgit.lib.Constants.HEAD;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
 import org.eclipse.jgit.errors.StopWalkException;
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -128,10 +129,10 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Create new rev walk
+	 * Create a newly configured {@link RevWalk} for the repository
 	 *
 	 * @param repository
-	 * @return rev walk
+	 * @return new {@link RevWalk}
 	 */
 	protected RevWalk createWalk(final Repository repository) {
 		final RevWalk walk = new RevWalk(repository);
@@ -148,7 +149,7 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Traverse commits in given rev walk
+	 * Traverse the commits in the given {@link RevWalk}
 	 *
 	 * @param walk
 	 * @return this finder
@@ -172,11 +173,11 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Walk commits between the start commit id and end commit id. Starting
-	 * commit and filter cannot be null.
+	 * Walk the commits between the start commit id and end commit id.
 	 *
 	 * @param repository
 	 * @param start
+	 *            must be non-null
 	 * @param end
 	 * @return this service
 	 */
@@ -185,6 +186,7 @@ public class CommitFinder extends RepositoryService {
 		if (start == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Starting commit id"));
+
 		final RevWalk walk = createWalk(repository);
 		try {
 			walk.markStart(walk.parseCommit(start));
@@ -200,18 +202,17 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Search commits starting from the given commit id.
+	 * Search the commits starting from the given commit id.
 	 *
 	 * @param start
 	 * @return this service
 	 */
 	public CommitFinder findFrom(final ObjectId start) {
-		findBetween(start, (ObjectId) null);
-		return this;
+		return findBetween(start, (ObjectId) null);
 	}
 
 	/**
-	 * Search commits starting from the given revision string.
+	 * Search the commits starting from the given revision.
 	 *
 	 * @param start
 	 * @return this service
@@ -221,17 +222,18 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Search commits starting at the commit that {@link Constants#HEAD}
-	 * currently points to.
+	 * Search the commits starting at the commit that HEAD current references.
 	 *
 	 * @return this service
 	 */
 	public CommitFinder find() {
-		return findFrom(Constants.HEAD);
+		return findFrom(HEAD);
 	}
 
 	/**
-	 * Search commits starting at the commit that each tag is pointing to
+	 * Search the commits starting at the commit that each tag is referencing.
+	 * <p>
+	 * Repositories that have no tags will be ignored.
 	 *
 	 * @return this finder
 	 */
@@ -250,13 +252,18 @@ public class CommitFinder extends RepositoryService {
 				walk(walk);
 			} catch (IOException e) {
 				throw new GitException(e, repo);
+			} finally {
+				walk.release();
 			}
 		}
 		return this;
 	}
 
 	/**
-	 * Search commits starting at the commit that each branch is pointing to
+	 * Search the commits starting at the commit that each branch is
+	 * referencing.
+	 * <p>
+	 * Repositories that have no branches will be ignored.
 	 *
 	 * @return this finder
 	 */
@@ -283,7 +290,7 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Search commits between the given start and end commits.
+	 * Search the commits between the given start and end commits.
 	 *
 	 * @param start
 	 * @param end
@@ -298,7 +305,7 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Search commits between the given start revision string and the given end
+	 * Search the commits between the given start revision and the given end
 	 * commit id.
 	 *
 	 * @param start
@@ -317,8 +324,8 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Search commits between the given start commit id and the given end
-	 * revision string.
+	 * Search the commits between the given start commit id and the given end
+	 * revision.
 	 *
 	 * @param start
 	 * @param end
@@ -336,8 +343,8 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Search commits between the given start revision string and the given end
-	 * revision string.
+	 * Search the commits between the given start revision and the given end
+	 * revision.
 	 *
 	 * @param start
 	 * @param end
