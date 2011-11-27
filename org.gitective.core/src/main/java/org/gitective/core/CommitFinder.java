@@ -37,7 +37,9 @@ import org.gitective.core.filter.commit.CommitFilter;
 import org.gitective.core.filter.tree.BaseTreeFilter;
 
 /**
- * Commit finder class
+ * Commit finder class for locating commits based on combining
+ * {@link TreeFilter} and {@link RevFilter} instances and performing a
+ * {@link RevWalk} on one or more Git repositories.
  */
 public class CommitFinder extends RepositoryService {
 
@@ -57,6 +59,8 @@ public class CommitFinder extends RepositoryService {
 	protected RevFilter commitMatcher;
 
 	/**
+	 * Create a commit finder for the given Git directories.
+	 *
 	 * @param gitDirs
 	 */
 	public CommitFinder(final File... gitDirs) {
@@ -64,6 +68,8 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
+	 * Create a commit finder for the given Git repositories.
+	 *
 	 * @param repositories
 	 */
 	public CommitFinder(final Repository... repositories) {
@@ -71,10 +77,21 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
+	 * Create a commit finder for the given Git directory paths.
+	 *
 	 * @param gitDirs
 	 */
 	public CommitFinder(final String... gitDirs) {
 		super(gitDirs);
+	}
+
+	/**
+	 * Create a commit finder for th given repository collection
+	 *
+	 * @param repositories
+	 */
+	public CommitFinder(Collection<?> repositories) {
+		super(repositories);
 	}
 
 	/**
