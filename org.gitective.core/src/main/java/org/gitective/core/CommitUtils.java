@@ -21,6 +21,12 @@
  */
 package org.gitective.core;
 
+import static org.eclipse.jgit.lib.Constants.MASTER;
+import static org.eclipse.jgit.lib.Constants.R_HEADS;
+import static org.eclipse.jgit.lib.Constants.R_REMOTES;
+import static org.eclipse.jgit.lib.Constants.R_TAGS;
+import static org.eclipse.jgit.revwalk.filter.RevFilter.MERGE_BASE;
+
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -33,15 +39,17 @@ import org.eclipse.jgit.lib.RefDatabase;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * Commit utilities
+ * Utilities for dealing with Git commits.
+ * <p>
+ * This class provides helpers for finding the commits that branches and tags
+ * reference.
  */
 public abstract class CommitUtils {
 
 	/**
-	 * Get commit that revision points to
+	 * Get the commit that the revision references.
 	 *
 	 * @param repository
 	 * @param revision
@@ -57,11 +65,12 @@ public abstract class CommitUtils {
 		if (revision.length() == 0)
 			throw new IllegalArgumentException(
 					Assert.formatNotEmpty("Revision"));
+
 		return parse(repository, resolve(repository, revision));
 	}
 
 	/**
-	 * Get commit with id
+	 * Get the commit with the given id
 	 *
 	 * @param repository
 	 * @param commitId
@@ -75,11 +84,12 @@ public abstract class CommitUtils {
 		if (commitId == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Commit id"));
+
 		return parse(repository, commitId);
 	}
 
 	/**
-	 * Get the HEAD commit in the given repository
+	 * Get the HEAD commit in the given repository.
 	 *
 	 * @param repository
 	 * @return commit never null
@@ -89,13 +99,13 @@ public abstract class CommitUtils {
 	}
 
 	/**
-	 * Get the commit at the tip of the master branch in the given repository
+	 * Get the commit at the tip of the master branch in the given repository.
 	 *
 	 * @param repository
 	 * @return commit never null
 	 */
 	public static RevCommit getMaster(final Repository repository) {
-		return getCommit(repository, Constants.MASTER);
+		return getCommit(repository, MASTER);
 	}
 
 	/**
@@ -114,6 +124,7 @@ public abstract class CommitUtils {
 			throw new IllegalArgumentException(Assert.formatNotNull("Commits"));
 		if (commits.length == 0)
 			throw new IllegalArgumentException(Assert.formatNotEmpty("Commits"));
+
 		return walkToBase(repository, commits);
 	}
 
@@ -135,6 +146,7 @@ public abstract class CommitUtils {
 		if (revisions.length == 0)
 			throw new IllegalArgumentException(
 					Assert.formatNotEmpty("Revisions"));
+
 		final int length = revisions.length;
 		final ObjectId[] commits = new ObjectId[length];
 		for (int i = 0; i < length; i++)
@@ -143,7 +155,7 @@ public abstract class CommitUtils {
 	}
 
 	/**
-	 * Get commit that given ref points to
+	 * Get the commit that the given name references.
 	 *
 	 * @param repository
 	 * @param refName
@@ -159,6 +171,7 @@ public abstract class CommitUtils {
 		if (refName.length() == 0)
 			throw new IllegalArgumentException(
 					Assert.formatNotEmpty("Ref name"));
+
 		Ref ref;
 		try {
 			ref = repository.getRef(refName);
@@ -169,7 +182,7 @@ public abstract class CommitUtils {
 	}
 
 	/**
-	 * Get commit that given ref points to
+	 * Get the commit for the given reference.
 	 *
 	 * @param repository
 	 * @param ref
@@ -181,11 +194,12 @@ public abstract class CommitUtils {
 					Assert.formatNotNull("Repository"));
 		if (ref == null)
 			throw new IllegalArgumentException(Assert.formatNotNull("Ref"));
+
 		return lookupRef(repository, ref);
 	}
 
 	/**
-	 * Get all commits that tags in the given repository point to
+	 * Get all the commits that tags in the given repository reference.
 	 *
 	 * @param repository
 	 * @return non-null but possibly empty collection of commits
@@ -194,11 +208,12 @@ public abstract class CommitUtils {
 		if (repository == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Repository"));
+
 		final Collection<RevCommit> commits = new HashSet<RevCommit>();
 		final RevWalk walk = new RevWalk(repository);
 		final RefDatabase refDb = repository.getRefDatabase();
 		try {
-			getRefCommits(walk, refDb, Constants.R_TAGS, commits);
+			getRefCommits(walk, refDb, R_TAGS, commits);
 		} catch (IOException e) {
 			throw new GitException(e, repository);
 		} finally {
@@ -208,7 +223,7 @@ public abstract class CommitUtils {
 	}
 
 	/**
-	 * Get all commits that branches in the given repository point to
+	 * Get all the commits that branches in the given repository reference.
 	 *
 	 * @param repository
 	 * @return non-null but possibly empty collection of commits
@@ -217,12 +232,13 @@ public abstract class CommitUtils {
 		if (repository == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Repository"));
+
 		final Collection<RevCommit> commits = new HashSet<RevCommit>();
 		final RevWalk walk = new RevWalk(repository);
 		final RefDatabase refDb = repository.getRefDatabase();
 		try {
-			getRefCommits(walk, refDb, Constants.R_HEADS, commits);
-			getRefCommits(walk, refDb, Constants.R_REMOTES, commits);
+			getRefCommits(walk, refDb, R_HEADS, commits);
+			getRefCommits(walk, refDb, R_REMOTES, commits);
 		} catch (IOException e) {
 			throw new GitException(e, repository);
 		} finally {
@@ -262,7 +278,7 @@ public abstract class CommitUtils {
 	}
 
 	/**
-	 * Resolve revision string to commit object id
+	 * Resolve the revision string to a commit object id
 	 *
 	 * @param repository
 	 * @param revision
@@ -285,7 +301,7 @@ public abstract class CommitUtils {
 	private static RevCommit walkToBase(final Repository repository,
 			final ObjectId... commits) {
 		final RevWalk walk = new RevWalk(repository);
-		walk.setRevFilter(RevFilter.MERGE_BASE);
+		walk.setRevFilter(MERGE_BASE);
 		try {
 			for (int i = 0; i < commits.length; i++)
 				walk.markStart(walk.parseCommit(commits[i]));
@@ -301,7 +317,7 @@ public abstract class CommitUtils {
 	}
 
 	/**
-	 * Parse commit from repository
+	 * Parse a commit from the repository
 	 *
 	 * @param repository
 	 * @param commit
