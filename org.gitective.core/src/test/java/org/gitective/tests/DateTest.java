@@ -26,12 +26,12 @@ import java.util.Date;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.AuthorDateFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitterDateFilter;
 import org.gitective.core.filter.commit.DateFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

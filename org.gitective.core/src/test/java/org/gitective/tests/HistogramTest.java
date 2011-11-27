@@ -27,7 +27,7 @@ import java.util.TimeZone;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.gitective.core.service.CommitFinder;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.stat.AuthorHistogramFilter;
 import org.gitective.core.stat.CommitCountComparator;
 import org.gitective.core.stat.CommitHistogram;

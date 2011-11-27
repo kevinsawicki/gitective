@@ -21,10 +21,10 @@
  */
 package org.gitective.tests;
 
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.ChangeIdFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

@@ -42,9 +42,9 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.BlobUtils;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.GitException;
 import org.gitective.core.filter.commit.CommitDiffFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

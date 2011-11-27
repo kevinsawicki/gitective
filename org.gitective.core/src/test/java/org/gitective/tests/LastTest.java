@@ -23,10 +23,10 @@ package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.LastCommitFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

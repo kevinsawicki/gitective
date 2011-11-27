@@ -28,9 +28,9 @@ import java.util.Map;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.DuplicateBlobFilter;
 import org.gitective.core.filter.commit.DuplicateContainer;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

@@ -30,12 +30,12 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.notes.Note;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.GitException;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.NoteContentFilter;
 import org.gitective.core.filter.commit.NoteFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

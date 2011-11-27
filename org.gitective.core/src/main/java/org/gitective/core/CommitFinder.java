@@ -19,7 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-package org.gitective.core.service;
+package org.gitective.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,14 +33,11 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
-import org.gitective.core.Assert;
-import org.gitective.core.CommitUtils;
-import org.gitective.core.GitException;
 import org.gitective.core.filter.commit.CommitFilter;
 import org.gitective.core.filter.tree.BaseTreeFilter;
 
 /**
- * Commit locator class
+ * Commit finder class
  */
 public class CommitFinder extends RepositoryService {
 

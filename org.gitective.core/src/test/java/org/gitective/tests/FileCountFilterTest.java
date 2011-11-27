@@ -24,9 +24,9 @@ package org.gitective.tests;
 import java.util.Arrays;
 
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.tree.CommitTreeFilter;
 import org.gitective.core.filter.tree.TypeCountFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

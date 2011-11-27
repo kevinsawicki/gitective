@@ -19,7 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-package org.gitective.core.service;
+package org.gitective.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepository;
-import org.gitective.core.Assert;
 
 /**
  * Base service class for working with one or more {@link Repository} instances.
@@ -45,7 +44,7 @@ public class RepositoryService {
 	/**
 	 * Create a repository service for the repositories at the specified
 	 * directory paths.
-	 * 
+	 *
 	 * @param gitDirs
 	 */
 	public RepositoryService(final String... gitDirs) {
@@ -69,7 +68,7 @@ public class RepositoryService {
 	/**
 	 * Create a repository service for the repositories at the specified
 	 * directories.
-	 * 
+	 *
 	 * @param gitDirs
 	 */
 	public RepositoryService(final File... gitDirs) {
@@ -92,7 +91,7 @@ public class RepositoryService {
 
 	/**
 	 * Create a repository service for the specified repositories.
-	 * 
+	 *
 	 * @param repositories
 	 */
 	public RepositoryService(final Repository... repositories) {
@@ -110,7 +109,7 @@ public class RepositoryService {
 	 * Create a repository service for the given {@link Collection} that can be
 	 * either {@link String} paths, {@link File} handles to directories, or
 	 * existing {@link Repository} instances.
-	 * 
+	 *
 	 * @param repositories
 	 */
 	public RepositoryService(final Collection<?> repositories) {

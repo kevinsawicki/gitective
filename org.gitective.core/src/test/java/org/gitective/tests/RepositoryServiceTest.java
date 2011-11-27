@@ -26,7 +26,7 @@ import java.io.File;
 import junit.framework.Assert;
 
 import org.eclipse.jgit.lib.Repository;
-import org.gitective.core.service.RepositoryService;
+import org.gitective.core.RepositoryService;
 import org.junit.Test;
 
 /**

@@ -27,8 +27,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.CommitDiffFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

@@ -23,10 +23,10 @@ package org.gitective.tests;
 
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.SignedOffByFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

@@ -30,10 +30,10 @@ import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AllCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

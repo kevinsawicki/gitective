@@ -25,9 +25,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.DuplicateContainer;
 import org.gitective.core.filter.commit.DuplicateTreeFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.gitective.core.service.CommitFinder;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.stat.AuthorHistogramFilter;
 import org.gitective.core.stat.CommitCalendar;
 import org.gitective.core.stat.CommitHistogramFilter;

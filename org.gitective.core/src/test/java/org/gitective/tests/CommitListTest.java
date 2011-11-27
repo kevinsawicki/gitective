@@ -23,8 +23,8 @@ package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.CommitListFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**

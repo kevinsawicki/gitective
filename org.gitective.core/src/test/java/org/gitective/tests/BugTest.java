@@ -22,11 +22,11 @@
 package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.BugFilter;
 import org.gitective.core.filter.commit.BugSetFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
-import org.gitective.core.service.CommitFinder;
 import org.junit.Test;
 
 /**
