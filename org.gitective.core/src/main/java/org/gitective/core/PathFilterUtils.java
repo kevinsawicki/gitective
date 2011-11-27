@@ -21,6 +21,8 @@
  */
 package org.gitective.core;
 
+import static org.eclipse.jgit.treewalk.filter.TreeFilter.ANY_DIFF;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,7 @@ import org.eclipse.jgit.treewalk.filter.PathSuffixFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 /**
- * Utilities for dealing with paths when looking for commits
+ * Utilities for filtering paths in a repository
  */
 public abstract class PathFilterUtils {
 
@@ -66,7 +68,7 @@ public abstract class PathFilterUtils {
 			filter = AndTreeFilter.create(filters);
 		else
 			filter = filters[0];
-		return AndTreeFilter.create(filter, TreeFilter.ANY_DIFF);
+		return AndTreeFilter.create(filter, ANY_DIFF);
 	}
 
 	private static TreeFilter orDiff(final TreeFilter[] filters) {
@@ -75,12 +77,12 @@ public abstract class PathFilterUtils {
 			filter = OrTreeFilter.create(filters);
 		else
 			filter = filters[0];
-		return AndTreeFilter.create(filter, TreeFilter.ANY_DIFF);
+		return AndTreeFilter.create(filter, ANY_DIFF);
 	}
 
 	/**
-	 * Create diff filter for paths
-	 * 
+	 * Create a diff filter that affects all the given paths
+	 *
 	 * @param paths
 	 * @return tree filter for diffs affecting given paths
 	 */
@@ -89,12 +91,13 @@ public abstract class PathFilterUtils {
 			throw new IllegalArgumentException(Assert.formatNotNull("Paths"));
 		if (paths.length == 0)
 			throw new IllegalArgumentException(Assert.formatNotEmpty("Paths"));
+
 		return andDiff(paths(paths));
 	}
 
 	/**
-	 * Create diff filter for paths
-	 * 
+	 * Create a diff filter that affects any of the given paths
+	 *
 	 * @param paths
 	 * @return tree filter for diffs affecting given paths
 	 */
@@ -103,12 +106,13 @@ public abstract class PathFilterUtils {
 			throw new IllegalArgumentException(Assert.formatNotNull("Paths"));
 		if (paths.length == 0)
 			throw new IllegalArgumentException(Assert.formatNotEmpty("Paths"));
-		return AndTreeFilter.create(group(paths), TreeFilter.ANY_DIFF);
+
+		return AndTreeFilter.create(group(paths), ANY_DIFF);
 	}
 
 	/**
-	 * Create diff filter for suffixes
-	 * 
+	 * Create a diff filter affecting all of the given path suffixes
+	 *
 	 * @param suffixes
 	 * @return tree filter for diffs affecting given suffixes
 	 */
@@ -118,12 +122,13 @@ public abstract class PathFilterUtils {
 		if (suffixes.length == 0)
 			throw new IllegalArgumentException(
 					Assert.formatNotEmpty("Suffixes"));
+
 		return andDiff(suffix(suffixes));
 	}
 
 	/**
-	 * Create diff filter for suffixes
-	 * 
+	 * Create a diff filter affecting any of the given path suffixes
+	 *
 	 * @param suffixes
 	 * @return tree filter for diffs affecting given suffixes
 	 */
@@ -133,6 +138,7 @@ public abstract class PathFilterUtils {
 		if (suffixes.length == 0)
 			throw new IllegalArgumentException(
 					Assert.formatNotEmpty("Suffixes"));
+
 		return orDiff(suffix(suffixes));
 	}
 }
