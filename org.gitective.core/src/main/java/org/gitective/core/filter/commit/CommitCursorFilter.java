@@ -32,7 +32,9 @@ import org.gitective.core.Assert;
 
 /**
  * Cursor filter that retains the latest commit if not included by the wrapped
- * filter. This can be useful for retaining the commit to start subsequent walks
+ * filter.
+ * <p>
+ * This filter can be used for retaining the next commit to start a walk with
  * when walking commits in blocks.
  */
 public class CommitCursorFilter extends CommitFilter {
@@ -44,12 +46,13 @@ public class CommitCursorFilter extends CommitFilter {
 	/**
 	 * Create cursor filter that retains last commit when not included by the
 	 * given filter.
-	 * 
+	 *
 	 * @param filter
 	 */
 	public CommitCursorFilter(final RevFilter filter) {
 		if (filter == null)
 			throw new IllegalArgumentException(Assert.formatNotNull("Filter"));
+
 		this.filter = filter;
 	}
 
@@ -68,7 +71,7 @@ public class CommitCursorFilter extends CommitFilter {
 
 	/**
 	 * Get last commit visited.
-	 * 
+	 *
 	 * @return commit
 	 */
 	public RevCommit getLast() {

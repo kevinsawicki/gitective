@@ -21,7 +21,7 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.util.regex.Pattern;
+import static java.util.regex.Pattern.MULTILINE;
 
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
@@ -33,13 +33,13 @@ public class BugFilter extends CommitMessageFindFilter {
 	/**
 	 * BUG_REGEX
 	 */
-	public static final String BUG_REGEX = "^Bug: (\\w+)$"; //$NON-NLS-1$
+	public static final String BUG_REGEX = "^Bug: (\\w+)$";
 
 	/**
 	 * Create bug filter
 	 */
 	public BugFilter() {
-		super(BUG_REGEX, Pattern.MULTILINE);
+		super(BUG_REGEX, MULTILINE);
 	}
 
 	@Override

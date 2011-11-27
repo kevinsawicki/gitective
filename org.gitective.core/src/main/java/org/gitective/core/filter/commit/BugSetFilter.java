@@ -21,10 +21,12 @@
  */
 package org.gitective.core.filter.commit;
 
+import static java.util.regex.Pattern.MULTILINE;
+import static org.gitective.core.filter.commit.BugFilter.BUG_REGEX;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -41,12 +43,12 @@ public class BugSetFilter extends CommitMessageFindFilter {
 	 * Create new bug set filter
 	 */
 	public BugSetFilter() {
-		super(BugFilter.BUG_REGEX, Pattern.MULTILINE);
+		super(BUG_REGEX, MULTILINE);
 	}
 
 	/**
-	 * Get bugs collected
-	 * 
+	 * Get the bugs ids collected
+	 *
 	 * @return non-null but possibly empty set of bug ids
 	 */
 	public Set<String> getBugs() {

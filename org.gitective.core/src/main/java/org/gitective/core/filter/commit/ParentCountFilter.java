@@ -21,6 +21,8 @@
  */
 package org.gitective.core.filter.commit;
 
+import static java.lang.Integer.MAX_VALUE;
+
 import java.io.IOException;
 
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -34,10 +36,12 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class ParentCountFilter extends CommitFilter {
 
 	private final int min;
+
 	private final int max;
 
 	/**
-	 * Create a parent count filter that has at least 2 parents.
+	 * Create a parent count filter that includes commits that have at least 2
+	 * parents.
 	 */
 	public ParentCountFilter() {
 		this(2);
@@ -46,18 +50,18 @@ public class ParentCountFilter extends CommitFilter {
 	/**
 	 * Create a filter that includes commits that have a parent commit count of
 	 * at least the number specified.
-	 * 
+	 *
 	 * @param min
 	 *            minimum number of parent commits (inclusive)
 	 */
 	public ParentCountFilter(final int min) {
-		this(min, Integer.MAX_VALUE);
+		this(min, MAX_VALUE);
 	}
 
 	/**
 	 * Create a filter that includes commits that have a parent commit count
 	 * that falls inclusively in the specified range.
-	 * 
+	 *
 	 * @param min
 	 *            minimum number of parent commits (inclusive)
 	 * @param max

@@ -33,13 +33,14 @@ import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.treewalk.filter.TreeFilter;
+import org.gitective.core.TreeUtils;
 
 /**
  * Commit diff filter that computes the differences introduced by each commit
  * visited and calls {@link #include(RevCommit, Collection)}.
+ *
+ * @see #include(RevCommit, Collection)
  */
 public class CommitDiffFilter extends CommitFilter {
 
@@ -71,30 +72,18 @@ public class CommitDiffFilter extends CommitFilter {
 			throws IOException {
 		final List<DiffEntry> diffs;
 
-		final TreeWalk walk = new TreeWalk(walker.getObjectReader());
+		final TreeWalk walk = TreeUtils.diffWithParents(walker, commit);
 		walk.setRecursive(true);
-		walk.setFilter(TreeFilter.ANY_DIFF);
 
-		switch (commit.getParentCount()) {
+		final int parentCount = commit.getParentCount();
+		switch (parentCount) {
 		case 0:
-			walk.addTree(new EmptyTreeIterator());
-			walk.addTree(commit.getTree());
 			diffs = DiffEntry.scan(walk);
 			break;
 		case 1:
-			walk.addTree(getTree(walker, commit.getParent(0)));
-			walk.addTree(commit.getTree());
 			diffs = DiffEntry.scan(walk);
 			break;
 		default:
-			final RevCommit[] parents = commit.getParents();
-			final int parentCount = parents.length;
-
-			// Add all parent trees with current commit tree last
-			for (int i = 0; i < parentCount; i++)
-				walk.addTree(getTree(walker, parents[i]));
-			walk.addTree(commit.getTree());
-
 			diffs = new ArrayList<DiffEntry>();
 			final MutableObjectId objectId = new MutableObjectId();
 			while (walk.next()) {
@@ -130,7 +119,7 @@ public class CommitDiffFilter extends CommitFilter {
 
 	/**
 	 * Handle the differences introduced by given commit.
-	 *
+	 * <p>
 	 * Sub-classes should override this method. The default implementation
 	 * returns true in all cases.
 	 *

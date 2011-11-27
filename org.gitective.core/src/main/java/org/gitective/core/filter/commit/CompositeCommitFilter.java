@@ -38,7 +38,7 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 
 	/**
 	 * Create a composite filter with given child filters
-	 * 
+	 *
 	 * @param filters
 	 */
 	public CompositeCommitFilter(final RevFilter... filters) {
@@ -49,10 +49,11 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	}
 
 	/**
-	 * Add child filters to this filter. This method resizes an internal array
-	 * on each call so it should be called with as many child filters at once
-	 * instead of once per child filter.
-	 * 
+	 * Add child filters to this filter.
+	 * <p>
+	 * This method resizes an internal array on each call so it should be called
+	 * with as many child filters at once instead of once per child filter.
+	 *
 	 * @param addedFilters
 	 * @return this filter
 	 */
@@ -87,7 +88,7 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 
 	/**
 	 * Clone each filter into a new array.
-	 * 
+	 *
 	 * @return non-null but possibly empty array of child filters
 	 */
 	protected RevFilter[] cloneFilters() {
@@ -97,7 +98,7 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	/**
 	 * Get the number of filters that have been added as a child filter to this
 	 * filter
-	 * 
+	 *
 	 * @return number of children filters
 	 */
 	public int getSize() {

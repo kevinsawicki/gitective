@@ -32,8 +32,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.gitective.core.PersonComparator;
 
 /**
- * Commit filter that stores a {@link TreeSet} of persons encountered while
- * visiting commits.
+ * Commit filter that stores a set of persons encountered while visiting
+ * commits.
  */
 public abstract class PersonSetFilter extends CommitFilter {
 
@@ -51,7 +51,7 @@ public abstract class PersonSetFilter extends CommitFilter {
 
 	/**
 	 * Create a person set filter using the given comparator
-	 * 
+	 *
 	 * @param comparator
 	 */
 	public PersonSetFilter(final Comparator<PersonIdent> comparator) {
@@ -75,7 +75,7 @@ public abstract class PersonSetFilter extends CommitFilter {
 
 	/**
 	 * Get persons encountered during commit visiting
-	 * 
+	 *
 	 * @return non-null but possibly empty set of persons
 	 */
 	public Set<PersonIdent> getPersons() {
@@ -84,7 +84,7 @@ public abstract class PersonSetFilter extends CommitFilter {
 
 	/**
 	 * Get the person from the commit to include in set
-	 * 
+	 *
 	 * @param commit
 	 * @return person
 	 */

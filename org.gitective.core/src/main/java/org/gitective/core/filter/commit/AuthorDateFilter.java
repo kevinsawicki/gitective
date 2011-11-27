@@ -33,6 +33,8 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class AuthorDateFilter extends DateFilter {
 
 	/**
+	 * Create an author date filter for the given date
+	 *
 	 * @param date
 	 */
 	public AuthorDateFilter(final Date date) {
@@ -40,6 +42,8 @@ public class AuthorDateFilter extends DateFilter {
 	}
 
 	/**
+	 * Create an author date filter for the given time
+	 *
 	 * @param time
 	 */
 	public AuthorDateFilter(final long time) {

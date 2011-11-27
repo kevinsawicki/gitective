@@ -30,15 +30,16 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 /**
  * Composite filter that will always include every commit but still calls the
  * {@link RevFilter#include(RevWalk, RevCommit)} method on each filter that has
- * been added to this filter. Most often used when you want to ensure that a
- * collection of filters are each always called on every commit in a
- * {@link RevWalk}.
+ * been added to this filter.
+ * <p>
+ * This filter is most often used when you want to ensure that a collection of
+ * filters are each always called on every commit in a {@link RevWalk}.
  */
 public class AllCommitFilter extends CompositeCommitFilter {
 
 	/**
 	 * Create an all commit filter with given child filters
-	 * 
+	 *
 	 * @param filters
 	 */
 	public AllCommitFilter(final RevFilter... filters) {

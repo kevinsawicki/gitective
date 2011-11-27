@@ -33,6 +33,8 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class CommitterDateFilter extends DateFilter {
 
 	/**
+	 * Create a new committer date filter for the given date
+	 *
 	 * @param date
 	 */
 	public CommitterDateFilter(final Date date) {
@@ -40,6 +42,8 @@ public class CommitterDateFilter extends DateFilter {
 	}
 
 	/**
+	 * Create a new committer date filter for the given time
+	 *
 	 * @param time
 	 */
 	public CommitterDateFilter(final long time) {

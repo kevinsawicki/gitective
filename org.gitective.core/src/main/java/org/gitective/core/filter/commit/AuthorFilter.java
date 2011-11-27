@@ -35,6 +35,8 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 public class AuthorFilter extends PersonFilter {
 
 	/**
+	 * Create an author filter for the given person
+	 *
 	 * @param person
 	 */
 	public AuthorFilter(final PersonIdent person) {
@@ -42,6 +44,8 @@ public class AuthorFilter extends PersonFilter {
 	}
 
 	/**
+	 * Create an author filter for the given name and e-mail address
+	 *
 	 * @param name
 	 * @param email
 	 */
@@ -52,7 +56,7 @@ public class AuthorFilter extends PersonFilter {
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
-		return match(commit.getAuthorIdent());
+		return match(commit.getAuthorIdent()) ? true : include(false);
 	}
 
 	@Override

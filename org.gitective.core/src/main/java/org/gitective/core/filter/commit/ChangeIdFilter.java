@@ -21,7 +21,7 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.util.regex.Pattern;
+import static java.util.regex.Pattern.MULTILINE;
 
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
@@ -34,13 +34,13 @@ public class ChangeIdFilter extends CommitMessageFindFilter {
 	/**
 	 * CHANGE_ID_REGEX
 	 */
-	public static final String CHANGE_ID_REGEX = "Change-Id: I[0-9a-f]{40}"; //$NON-NLS-1$
+	public static final String CHANGE_ID_REGEX = "Change-Id: I[0-9a-f]{40}";
 
 	/**
 	 * Create change id filter
 	 */
 	public ChangeIdFilter() {
-		super(CHANGE_ID_REGEX, Pattern.MULTILINE);
+		super(CHANGE_ID_REGEX, MULTILINE);
 	}
 
 	@Override

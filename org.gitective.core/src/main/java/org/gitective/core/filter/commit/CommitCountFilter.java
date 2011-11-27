@@ -35,7 +35,7 @@ public class CommitCountFilter extends CommitFilter {
 	private long count;
 
 	@Override
-	public boolean include(final RevWalk walker, final RevCommit cmit)
+	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		count++;
 		return true;
@@ -43,7 +43,7 @@ public class CommitCountFilter extends CommitFilter {
 
 	/**
 	 * Get number of commits visited
-	 * 
+	 *
 	 * @return count
 	 */
 	public long getCount() {

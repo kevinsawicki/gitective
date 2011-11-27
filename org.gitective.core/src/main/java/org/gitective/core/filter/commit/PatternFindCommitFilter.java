@@ -52,7 +52,7 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 
 	/**
 	 * Create a pattern find commit filter
-	 * 
+	 *
 	 * @param pattern
 	 */
 	public PatternFindCommitFilter(final String pattern) {
@@ -61,7 +61,7 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 
 	/**
 	 * Create a pattern find commit filter
-	 * 
+	 *
 	 * @param pattern
 	 * @param flags
 	 */
@@ -70,6 +70,7 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 			throw new IllegalArgumentException(Assert.formatNotNull("Pattern"));
 		if (pattern.length() == 0)
 			throw new IllegalArgumentException(Assert.formatNotEmpty("Pattern"));
+
 		this.pattern = pattern;
 		this.flags = flags;
 		matcher = Pattern.compile(pattern, flags).matcher("");
@@ -78,12 +79,12 @@ public abstract class PatternFindCommitFilter extends CommitFilter {
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
-		return include(matcher.reset(getText(commit)).find());
+		return matcher.reset(getText(commit)).find() ? true : include(false);
 	}
 
 	/**
 	 * Get the text from the commit to find the pattern in
-	 * 
+	 *
 	 * @param commit
 	 * @return text
 	 */

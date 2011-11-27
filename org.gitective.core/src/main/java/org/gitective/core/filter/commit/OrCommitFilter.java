@@ -29,8 +29,10 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
  * Composite filter that only includes commits that are included by at least one
- * child filter that has been added to this filter. This filter stops matching
- * against child filters when the first child filter matches the current commit.
+ * child filter that has been added to this filter.
+ * <p>
+ * This filter stops matching against child filters when the first child filter
+ * matches the current commit.
  */
 public class OrCommitFilter extends CompositeCommitFilter {
 
@@ -43,7 +45,7 @@ public class OrCommitFilter extends CompositeCommitFilter {
 
 	/**
 	 * Create an or commit filter with given child filters
-	 * 
+	 *
 	 * @param filters
 	 */
 	public OrCommitFilter(final RevFilter... filters) {

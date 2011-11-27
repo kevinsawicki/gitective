@@ -30,9 +30,8 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.treewalk.filter.TreeFilter;
+import org.gitective.core.TreeUtils;
 
 /**
  * Filter that tracks any duplicate trees introduced in a visited commit.
@@ -43,27 +42,7 @@ public class DuplicateTreeFilter extends CommitFilter {
 
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
-		final TreeWalk walk = new TreeWalk(walker.getObjectReader());
-		walk.setFilter(TreeFilter.ANY_DIFF);
-
-		switch (commit.getParentCount()) {
-		case 0:
-			walk.addTree(new EmptyTreeIterator());
-			walk.addTree(commit.getTree());
-			break;
-		case 1:
-			walk.addTree(getTree(walker, commit.getParent(0)));
-			walk.addTree(commit.getTree());
-			break;
-		default:
-			final RevCommit[] parents = commit.getParents();
-			final int parentCount = parents.length;
-
-			// Add all parent trees with current commit tree last
-			for (int i = 0; i < parentCount; i++)
-				walk.addTree(getTree(walker, parents[i]));
-			walk.addTree(commit.getTree());
-		}
+		final TreeWalk walk = TreeUtils.diffWithParents(walker, commit);
 		final MutableObjectId id = new MutableObjectId();
 		final ObjectId zero = ObjectId.zeroId();
 		final DuplicateContainer dupes = new DuplicateContainer(commit);

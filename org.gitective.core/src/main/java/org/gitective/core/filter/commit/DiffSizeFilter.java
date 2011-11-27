@@ -38,8 +38,8 @@ public class DiffSizeFilter extends CommitDiffFilter {
 	private final int total;
 
 	/**
-	 * Create filter that introduced given number of line differences
-	 * 
+	 * Create a filter that introduced given number of line differences
+	 *
 	 * @param diffTotal
 	 */
 	public DiffSizeFilter(final int diffTotal) {
@@ -47,8 +47,8 @@ public class DiffSizeFilter extends CommitDiffFilter {
 	}
 
 	/**
-	 * Get configured difference total
-	 * 
+	 * Get the configured difference total
+	 *
 	 * @return total
 	 */
 	public int getTotal() {

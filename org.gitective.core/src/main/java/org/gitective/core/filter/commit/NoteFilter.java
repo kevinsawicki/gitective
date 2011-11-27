@@ -41,6 +41,7 @@ public class NoteFilter extends CommitFilter {
 
 	private String[] noteRefs;
 
+	@Override
 	public CommitFilter setRepository(final Repository repository) {
 		super.setRepository(repository);
 		if (repository != null) {

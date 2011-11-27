@@ -29,7 +29,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
  * Composite filter that only includes commits that are included by every child
- * filter that has been added to this filter.
+ * filter that has been added to this parent filter.
  */
 public class AndCommitFilter extends CompositeCommitFilter {
 
@@ -42,7 +42,7 @@ public class AndCommitFilter extends CompositeCommitFilter {
 
 	/**
 	 * Create and commit filter with given child filters
-	 * 
+	 *
 	 * @param filters
 	 */
 	public AndCommitFilter(final RevFilter... filters) {

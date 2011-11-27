@@ -36,7 +36,7 @@ public class CommitterFilter extends PersonFilter {
 
 	/**
 	 * Create a committer filter matching a {@link PersonIdent}
-	 * 
+	 *
 	 * @param person
 	 */
 	public CommitterFilter(final PersonIdent person) {
@@ -45,7 +45,7 @@ public class CommitterFilter extends PersonFilter {
 
 	/**
 	 * Create a committer filter matching a name and e-mail address
-	 * 
+	 *
 	 * @param name
 	 * @param email
 	 */
@@ -56,7 +56,7 @@ public class CommitterFilter extends PersonFilter {
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
-		return match(commit.getCommitterIdent());
+		return match(commit.getCommitterIdent()) ? true : include(false);
 	}
 
 	@Override

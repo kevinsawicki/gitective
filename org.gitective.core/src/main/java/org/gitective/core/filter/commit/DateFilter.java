@@ -42,8 +42,8 @@ public abstract class DateFilter extends CommitFilter {
 	protected final long time;
 
 	/**
-	 * Create date filter
-	 * 
+	 * Create a date filter for a given time
+	 *
 	 * @param time
 	 */
 	public DateFilter(final long time) {
@@ -51,14 +51,15 @@ public abstract class DateFilter extends CommitFilter {
 	}
 
 	/**
-	 * Create date filter from date
-	 * 
+	 * Create a date filter for a given date
+	 *
 	 * @param date
 	 *            must be non-null
 	 */
 	public DateFilter(final Date date) {
 		if (date == null)
 			throw new IllegalArgumentException(Assert.formatNotNull("Date"));
+
 		time = date.getTime();
 	}
 
@@ -66,12 +67,16 @@ public abstract class DateFilter extends CommitFilter {
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		final Date date = getDate(commit);
-		return include(date != null && date.getTime() >= time);
+		if (date == null)
+			return include(false);
+		if (date.getTime() < time)
+			return include(false);
+		return true;
 	}
 
 	/**
-	 * Get date from given {@link PersonIdent}
-	 * 
+	 * Get the date from a given {@link PersonIdent}
+	 *
 	 * @param person
 	 * @return date or null if given person is null
 	 */
@@ -80,8 +85,8 @@ public abstract class DateFilter extends CommitFilter {
 	}
 
 	/**
-	 * Get date from commit to compare against
-	 * 
+	 * Get a date from the commit to compare against
+	 *
 	 * @param commit
 	 * @return date
 	 */

@@ -52,10 +52,11 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	 */
 	protected RevTree getTree(final RevWalk walk, final RevCommit commit)
 			throws IOException {
-		RevTree tree = commit.getTree();
-		if (tree == null)
-			tree = walk.parseCommit(commit).getTree();
-		return tree;
+		final RevTree tree = commit.getTree();
+		if (tree != null)
+			return tree;
+		walk.parseHeaders(commit);
+		return commit.getTree();
 	}
 
 	/**
@@ -108,7 +109,7 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 
 	/**
 	 * Clones this filter.
-	 *
+	 * <p>
 	 * The default implementation throws a {@link UnsupportedOperationException}
 	 * and sub-classes should override if filter cloning is supported.
 	 *

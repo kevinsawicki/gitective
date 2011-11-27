@@ -94,7 +94,7 @@ public class NoteContentFilter extends CommitFilter {
 
 	/**
 	 * Handle note associate with given commit.
-	 *
+	 * <p>
 	 * This method calls {@link #include(RevCommit, Note, String)} by default
 	 * with the content read from the blob associated with the note, sub-classes
 	 * should override if needed.
@@ -110,7 +110,7 @@ public class NoteContentFilter extends CommitFilter {
 
 	/**
 	 * Handle note content associated with given commit.
-	 *
+	 * <p>
 	 * This method always returns true by default and sub-classes should
 	 * override.
 	 *

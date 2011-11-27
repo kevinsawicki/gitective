@@ -21,10 +21,12 @@
  */
 package org.gitective.core.filter.commit;
 
+import static java.util.regex.Pattern.MULTILINE;
+import static org.eclipse.jgit.lib.Constants.SIGNED_OFF_BY_TAG;
+
 import java.text.MessageFormat;
 import java.util.regex.Pattern;
 
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
@@ -37,20 +39,19 @@ public class SignedOffByFilter extends CommitMessageFindFilter {
 	/**
 	 * Signed off by format
 	 */
-	public static final String SIGNED_OFF_BY = Constants.SIGNED_OFF_BY_TAG
-			+ "{0} <{1}>";
+	public static final String SIGNED_OFF_BY = SIGNED_OFF_BY_TAG + "{0} <{1}>";
 
 	private final PersonIdent person;
 
 	/**
 	 * Create a signed off by filter matching the person
-	 * 
+	 *
 	 * @param person
 	 *            must be non-null
 	 */
 	public SignedOffByFilter(final PersonIdent person) {
 		super(Pattern.quote(MessageFormat.format(SIGNED_OFF_BY,
-				person.getName(), person.getEmailAddress())), Pattern.MULTILINE);
+				person.getName(), person.getEmailAddress())), MULTILINE);
 		this.person = person;
 	}
 

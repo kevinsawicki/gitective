@@ -32,6 +32,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
  * Filter that tracks commits where files with the same content were modified.
+ * <p>
  * This filter traverses all the diff entries in each commit visited and tracks
  * any instances where the different paths reference the same blob object id.
  */
@@ -54,7 +55,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 	}
 
 	/**
-	 * Get duplicates
+	 * Get the duplicates
 	 *
 	 * @return non-null but possibly empty map
 	 */
