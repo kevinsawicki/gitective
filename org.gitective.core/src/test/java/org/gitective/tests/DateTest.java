@@ -21,8 +21,6 @@
  */
 package org.gitective.tests;
 
-import java.util.Date;
-
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
@@ -31,7 +29,6 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.AuthorDateFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitterDateFilter;
-import org.gitective.core.filter.commit.DateFilter;
 import org.junit.Test;
 
 /**
@@ -41,7 +38,7 @@ public class DateTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link AuthorDateFilter}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -61,7 +58,7 @@ public class DateTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link AuthorDateFilter}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -78,7 +75,7 @@ public class DateTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link AuthorDateFilter#clone()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -92,7 +89,7 @@ public class DateTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link CommitterDateFilter}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -112,7 +109,7 @@ public class DateTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link CommitterDateFilter}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -129,7 +126,7 @@ public class DateTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link CommitterDateFilter#clone()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
