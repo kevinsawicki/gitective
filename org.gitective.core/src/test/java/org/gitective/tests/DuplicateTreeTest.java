@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.DuplicateContainer;
 import org.gitective.core.filter.commit.DuplicateTreeFilter;
@@ -51,6 +52,7 @@ public class DuplicateTreeTest extends GitTestCase {
 		assertNotNull(dupes);
 		assertEquals(1, dupes.size());
 		assertEquals(commit, dupes.keySet().iterator().next());
+		assertTrue(filter.hasDuplicates());
 	}
 
 	/**
@@ -69,5 +71,20 @@ public class DuplicateTreeTest extends GitTestCase {
 		Map<RevCommit, DuplicateContainer> dupes = filter.getDuplicates();
 		assertNotNull(dupes);
 		assertTrue(dupes.isEmpty());
+		assertFalse(filter.hasDuplicates());
+	}
+
+	/**
+	 * Test of {@link DuplicateTreeFilter#clone()}
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void cloneFilter() throws Exception {
+		DuplicateTreeFilter filter1 = new DuplicateTreeFilter();
+		RevFilter filter2 = filter1.clone();
+		assertNotNull(filter2);
+		assertTrue(filter2 instanceof DuplicateTreeFilter);
+		assertNotSame(filter1, filter2);
 	}
 }
