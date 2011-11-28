@@ -24,6 +24,7 @@ package org.gitective.tests;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.tree.CommitTreeFilter;
 import org.gitective.core.filter.tree.ExtensionOccurrence;
@@ -93,5 +94,19 @@ public class ExtensionOccurrenceTest extends GitTestCase {
 			assertNotNull(occurrence.getExtension());
 			assertTrue(occurrence.getCount() > 0);
 		}
+	}
+
+	/**
+	 * Test {@link ExtensionOccurrenceFilter#clone()}
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void cloneFilter() throws Exception {
+		ExtensionOccurrenceFilter filter1 = new ExtensionOccurrenceFilter();
+		TreeFilter filter2 = filter1.clone();
+		assertNotNull(filter2);
+		assertTrue(filter2 instanceof ExtensionOccurrenceFilter);
+		assertNotSame(filter1, filter2);
 	}
 }
