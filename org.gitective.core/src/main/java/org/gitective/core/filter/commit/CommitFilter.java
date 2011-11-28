@@ -43,23 +43,6 @@ public abstract class CommitFilter extends RevFilter implements Cloneable {
 	protected Repository repository;
 
 	/**
-	 * Get tree associated with commit
-	 *
-	 * @param walk
-	 * @param commit
-	 * @return tree
-	 * @throws IOException
-	 */
-	protected RevTree getTree(final RevWalk walk, final RevCommit commit)
-			throws IOException {
-		final RevTree tree = commit.getTree();
-		if (tree != null)
-			return tree;
-		walk.parseHeaders(commit);
-		return commit.getTree();
-	}
-
-	/**
 	 * Set whether the search should be stopped when a commit visited is not
 	 * included.
 	 *
