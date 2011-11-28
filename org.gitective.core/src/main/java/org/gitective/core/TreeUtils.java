@@ -70,23 +70,19 @@ public abstract class TreeUtils {
 			final RevWalk rWalk, final RevCommit commit) throws IOException {
 		final TreeWalk walk = new TreeWalk(reader);
 		final int parentCount = commit.getParentCount();
-		try {
-			switch (parentCount) {
-			case 0:
-				walk.addTree(new EmptyTreeIterator());
-				break;
-			case 1:
-				walk.addTree(getTree(rWalk, commit.getParent(0)));
-				break;
-			default:
-				final RevCommit[] parents = commit.getParents();
-				for (int i = 0; i < parentCount; i++)
-					walk.addTree(getTree(rWalk, parents[i]));
-			}
-			walk.addTree(getTree(rWalk, commit));
-		} catch (IOException e) {
-			throw new GitException(e, null);
+		switch (parentCount) {
+		case 0:
+			walk.addTree(new EmptyTreeIterator());
+			break;
+		case 1:
+			walk.addTree(getTree(rWalk, commit.getParent(0)));
+			break;
+		default:
+			final RevCommit[] parents = commit.getParents();
+			for (int i = 0; i < parentCount; i++)
+				walk.addTree(getTree(rWalk, parents[i]));
 		}
+		walk.addTree(getTree(rWalk, commit));
 		return walk;
 	}
 
