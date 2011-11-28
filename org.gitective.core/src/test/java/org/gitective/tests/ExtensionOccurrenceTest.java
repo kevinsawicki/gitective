@@ -89,11 +89,20 @@ public class ExtensionOccurrenceTest extends GitTestCase {
 				.find();
 		assertEquals(2, filter.getCount("php"));
 		assertEquals(1, filter.getCount("txt"));
+		ExtensionOccurrence previous = null;
+		int count = 0;
 		for (ExtensionOccurrence occurrence : filter) {
 			assertNotNull(occurrence);
 			assertNotNull(occurrence.getExtension());
+			assertTrue(occurrence.equals(occurrence));
 			assertTrue(occurrence.getCount() > 0);
+			assertFalse(occurrence.equals(previous));
+			if (previous != null)
+				assertFalse(occurrence.toString().equals(previous.toString()));
+			previous = occurrence;
+			count++;
 		}
+		assertEquals(2, count);
 	}
 
 	/**
