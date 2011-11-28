@@ -21,17 +21,20 @@
  */
 package org.gitective.core.stat;
 
+import static java.lang.Long.MAX_VALUE;
+import static java.lang.Long.MIN_VALUE;
+import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
  * Activity class for storing all the commits attributed to a specific user.
- * 
+ * <p>
  * This class provides the IDs and times for all commits attributed.
  */
 public class UserCommitActivity implements Serializable {
@@ -54,12 +57,12 @@ public class UserCommitActivity implements Serializable {
 	private int index;
 	private byte[][] commits;
 	private long[] times;
-	private long first = Long.MAX_VALUE;
-	private long last = Long.MIN_VALUE;
+	private long first = MAX_VALUE;
+	private long last = MIN_VALUE;
 
 	/**
-	 * Create user activity for given name and email
-	 * 
+	 * Create user activity for given name and e-mail address
+	 *
 	 * @param name
 	 * @param email
 	 */
@@ -72,7 +75,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get name of user
-	 * 
+	 *
 	 * @return name
 	 */
 	public String getName() {
@@ -80,8 +83,8 @@ public class UserCommitActivity implements Serializable {
 	}
 
 	/**
-	 * Get email address of user
-	 * 
+	 * Get e-mail address of user
+	 *
 	 * @return email
 	 */
 	public String getEmail() {
@@ -90,7 +93,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Include given commit in activity
-	 * 
+	 *
 	 * @param commit
 	 *            must be non-null
 	 * @param user
@@ -108,7 +111,7 @@ public class UserCommitActivity implements Serializable {
 			commits = Arrays.copyOf(commits, newSize);
 			times = Arrays.copyOf(times, newSize);
 		}
-		final byte[] id = new byte[Constants.OBJECT_ID_LENGTH];
+		final byte[] id = new byte[OBJECT_ID_LENGTH];
 		commit.copyRawTo(id, 0);
 		commits[index] = id;
 		times[index] = when;
@@ -123,7 +126,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get commit times
-	 * 
+	 *
 	 * @return non-null but possibly empty array
 	 */
 	public long[] getTimes() {
@@ -132,7 +135,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get raw commits as array of byte arrays
-	 * 
+	 *
 	 * @return non-null but possibly empty array
 	 */
 	public byte[][] getRawIds() {
@@ -141,7 +144,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get commits as array of object ids
-	 * 
+	 *
 	 * @return non-null but possibly empty array
 	 */
 	public ObjectId[] getIds() {
@@ -153,7 +156,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get number of commits
-	 * 
+	 *
 	 * @return commit count
 	 */
 	public int getCount() {
@@ -162,7 +165,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get id of first commit
-	 * 
+	 *
 	 * @return commit id or null if no commits
 	 */
 	public ObjectId getFirst() {
@@ -171,7 +174,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get id of latest commit
-	 * 
+	 *
 	 * @return commit id or null if no commits
 	 */
 	public ObjectId getLast() {
@@ -180,7 +183,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get time of earliest commit
-	 * 
+	 *
 	 * @return time in milliseconds or 0 if no commits
 	 */
 	public long getEarliest() {
@@ -189,7 +192,7 @@ public class UserCommitActivity implements Serializable {
 
 	/**
 	 * Get time of latest commit
-	 * 
+	 *
 	 * @return time in milliseconds or 0 if no commits
 	 */
 	public long getLatest() {

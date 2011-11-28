@@ -37,7 +37,7 @@ public abstract class CommitHistogramFilter extends CommitFilter {
 
 	/**
 	 * Get generated histogram
-	 * 
+	 *
 	 * @return histogram
 	 */
 	public CommitHistogram getHistogram() {
@@ -46,7 +46,7 @@ public abstract class CommitHistogramFilter extends CommitFilter {
 
 	@Override
 	public CommitFilter reset() {
-		histogram = new CommitHistogram();
+		histogram.clear();
 		return super.reset();
 	}
 }

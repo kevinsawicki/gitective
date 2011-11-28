@@ -46,7 +46,7 @@ public class CommitHistogram implements Serializable {
 
 	/**
 	 * Register commit under given user
-	 * 
+	 *
 	 * @param commit
 	 * @param user
 	 * @return this histogram
@@ -64,8 +64,18 @@ public class CommitHistogram implements Serializable {
 	}
 
 	/**
+	 * Clear all user commit activity from histogram
+	 *
+	 * @return this histogram
+	 */
+	public CommitHistogram clear() {
+		users.clear();
+		return this;
+	}
+
+	/**
 	 * Get user activity by given email address
-	 * 
+	 *
 	 * @param email
 	 * @return activity or null if none
 	 */
@@ -75,7 +85,7 @@ public class CommitHistogram implements Serializable {
 
 	/**
 	 * Get all user activity sorted by optional comparator
-	 * 
+	 *
 	 * @param comparator
 	 * @return non-null but possibly empty array of user activity
 	 */
@@ -90,7 +100,7 @@ public class CommitHistogram implements Serializable {
 
 	/**
 	 * Get all user activity
-	 * 
+	 *
 	 * @see #getUserActivity(Comparator)
 	 * @return non-null but possibly empty array of user activity
 	 */

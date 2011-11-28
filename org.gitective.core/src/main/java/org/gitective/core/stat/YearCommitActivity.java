@@ -45,6 +45,9 @@ public class YearCommitActivity {
 
 	private final int year;
 
+	/**
+	 * Month -> Days -> Hours
+	 */
 	private final int[][][] commits;
 
 	private int total;

@@ -31,7 +31,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 /**
- * Base tree filter to be extended by sub-classes
+ * Base tree filter to be extended by sub-classes.
  */
 public abstract class BaseTreeFilter extends TreeFilter {
 

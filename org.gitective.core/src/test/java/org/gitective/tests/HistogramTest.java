@@ -75,7 +75,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Test histogram with single commit
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -107,7 +107,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Test histogram with single commit
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -139,7 +139,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link LatestComparator}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -163,7 +163,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link EarliestComparator}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -187,7 +187,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link CommitCountComparator}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -214,7 +214,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link CommitHistogramFilter#reset()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -227,12 +227,12 @@ public class HistogramTest extends GitTestCase {
 		assertSame(histogram, filter.getHistogram());
 		filter.reset();
 		assertNotNull(filter.getHistogram());
-		assertNotSame(histogram, filter.getHistogram());
+		assertSame(histogram, filter.getHistogram());
 	}
 
 	/**
 	 * Unit test of {@link FileHistogramFilter#reset()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -250,7 +250,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link AuthorHistogramFilter#clone()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -267,7 +267,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link CommitterHistogramFilter#clone()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -284,7 +284,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Unit test of {@link FileHistogramFilter#clone()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -301,7 +301,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Test {@link FileHistogramFilter} with single commit
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -332,7 +332,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Test {@link FileHistogramFilter} with three commits
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -358,7 +358,7 @@ public class HistogramTest extends GitTestCase {
 
 	/**
 	 * Test of {@link RevisionCountComparator}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test

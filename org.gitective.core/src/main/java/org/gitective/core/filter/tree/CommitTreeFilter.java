@@ -69,6 +69,7 @@ public class CommitTreeFilter extends CommitFilter {
 	public CommitTreeFilter(final TreeFilter filter) {
 		if (filter == null)
 			throw new IllegalArgumentException("Filter cannot be null");
+
 		if (filter instanceof BaseTreeFilter)
 			this.filter = (BaseTreeFilter) filter;
 		else

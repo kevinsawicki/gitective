@@ -34,17 +34,19 @@ public class ExtensionOccurrence {
 	private final String extension;
 
 	/**
-	 * Create occurrence
+	 * Create occurrence for given extension
 	 *
 	 * @param extension
 	 *            must be non-null
 	 */
-	ExtensionOccurrence(final String extension) {
+	protected ExtensionOccurrence(final String extension) {
 		this.extension = extension;
 		count = 1;
 	}
 
 	/**
+	 * Get number of occurrences
+	 *
 	 * @return count
 	 */
 	public int getCount() {
@@ -52,6 +54,8 @@ public class ExtensionOccurrence {
 	}
 
 	/**
+	 * Get extension
+	 *
 	 * @return extension
 	 */
 	public String getExtension() {

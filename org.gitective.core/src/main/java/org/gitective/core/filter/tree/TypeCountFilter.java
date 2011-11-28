@@ -33,7 +33,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 /**
- * Tree filter that counts entries visited of the configured type
+ * Tree filter that counts entries visited of a configured type
  */
 public class TypeCountFilter extends BaseTreeFilter {
 

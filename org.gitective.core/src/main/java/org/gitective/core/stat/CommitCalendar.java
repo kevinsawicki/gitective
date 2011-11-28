@@ -30,7 +30,7 @@ import java.util.TreeMap;
 
 /**
  * Commit calendar class that stores yearly commit activity.
- * 
+ * <p>
  * This class supports obtaining the number of commits in a given month, day or
  * hour of the day across all years. Also supported is obtaining the number of
  * commits in each month, day or hour of the day as an array of integers.
@@ -44,7 +44,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Create calendar from user activity
-	 * 
+	 *
 	 * @param activity
 	 */
 	public CommitCalendar(final UserCommitActivity[] activity) {
@@ -66,7 +66,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Get yearly activity
-	 * 
+	 *
 	 * @return non-null but possibly empty array
 	 */
 	public YearCommitActivity[] getYears() {
@@ -75,7 +75,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Get commit counts for each month
-	 * 
+	 *
 	 * @return monthly counts
 	 */
 	public int[] getMonths() {
@@ -87,7 +87,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Get commit counts for each day of the month
-	 * 
+	 *
 	 * @return day of month counts
 	 */
 	public int[] getDays() {
@@ -99,7 +99,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Get commit counts for each hour of the day
-	 * 
+	 *
 	 * @return hourly counts
 	 */
 	public int[] getHours() {
@@ -111,7 +111,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Get number of commits in given month
-	 * 
+	 *
 	 * @param month
 	 * @return monthly count
 	 */
@@ -124,7 +124,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Get number of commits in given hour
-	 * 
+	 *
 	 * @param hour
 	 * @return hourly count
 	 */
@@ -137,7 +137,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Get number of commits in given day of month
-	 * 
+	 *
 	 * @param dayOfMonth
 	 * @return day of month count
 	 */
@@ -150,7 +150,7 @@ public class CommitCalendar implements Serializable {
 
 	/**
 	 * Get total number of commits for all years
-	 * 
+	 *
 	 * @return number of commits
 	 */
 	public int getCount() {

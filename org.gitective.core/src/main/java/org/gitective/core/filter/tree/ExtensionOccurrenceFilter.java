@@ -39,14 +39,15 @@ public class ExtensionOccurrenceFilter extends BaseTreeFilter implements
 	private final Map<String, ExtensionOccurrence> extensions = new HashMap<String, ExtensionOccurrence>();
 
 	/**
-	 * Get occurrences of given extension. The given extension should not
-	 * contain a leading '.' character.
+	 * Get occurrences of given extension.
+	 * <p>
+	 * The given extension should not contain a leading '.' character.
 	 *
 	 * @param extension
 	 * @return occurrence count
 	 */
 	public int getCount(final String extension) {
-		if (extension == null)
+		if (extension == null || extension.length() == 0)
 			return 0;
 		final ExtensionOccurrence count = extensions.get(extension);
 		return count != null ? count.count : 0;
