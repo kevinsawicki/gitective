@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.tree.CommitTreeFilter;
+import org.gitective.core.filter.tree.ExtensionOccurrence;
 import org.gitective.core.filter.tree.ExtensionOccurrenceFilter;
 import org.junit.Test;
 
@@ -58,7 +59,8 @@ public class ExtensionOccurrenceTest extends GitTestCase {
 	public void noFileExtensions() throws Exception {
 		add("file", "content");
 		ExtensionOccurrenceFilter filter = new ExtensionOccurrenceFilter();
-		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter)).find();
+		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
+				.find();
 		assertNotNull(filter.getExtensions());
 		assertEquals(0, filter.getExtensions().length);
 		assertNotNull(filter.getOccurrences());
@@ -82,7 +84,14 @@ public class ExtensionOccurrenceTest extends GitTestCase {
 		contents.add("text file");
 		add(testRepo, paths, contents, "first commit");
 		ExtensionOccurrenceFilter filter = new ExtensionOccurrenceFilter();
-		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter)).find();
+		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
+				.find();
 		assertEquals(2, filter.getCount("php"));
+		assertEquals(1, filter.getCount("txt"));
+		for (ExtensionOccurrence occurrence : filter) {
+			assertNotNull(occurrence);
+			assertNotNull(occurrence.getExtension());
+			assertTrue(occurrence.getCount() > 0);
+		}
 	}
 }
