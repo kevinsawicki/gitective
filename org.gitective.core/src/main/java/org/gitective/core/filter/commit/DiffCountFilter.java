@@ -59,6 +59,9 @@ public class DiffCountFilter extends CommitDiffFilter {
 	/**
 	 * Should the commit introducing the given number of differences be
 	 * included?
+	 * <p>
+	 * Sub-classes should override this method. The default implementation
+	 * returns true in all cases.
 	 *
 	 * @param commit
 	 * @param diffs
