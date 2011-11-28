@@ -108,9 +108,10 @@ public abstract class BaseTreeFilter extends TreeFilter {
 	}
 
 	/**
-	 * Clones the tree filter. The default implementation throws a
-	 * {@link UnsupportedOperationException} and sub-classes should override if
-	 * filter cloning is supported.
+	 * Clones the tree filter.
+	 * <p>
+	 * The default implementation throws a {@link UnsupportedOperationException}
+	 * and sub-classes should override if filter cloning is supported.
 	 *
 	 * @see TreeFilter#clone()
 	 */
