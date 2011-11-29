@@ -13,6 +13,7 @@
 	<name>gitective core</name>
 	<description>gitective core library</description>
 	<url>http://gitective.org</url>
+	<inceptionYear>2011</inceptionYear>
 
 	<issueManagement>
 		<url>https://github.com/kevinsawicki/gitective/issues</url>
