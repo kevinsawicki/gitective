@@ -5,6 +5,18 @@ that makes investigating Git repositories simpler and easier.  Gitective makes
 it straight-forward to find interesting commits in a Git repository through
 combining the included filters.
 
+This library is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cgitective)
+
+```xml
+<dependency>
+  <groupId>org.gitective</groupId>
+  <artifactId>gitective-core</artifactId>
+  <version>0.9</version>
+</dependency>
+```
+
+# Details
+
 gitective supports finding commits through registering filters that first
 select commits and then run matchers against those commits.
 
@@ -26,10 +38,12 @@ You would find this using the following steps:
 CommitCountFilter bugCommits = new CommitCountFilter();
 CommitCountFilter javaBugCommits = new CommitCountFilter();
 CommitFinder finder = new CommitFinder("/repos/myrepo/.git");
+
 finder.setFilter(new AndCommitFilter(new BugFilter(), bugCommits));
 finder.setFilter(PathFilterUtils.andSuffix(".java"));
 finder.setMatcher(javaBugCommits);
 finder.find();
+
 System.out.println(javaBugCommits.getCount() + " java bugs fixed");
 System.out.println(bugCommits.getCount() + " total bugs fixed");
 ```
@@ -60,9 +74,11 @@ This case is common when doing peer code review or using a code review system.
 PersonIdent person = new PersonIdent("Michael Bluth", "michael@sitwell.com");
 CommitCountFilter count = new CommitCountFilter();
 AndCommitFilter filters = new AndCommitFilter();
+
 filters.add(new AuthorFilter(person));
 filters.add(new CommitterFilter(person).negate());
 filters.add(count);
+
 CommitFinder finder = new CommitFinder("/repos/myrepo/.git");
 finder.setFilter(filters).find();
 System.out.println(count.getCount());
@@ -75,8 +91,10 @@ This example may seem uncommon but it will return 6 different users when run aga
 AuthorSetFilter authors = new AuthorSetFilter();
 AndCommitFilter filters = new AndCommitFilter();
 filters.add(new ParentCountFilter(10), authors);
+
 CommitFinder finder = new CommitFinder("/repos/linux-2.6/.git");
 finder.setFilter(filters).find();
+
 for (PersonIdent author : authors.getPersons())
      System.out.println(author);
 ```
@@ -87,10 +105,13 @@ This example assumes two current branches,  _master_ and a  _release1_ branch th
 ```java
 Repository repo = new FileRepository("/repos/productA/.git");
 RevCommit base = CommitUtils.getBase(repo, "master", "release1");
+
 CommitCountFilter count = new CommitCountFilter();
 CommitFinder finder = new CommitFinder(repo).setFilter(count);
+
 finder.findBetween("master", base);
 System.out.println("Commits in master since release1 was branched: " + count.getCount());
+
 count.reset();
 finder.findBetween("release1", base);
 System.out.println("Commits in release1 since branched from master: " + count.getCount());
@@ -104,8 +125,10 @@ CommitCountFilter all = new CommitCountFilter();
 CommitCountFilter gerrit = new CommitCountFilter();
 AllCommitFilter filters = new AllCommitFilter();
 filters.add(new AndCommitFilter(new ChangeIdFilter(), gerrit), all);
+
 CommitFinder finder = new CommitFinder("/repos/egit/.git");
 finder.setFilter(filters).find();
+
 System.out.println(MessageFormat.format(
      "{0} out of {1} commits have Gerrit change ids",
      gerrit.getCount(),	all.getCount()));
@@ -119,9 +142,11 @@ CommitListFilter block = new CommitListFilter();
 CommitFilter limit = new CommitLimitFilter(100).setStop(true);
 AndCommitFilter filters = new AndCommitFilter(limit, block);
 CommitCursorFilter cursor = new CommitCursorFilter(filters);
+
 Repository repo = new FileRepository("/repos/jgit/.git");
 CommitFinder finder = new CommitFinder(repo);
 finder.setFilter(cursor);
+
 RevCommit commit = CommitUtils.getHead(repo);
 while (commit != null) {
      finder.findFrom(commit);
@@ -139,6 +164,7 @@ This example collects all the commits that have a 'Bug: XXXXXXX' line in the com
 ```java
 CommitListFilter commits = new CommitListFilter();
 AndCommitFilter filter = new AndCommitFilter(new BugFilter(), commits);
+
 CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(filter).find();
 ```
@@ -155,6 +181,7 @@ CommitDiffFilter diffs = new CommitDiffFilter() {
 
 };
 AndCommitFilter filter = new AndCommitFilter(new ParentCountFilter(), diff);
+
 CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(filter).find();
 ```
@@ -170,6 +197,7 @@ NoteContentFilter notes = new NoteContentFilter() {
      }
 
 };
+
 CommitFinder finder = new CommitFinder("/repos/jgit/.git");
 finder.setFilter(notes).find();
 ```
@@ -181,8 +209,10 @@ This examples prints out how many commits happened each year in August.
 AuthorHistogramFilter filter = new AuthorHistogramFilter();
 CommitFinder finder = new CommitFinder("/repos/redis/.git");
 finder.setFilter(filter).find();
+
 UserCommitActivity[] activity = filter.getHistogram().getUserActivity();
 CommitCalendar commits = new CommitCalendar(activity);
+
 for(YearCommitActivity year : commits.getYears())
      System.out.println(year.getMonthCount(Month.AUGUST) 
                           + " commits in August, " + year.getYear());
@@ -201,8 +231,10 @@ String content = BlobUtils.getHeadContent(repo, "src/Buffer.java");
 
 ```java
 Repository repo = new FileRepository("/repos/jgit/.git");
+
 ObjectId current = BlobUtils.getId(repo, "master", "Main.java");
 ObjectId previous = BlobUtils.getId(repo, "master~1", "Main.java");
+
 Collection<Edit> edit = BlobUtils.diff(repo, previous, current);
 ```
 
