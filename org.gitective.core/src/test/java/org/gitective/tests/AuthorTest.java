@@ -62,7 +62,7 @@ public class AuthorTest extends GitTestCase {
 
 	/**
 	 * Test of {@link AuthorFilter}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -84,7 +84,7 @@ public class AuthorTest extends GitTestCase {
 
 	/**
 	 * Test non-match of {@link AuthorFilter}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -101,7 +101,7 @@ public class AuthorTest extends GitTestCase {
 
 	/**
 	 * Test of {@link AuthorSetFilter}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -121,8 +121,52 @@ public class AuthorTest extends GitTestCase {
 	}
 
 	/**
+	 * Match author name only
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void matchNameOnly() throws Exception {
+		add("file.txt", "a");
+		author = new PersonIdent("franklin", "test@test.com");
+		RevCommit commit2 = add("file.txt", "b");
+		author = new PersonIdent("franklin", "test@test.org");
+		RevCommit commit3 = add("file.txt", "c");
+		AuthorFilter filter = new AuthorFilter("franklin", null);
+		CommitListFilter commits = new CommitListFilter();
+		CommitFinder service = new CommitFinder(testRepo);
+		service.setFilter(new AndCommitFilter().add(filter, commits));
+		service.find();
+		assertEquals(2, commits.getCommits().size());
+		assertTrue(commits.getCommits().contains(commit2));
+		assertTrue(commits.getCommits().contains(commit3));
+	}
+
+	/**
+	 * Match author e-mail only
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void matchEmailOnly() throws Exception {
+		add("file.txt", "a");
+		author = new PersonIdent("a user", "test@test.com");
+		RevCommit commit2 = add("file.txt", "b");
+		author = new PersonIdent("b user", "test@test.com");
+		RevCommit commit3 = add("file.txt", "c");
+		AuthorFilter filter = new AuthorFilter(null, "test@test.com");
+		CommitListFilter commits = new CommitListFilter();
+		CommitFinder service = new CommitFinder(testRepo);
+		service.setFilter(new AndCommitFilter().add(filter, commits));
+		service.find();
+		assertEquals(2, commits.getCommits().size());
+		assertTrue(commits.getCommits().contains(commit2));
+		assertTrue(commits.getCommits().contains(commit3));
+	}
+
+	/**
 	 * Test of {@link AuthorSetFilter#reset()}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -139,21 +183,5 @@ public class AuthorTest extends GitTestCase {
 		filter.reset();
 		assertTrue(filter.getPersons().isEmpty());
 		assertFalse(filter.getPersons().contains(author));
-	}
-
-	/**
-	 * Test constructor of author filter with null name
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void constructorWithNullName() {
-		new AuthorFilter(null, "a@b.c");
-	}
-
-	/**
-	 * Test constructor of author filter with null name
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void constructorWithNullEmail() {
-		new AuthorFilter("name", null);
 	}
 }

@@ -61,6 +61,6 @@ public class AuthorFilter extends PersonFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new AuthorFilter(person);
+		return new AuthorFilter(name, email);
 	}
 }

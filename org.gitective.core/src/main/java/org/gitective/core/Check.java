@@ -29,18 +29,19 @@ public abstract class Check {
 	/**
 	 * Check if the two given objects are either both null or both equal
 	 * according the {@link Object#equals(Object)} method of object1.
-	 * 
+	 *
 	 * @param object1
 	 * @param object2
 	 * @return true if equal, false otherwise
 	 */
 	public static boolean equals(final Object object1, final Object object2) {
-		return allNull(object1, object2) || equalsNonNull(object1, object2);
+		return (object1 == null && object2 == null)
+				|| equalsNonNull(object1, object2);
 	}
 
 	/**
 	 * Check if the all given objects are null.
-	 * 
+	 *
 	 * @param objects
 	 * @return true if both are null, false otherwise
 	 */
@@ -56,7 +57,7 @@ public abstract class Check {
 
 	/**
 	 * Check if any of the given objects are null
-	 * 
+	 *
 	 * @param objects
 	 * @return true if any object is null, false otherwise
 	 */
@@ -73,14 +74,14 @@ public abstract class Check {
 	/**
 	 * Check if the two given objects are both non-null and equal according to
 	 * the {@link Object#equals(Object)} method of object1.
-	 * 
+	 *
 	 * @param object1
 	 * @param object2
 	 * @return true if non-null and equal, false otherwise
 	 */
 	public static boolean equalsNonNull(final Object object1,
 			final Object object2) {
-		return !anyNull(object1, object2) && object1.equals(object2);
+		return object1 != null && object2 != null && object1.equals(object2);
 	}
 
 }

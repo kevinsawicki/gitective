@@ -61,6 +61,6 @@ public class CommitterFilter extends PersonFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new CommitterFilter(person);
+		return new CommitterFilter(name, email);
 	}
 }

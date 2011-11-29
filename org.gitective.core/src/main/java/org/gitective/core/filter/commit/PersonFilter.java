@@ -22,9 +22,6 @@
 package org.gitective.core.filter.commit;
 
 import org.eclipse.jgit.lib.PersonIdent;
-import org.gitective.core.Assert;
-import org.gitective.core.Check;
-import org.gitective.core.PersonComparator;
 
 /**
  * Base commit filter that contains utility methods for matching the configured
@@ -33,47 +30,58 @@ import org.gitective.core.PersonComparator;
 public abstract class PersonFilter extends CommitFilter {
 
 	/**
-	 * Person matching against
+	 * Name matching against
 	 */
-	protected final PersonIdent person;
+	protected final String name;
+
+	/**
+	 * E-mail matching against
+	 */
+	protected final String email;
 
 	/**
 	 * Create a person filter
-	 * 
+	 *
 	 * @param name
 	 * @param email
 	 */
 	public PersonFilter(final String name, final String email) {
-		if (name == null)
-			throw new IllegalArgumentException(Assert.formatNotNull("Name"));
-		if (email == null)
-			throw new IllegalArgumentException(Assert.formatNotNull("E-mail"));
-		person = new PersonIdent(name, email);
+		this.name = name;
+		this.email = email;
 	}
 
 	/**
 	 * Create a person filter
-	 * 
+	 *
 	 * @param person
 	 */
 	public PersonFilter(final PersonIdent person) {
-		this.person = person;
+		if (person != null) {
+			name = person.getName();
+			email = person.getEmailAddress();
+		} else {
+			name = null;
+			email = null;
+		}
 	}
 
 	/**
 	 * Match the specified {@link PersonIdent} against the name and e-mail
 	 * address of the configured {@link PersonIdent}.
-	 * 
+	 *
 	 * @param ident
 	 * @return true on matches, false otherwise
 	 */
 	protected boolean match(final PersonIdent ident) {
-		if (Check.allNull(person, ident))
-			return true;
+		if (ident == null)
+			return name == null && email == null;
 
-		if (Check.anyNull(person, ident))
+		if (name != null && !name.equals(ident.getName()))
 			return false;
 
-		return PersonComparator.INSTANCE.equals(person, ident);
+		if (email != null && !email.equals(ident.getEmailAddress()))
+			return false;
+
+		return true;
 	}
 }
