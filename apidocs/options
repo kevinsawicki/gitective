@@ -1,0 +1,24 @@
+-classpath
+'/home/kevin/repositories/gitective/org.gitective.core/target/classes:/home/kevin/.m2/repository/org/eclipse/jgit/org.eclipse.jgit/1.1.0.201109151100-r/org.eclipse.jgit-1.1.0.201109151100-r.jar:/home/kevin/.m2/repository/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/kevin/repositories/gitective/org.gitective.core/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/home/kevin/repositories/gitective/org.gitective.core/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'gitective core 0.9.1-SNAPSHOT API'
+-linkoffline
+'http://download.oracle.com/javase/1.5.0/docs/api' '/home/kevin/repositories/gitective/org.gitective.core/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'gitective core 0.9.1-SNAPSHOT API'

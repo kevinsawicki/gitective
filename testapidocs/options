@@ -1,0 +1,26 @@
+-classpath
+'/home/kevin/repositories/gitective/org.gitective.core/target/classes:/home/kevin/repositories/gitective/org.gitective.core/target/test-classes:/home/kevin/.m2/repository/org/eclipse/jgit/org.eclipse.jgit/1.1.0.201109151100-r/org.eclipse.jgit-1.1.0.201109151100-r.jar:/home/kevin/.m2/repository/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar:/home/kevin/.m2/repository/junit/junit/4.8/junit-4.8.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/kevin/repositories/gitective/org.gitective.core/src/test/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/home/kevin/repositories/gitective/org.gitective.core/target/site/testapidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'gitective core 0.9.1-SNAPSHOT Test API'
+-link
+'../apidocs'
+-linkoffline
+'http://download.oracle.com/javase/1.5.0/docs/api' '/home/kevin/repositories/gitective/org.gitective.core/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'gitective core 0.9.1-SNAPSHOT Test API'

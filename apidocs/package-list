@@ -1,0 +1,4 @@
+org.gitective.core
+org.gitective.core.filter.commit
+org.gitective.core.filter.tree
+org.gitective.core.stat
