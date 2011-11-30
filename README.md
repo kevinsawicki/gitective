@@ -15,6 +15,8 @@ This library is available from [Maven Central](http://search.maven.org/#search%7
 </dependency>
 ```
 
+Javadocs are available [here](http://gitective.org/apidocs/index.html).
+
 # Details
 
 gitective supports finding commits through registering filters that first
