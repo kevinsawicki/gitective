@@ -207,4 +207,90 @@ public abstract class TreeUtils {
 		walk.setFilter(ANY_DIFF);
 		return walk;
 	}
+
+	/**
+	 * Create a tree walk configured with the given commit revisions
+	 *
+	 * @param repository
+	 * @param revisions
+	 * @return tree walk
+	 */
+	public static TreeWalk withCommits(Repository repository,
+			String... revisions) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (revisions == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Revisions"));
+		if (revisions.length == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Revisions"));
+
+		final TreeWalk walk = new TreeWalk(repository);
+		try {
+			for (String revision : revisions)
+				walk.addTree(CommitUtils.getCommit(repository, revision)
+						.getTree());
+		} catch (IOException e) {
+			throw new GitException(e, repository);
+		}
+		return walk;
+	}
+
+	/**
+	 * Create a tree walk configured with the given commits
+	 *
+	 * @param repository
+	 * @param commits
+	 * @return tree walk
+	 */
+	public static TreeWalk withCommits(Repository repository,
+			ObjectId... commits) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (commits == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Commits"));
+		if (commits.length == 0)
+			throw new IllegalArgumentException(Assert.formatNotEmpty("Commits"));
+
+		final TreeWalk walk = new TreeWalk(repository);
+		try {
+			for (ObjectId commit : commits)
+				walk.addTree(CommitUtils.getCommit(repository, commit)
+						.getTree());
+		} catch (IOException e) {
+			throw new GitException(e, repository);
+		}
+		return walk;
+	}
+
+	/**
+	 * Create a tree walk configured to diff the given commits
+	 *
+	 * @param repository
+	 * @param commits
+	 * @return tree walk
+	 */
+	public static TreeWalk diffWithCommits(Repository repository,
+			ObjectId... commits) {
+		final TreeWalk walk = withCommits(repository, commits);
+		walk.setFilter(ANY_DIFF);
+		return walk;
+	}
+
+	/**
+	 * Create a tree walk configured to diff the given commit revisions
+	 *
+	 * @param repository
+	 * @param revisions
+	 * @return tree walk
+	 */
+	public static TreeWalk diffWithCommits(Repository repository,
+			String... revisions) {
+		final TreeWalk walk = withCommits(repository, revisions);
+		walk.setFilter(ANY_DIFF);
+		return walk;
+	}
 }

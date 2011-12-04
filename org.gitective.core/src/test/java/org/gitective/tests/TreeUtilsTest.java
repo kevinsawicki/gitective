@@ -125,4 +125,49 @@ public class TreeUtilsTest extends GitTestCase {
 				walk.getObjectId(1));
 		assertFalse(walk.next());
 	}
+
+	/**
+	 * Diff walk for commit with one parent
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void diffRevisions() throws Exception {
+		Repository repo = new FileRepository(testRepo);
+		RevCommit commit1 = add("test.txt", "content");
+		RevCommit commit2 = add("test.txt", "content2");
+		TreeWalk walk = TreeUtils.diffWithCommits(repo,
+				Constants.MASTER + "~1", Constants.MASTER);
+		assertNotNull(walk);
+		assertEquals(2, walk.getTreeCount());
+		assertTrue(walk.next());
+		assertEquals("test.txt", walk.getPathString());
+		assertEquals(BlobUtils.getId(repo, commit1, "test.txt"),
+				walk.getObjectId(0));
+		assertEquals(BlobUtils.getId(repo, commit2, "test.txt"),
+				walk.getObjectId(1));
+		assertFalse(walk.next());
+	}
+
+	/**
+	 * Diff walk for commit with one parent
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void diffCommits() throws Exception {
+		Repository repo = new FileRepository(testRepo);
+		RevCommit commit1 = add("test.txt", "content");
+		RevCommit commit2 = add("test.txt", "content2");
+		TreeWalk walk = TreeUtils.diffWithCommits(repo, commit1, commit2);
+		assertNotNull(walk);
+		assertEquals(2, walk.getTreeCount());
+		assertTrue(walk.next());
+		assertEquals("test.txt", walk.getPathString());
+		assertEquals(BlobUtils.getId(repo, commit1, "test.txt"),
+				walk.getObjectId(0));
+		assertEquals(BlobUtils.getId(repo, commit2, "test.txt"),
+				walk.getObjectId(1));
+		assertFalse(walk.next());
+	}
 }
