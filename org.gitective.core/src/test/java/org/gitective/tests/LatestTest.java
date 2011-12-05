@@ -24,7 +24,6 @@ package org.gitective.tests;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.gitective.core.CommitUtils;
-import org.gitective.core.GitException;
 import org.junit.Test;
 
 /**
@@ -34,29 +33,27 @@ public class LatestTest extends GitTestCase {
 
 	/**
 	 * Test retrieving latest commit from repository
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
 	public void latest() throws Exception {
 		RevCommit commit = add("file.txt", "content");
-		assertEquals(commit,
-				CommitUtils.getHead(new FileRepository(testRepo)));
+		assertEquals(commit, CommitUtils.getHead(new FileRepository(testRepo)));
 	}
 
 	/**
 	 * Test retrieving latest commit from repository
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	@Test(expected = GitException.class)
 	public void latestOnEmptyRepository() throws Exception {
-		CommitUtils.getHead(new FileRepository(testRepo));
+		assertNull(CommitUtils.getHead(new FileRepository(testRepo)));
 	}
 
 	/**
 	 * Test lookup of commit by id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test

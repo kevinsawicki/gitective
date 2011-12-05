@@ -28,7 +28,6 @@ import static org.eclipse.jgit.lib.Constants.R_TAGS;
 import static org.eclipse.jgit.revwalk.filter.RevFilter.MERGE_BASE;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -286,16 +285,11 @@ public abstract class CommitUtils {
 	 */
 	protected static ObjectId resolve(final Repository repository,
 			final String revision) {
-		final ObjectId id;
 		try {
-			id = repository.resolve(revision);
+			return repository.resolve(revision);
 		} catch (IOException e) {
 			throw new GitException(e, repository);
 		}
-		if (id != null)
-			return id;
-		throw new GitException(MessageFormat.format(
-				"Revision ''{0}'' could not be resolved", revision), repository);
 	}
 
 	private static RevCommit walkToBase(final Repository repository,
