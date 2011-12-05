@@ -31,9 +31,15 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jgit.api.LsRemoteCommand;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.RemoteConfig;
@@ -232,5 +238,57 @@ public abstract class RepositoryUtils {
 		} catch (Exception e) {
 			throw new GitException(e, repository);
 		}
+	}
+
+	/**
+	 * Map names to e-mail addresses for all given {@link PersonIdent} instances
+	 *
+	 * @see PersonIdent#getName()
+	 * @see PersonIdent#getEmailAddress()
+	 * @param persons
+	 * @return non-null but possibly empty map of names to e-mail addresses
+	 */
+	public static Map<String, Set<String>> mapNamesToEmails(
+			final Collection<PersonIdent> persons) {
+		if (persons == null || persons.isEmpty())
+			return Collections.emptyMap();
+
+		final Map<String, Set<String>> namesToEmails = new HashMap<String, Set<String>>(
+				persons.size());
+		for (PersonIdent person : persons) {
+			Set<String> emails = namesToEmails.get(person.getName());
+			if (emails == null) {
+				emails = new HashSet<String>(2);
+				namesToEmails.put(person.getName(), emails);
+			}
+			emails.add(person.getEmailAddress());
+		}
+		return namesToEmails;
+	}
+
+	/**
+	 * Map e-mail addresses to names for all given {@link PersonIdent} instances
+	 *
+	 * @see PersonIdent#getName()
+	 * @see PersonIdent#getEmailAddress()
+	 * @param persons
+	 * @return non-null but possibly empty map of e-mail addresses to names
+	 */
+	public static Map<String, Set<String>> mapEmailsToNames(
+			final Collection<PersonIdent> persons) {
+		if (persons == null || persons.isEmpty())
+			return Collections.emptyMap();
+
+		final Map<String, Set<String>> emailsToNames = new HashMap<String, Set<String>>(
+				persons.size());
+		for (PersonIdent person : persons) {
+			Set<String> names = emailsToNames.get(person.getEmailAddress());
+			if (names == null) {
+				names = new HashSet<String>(2);
+				emailsToNames.put(person.getEmailAddress(), names);
+			}
+			names.add(person.getName());
+		}
+		return emailsToNames;
 	}
 }
