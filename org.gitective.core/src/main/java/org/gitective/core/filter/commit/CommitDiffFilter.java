@@ -78,8 +78,6 @@ public class CommitDiffFilter extends CommitFilter {
 		final int parentCount = commit.getParentCount();
 		switch (parentCount) {
 		case 0:
-			diffs = DiffEntry.scan(walk);
-			break;
 		case 1:
 			diffs = DiffEntry.scan(walk);
 			break;
