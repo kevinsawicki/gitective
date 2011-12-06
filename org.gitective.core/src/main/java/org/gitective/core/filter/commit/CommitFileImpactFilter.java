@@ -55,7 +55,7 @@ public class CommitFileImpactFilter extends CommitDiffFilter implements
 	 *
 	 * @param limit
 	 */
-	public CommitFileImpactFilter(int limit) {
+	public CommitFileImpactFilter(final int limit) {
 		this.limit = limit;
 	}
 
