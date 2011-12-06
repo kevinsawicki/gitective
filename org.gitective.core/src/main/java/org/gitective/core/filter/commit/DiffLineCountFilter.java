@@ -92,6 +92,6 @@ public class DiffLineCountFilter extends CommitDiffFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new DiffFileCountFilter();
+		return new DiffLineCountFilter();
 	}
 }
