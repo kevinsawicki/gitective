@@ -76,8 +76,6 @@ public class DiffLineCountFilter extends CommitDiffFilter {
 				case REPLACE:
 					edited += hunk.getLengthB();
 					break;
-				default:
-					break;
 				}
 		return true;
 	}

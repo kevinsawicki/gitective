@@ -90,8 +90,6 @@ public class CommitFileImpactFilter extends CommitDiffFilter implements
 			case DELETE:
 				delete++;
 				break;
-			default:
-				break;
 			}
 		final CommitImpact impact = new CommitImpact(commit, add, edit, delete);
 		commits.add(impact);

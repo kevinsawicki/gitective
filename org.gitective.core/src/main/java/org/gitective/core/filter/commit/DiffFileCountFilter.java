@@ -72,8 +72,6 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 			case DELETE:
 				deleted++;
 				break;
-			default:
-				break;
 			}
 		return true;
 	}

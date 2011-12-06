@@ -94,8 +94,6 @@ public class CommitLineImpactFilter extends CommitDiffFilter implements
 				case REPLACE:
 					edit += hunk.getLengthB();
 					break;
-				default:
-					break;
 				}
 		commits.add(new CommitImpact(commit, add, edit, delete));
 		if (commits.size() > limit)
