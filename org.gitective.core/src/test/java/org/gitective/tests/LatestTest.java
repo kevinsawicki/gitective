@@ -40,6 +40,8 @@ public class LatestTest extends GitTestCase {
 	public void latest() throws Exception {
 		RevCommit commit = add("file.txt", "content");
 		assertEquals(commit, CommitUtils.getHead(new FileRepository(testRepo)));
+		assertEquals(commit,
+				CommitUtils.getMaster(new FileRepository(testRepo)));
 	}
 
 	/**

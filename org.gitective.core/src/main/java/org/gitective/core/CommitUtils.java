@@ -21,6 +21,7 @@
  */
 package org.gitective.core;
 
+import static org.eclipse.jgit.lib.Constants.HEAD;
 import static org.eclipse.jgit.lib.Constants.MASTER;
 import static org.eclipse.jgit.lib.Constants.R_HEADS;
 import static org.eclipse.jgit.lib.Constants.R_REMOTES;
@@ -31,7 +32,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.RefDatabase;
@@ -94,7 +94,7 @@ public abstract class CommitUtils {
 	 * @return commit never null
 	 */
 	public static RevCommit getHead(final Repository repository) {
-		return getCommit(repository, Constants.HEAD);
+		return getCommit(repository, HEAD);
 	}
 
 	/**
