@@ -170,4 +170,60 @@ public class TreeUtilsTest extends GitTestCase {
 				walk.getObjectId(1));
 		assertFalse(walk.next());
 	}
+
+	/**
+	 * Parent tree walk with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void withCommitsNullRepository() {
+		TreeUtils.withCommits(null, ObjectId.zeroId());
+	}
+
+	/**
+	 * Parent tree walk with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void withCommitsNullRepository2() {
+		TreeUtils.withCommits(null, Constants.MASTER);
+	}
+
+	/**
+	 * /** Commit tree walk with null object ids
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void withCommitsNullIds() throws IOException {
+		TreeUtils.withCommits(new FileRepository(testRepo), (ObjectId[]) null);
+	}
+
+	/**
+	 * Commit tree walk with null revisions
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void withCommitsNullRevision() throws IOException {
+		TreeUtils.withCommits(new FileRepository(testRepo), (String[]) null);
+	}
+
+	/**
+	 * Commit tree walk with empty revisions
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void withCommitsEmptyRevision() throws IOException {
+		TreeUtils.withCommits(new FileRepository(testRepo), new String[0]);
+	}
+
+	/**
+	 * Commit tree walk with empty commits
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void withCommitsEmptyCommits() throws IOException {
+		TreeUtils.withCommits(new FileRepository(testRepo), new ObjectId[0]);
+	}
 }
