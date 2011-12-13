@@ -35,6 +35,7 @@ import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectStream;
@@ -555,6 +556,19 @@ public class BlobUtilsTest extends GitTestCase {
 		add("test.txt", "content");
 		assertEquals("content", BlobUtils.getHeadContent(new FileRepository(
 				testRepo), "test.txt"));
+	}
+
+	/**
+	 * Get raw HEAD content at path
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getRawHeadContent() throws Exception {
+		add("test.txt", "content");
+		assertArrayEquals("content".getBytes(Constants.CHARACTER_ENCODING),
+				BlobUtils.getRawHeadContent(new FileRepository(testRepo),
+						"test.txt"));
 	}
 
 	/**
