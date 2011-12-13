@@ -242,6 +242,8 @@ public abstract class RepositoryUtils {
 
 	/**
 	 * Map names to e-mail addresses for all given {@link PersonIdent} instances
+	 * <p>
+	 * {@link PersonIdent} entries with a null or empty name will be ignored.
 	 *
 	 * @see PersonIdent#getName()
 	 * @see PersonIdent#getEmailAddress()
@@ -256,18 +258,26 @@ public abstract class RepositoryUtils {
 		final Map<String, Set<String>> namesToEmails = new HashMap<String, Set<String>>(
 				persons.size());
 		for (PersonIdent person : persons) {
-			Set<String> emails = namesToEmails.get(person.getName());
+			String name = person.getName();
+			if (name == null || name.length() == 0)
+				continue;
+			Set<String> emails = namesToEmails.get(name);
 			if (emails == null) {
 				emails = new HashSet<String>(2);
-				namesToEmails.put(person.getName(), emails);
+				namesToEmails.put(name, emails);
 			}
-			emails.add(person.getEmailAddress());
+			String email = person.getEmailAddress();
+			if (email != null && email.length() > 0)
+				emails.add(email);
 		}
 		return namesToEmails;
 	}
 
 	/**
 	 * Map e-mail addresses to names for all given {@link PersonIdent} instances
+	 * <p>
+	 * {@link PersonIdent} entries with a null or empty e-mail address will be
+	 * ignored.
 	 *
 	 * @see PersonIdent#getName()
 	 * @see PersonIdent#getEmailAddress()
@@ -282,12 +292,17 @@ public abstract class RepositoryUtils {
 		final Map<String, Set<String>> emailsToNames = new HashMap<String, Set<String>>(
 				persons.size());
 		for (PersonIdent person : persons) {
-			Set<String> names = emailsToNames.get(person.getEmailAddress());
+			String email = person.getEmailAddress();
+			if (email == null || email.length() == 0)
+				continue;
+			Set<String> names = emailsToNames.get(email);
 			if (names == null) {
 				names = new HashSet<String>(2);
-				emailsToNames.put(person.getEmailAddress(), names);
+				emailsToNames.put(email, names);
 			}
-			names.add(person.getName());
+			String name = person.getName();
+			if (name != null && name.length() > 0)
+				names.add(name);
 		}
 		return emailsToNames;
 	}
