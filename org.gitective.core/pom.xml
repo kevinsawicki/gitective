@@ -105,7 +105,7 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>downloads-maven-plugin</artifactId>
-				<version>0.3</version>
+				<version>0.4</version>
 				<configuration>
 					<description>${project.version} release of ${project.name}</description>
 					<override>true</override>
@@ -115,7 +115,7 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
-				<version>0.3</version>
+				<version>0.4</version>
 				<configuration>
 					<message>Generated site for ${project.name} ${project.version}</message>
 				</configuration>
