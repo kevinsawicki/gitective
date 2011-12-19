@@ -141,7 +141,6 @@ public class CommitFinder extends RepositoryService {
 	 * by calling {@link #setMatcher(RevFilter)}. The filter set by calling
 	 * {@link #setFilter(RevFilter)} will still visit commits in starting order.
 	 *
-	 *
 	 * @param reverse
 	 * @return this service
 	 */
