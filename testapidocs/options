@@ -15,7 +15,7 @@
 -docencoding
 'UTF-8'
 -doctitle
-'gitective core 0.9.2 Test API'
+'gitective core 0.9.3 Test API'
 -link
 '../apidocs'
 -linkoffline
@@ -23,4 +23,4 @@
 -use
 -version
 -windowtitle
-'gitective core 0.9.2 Test API'
+'gitective core 0.9.3 Test API'
