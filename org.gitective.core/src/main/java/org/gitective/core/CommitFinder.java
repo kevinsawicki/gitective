@@ -97,7 +97,7 @@ public class CommitFinder extends RepositoryService {
 	 *
 	 * @param repositories
 	 */
-	public CommitFinder(Collection<?> repositories) {
+	public CommitFinder(final Collection<?> repositories) {
 		super(repositories);
 	}
 
