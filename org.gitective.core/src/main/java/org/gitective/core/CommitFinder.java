@@ -31,6 +31,7 @@ import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
@@ -58,6 +59,11 @@ public class CommitFinder extends RepositoryService {
 	 * Commit filter for matches
 	 */
 	protected RevFilter commitMatcher;
+
+	/**
+	 * Sort strategy for {@link RevWalk}
+	 */
+	protected RevSort sort;
 
 	/**
 	 * Create a commit finder for the given Git directories.
@@ -129,6 +135,25 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
+	 * Set whether to use {@link RevSort#REVERSE} to sort commits
+	 * <p>
+	 * This will only affect the order that commits are passed to the filter set
+	 * by calling {@link #setMatcher(RevFilter)}. The filter set by calling
+	 * {@link #setFilter(RevFilter)} will still visit commits in starting order.
+	 *
+	 *
+	 * @param reverse
+	 * @return this service
+	 */
+	public CommitFinder setReverseOrder(final boolean reverse) {
+		if (reverse)
+			sort = RevSort.REVERSE;
+		else
+			sort = null;
+		return this;
+	}
+
+	/**
 	 * Create a newly configured {@link RevWalk} for the repository
 	 *
 	 * @param repository
@@ -145,6 +170,8 @@ public class CommitFinder extends RepositoryService {
 			((CommitFilter) commitMatcher).setRepository(repository);
 		if (treeFilter instanceof BaseTreeFilter)
 			((BaseTreeFilter) treeFilter).setRepository(repository);
+		if (sort != null)
+			walk.sort(sort);
 		return walk;
 	}
 

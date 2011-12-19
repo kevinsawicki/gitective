@@ -35,6 +35,8 @@ import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.gitective.core.filter.commit.CommitFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
+import org.gitective.core.filter.commit.DiffFileCountFilter;
+import org.gitective.core.filter.commit.DiffLineCountFilter;
 import org.junit.Test;
 
 /**
@@ -44,7 +46,7 @@ public class CommitFinderTest extends GitTestCase {
 
 	/**
 	 * Test matcher throwing an {@link IOException} when visiting a commit
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -75,7 +77,7 @@ public class CommitFinderTest extends GitTestCase {
 	/**
 	 * Test matcher throwing a {@link StopWalkException} and it being suppressed
 	 * and the walk stopping
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -100,7 +102,7 @@ public class CommitFinderTest extends GitTestCase {
 
 	/**
 	 * Test searching commit range that has none in-between start and end
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -115,7 +117,7 @@ public class CommitFinderTest extends GitTestCase {
 
 	/**
 	 * Test searching commit range that has none in-between start and end
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -130,7 +132,7 @@ public class CommitFinderTest extends GitTestCase {
 
 	/**
 	 * Test searching commit range that has none in-between start and end
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -152,5 +154,30 @@ public class CommitFinderTest extends GitTestCase {
 	public void findNullStartId() {
 		CommitFinder finder = new CommitFinder(testRepo);
 		finder.findBetween((ObjectId) null, ObjectId.zeroId());
+	}
+
+	/**
+	 * Parse commits in reverse order
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void reverseOrder() throws Exception {
+		RevCommit commit1 = add("test.txt", "content");
+		RevCommit commit2 = add("test.txt", "content2");
+		CommitFinder finder = new CommitFinder(testRepo);
+		CommitListFilter commits = new CommitListFilter();
+		DiffFileCountFilter diffFiles = new DiffFileCountFilter();
+		DiffLineCountFilter diffLines = new DiffLineCountFilter();
+		finder.setMatcher(new AndCommitFilter(commits, diffFiles, diffLines));
+		finder.setReverseOrder(true);
+		finder.find();
+		assertEquals(2, commits.getCommits().size());
+		assertEquals(commit1, commits.getCommits().get(0));
+		assertEquals(commit2, commits.getCommits().get(1));
+		assertEquals(1, diffFiles.getAdded());
+		assertEquals(1, diffFiles.getEdited());
+		assertEquals(1, diffLines.getAdded());
+		assertEquals(1, diffLines.getEdited());
 	}
 }
