@@ -50,7 +50,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Test getting the commit a tag points to
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -70,7 +70,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Test getting commit for tag that doesn't exist
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -82,7 +82,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Test getting the commit a branch points to
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -118,7 +118,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get commit with null object id parameter
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -128,7 +128,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get commit with null revision parameter
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -138,7 +138,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get commit with empty revision parameter
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -164,7 +164,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get base with null object ids
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -174,7 +174,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get base with empty object ids
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -184,7 +184,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get base with null revisions
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -194,12 +194,22 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get base with empty revision
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getBaseWithEmptyRevisions() throws Exception {
 		CommitUtils.getBase(new FileRepository(testRepo), new String[0]);
+	}
+
+	/**
+	 * Get base with unknown revision
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = GitException.class)
+	public void getBaseWithUnknownRevision() throws Exception {
+		CommitUtils.getBase(new FileRepository(testRepo), "notaref");
 	}
 
 	/**
@@ -220,7 +230,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get ref with null ref name
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -230,7 +240,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get ref with null ref name
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -240,7 +250,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get ref with empty ref name
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -266,7 +276,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get ref with bad ref database
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = GitException.class)
@@ -277,7 +287,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get branches with bad ref database
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = GitException.class)
@@ -287,7 +297,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get tags with bad ref database
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test(expected = GitException.class)
@@ -297,7 +307,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get commit for ref with null id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -341,7 +351,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get commit for ref with zero id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = GitException.class)
@@ -385,7 +395,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get commit base with zero id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = GitException.class)
@@ -395,7 +405,7 @@ public class CommitUtilsTest extends GitTestCase {
 
 	/**
 	 * Get commit with zero id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test(expected = GitException.class)

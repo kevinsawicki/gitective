@@ -131,7 +131,7 @@ public abstract class TreeUtils {
 			throw new IllegalArgumentException(
 					Assert.formatNotEmpty("Revision"));
 
-		final ObjectId commit = CommitUtils.resolve(repository, revision);
+		final ObjectId commit = CommitUtils.strictResolve(repository, revision);
 		final ObjectReader reader = repository.newObjectReader();
 		final RevWalk walk = new RevWalk(reader);
 		try {

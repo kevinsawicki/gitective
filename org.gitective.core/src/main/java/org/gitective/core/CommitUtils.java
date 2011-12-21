@@ -29,6 +29,7 @@ import static org.eclipse.jgit.lib.Constants.R_TAGS;
 import static org.eclipse.jgit.revwalk.filter.RevFilter.MERGE_BASE;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -148,8 +149,9 @@ public abstract class CommitUtils {
 
 		final int length = revisions.length;
 		final ObjectId[] commits = new ObjectId[length];
-		for (int i = 0; i < length; i++)
-			commits[i] = resolve(repository, revisions[i]);
+		for (int i = 0; i < length; i++) {
+			commits[i] = strictResolve(repository, revisions[i]);
+		}
 		return walkToBase(repository, commits);
 	}
 
@@ -290,6 +292,26 @@ public abstract class CommitUtils {
 		} catch (IOException e) {
 			throw new GitException(e, repository);
 		}
+	}
+
+	/**
+	 * Resolve the revision string to a commit object id.
+	 * <p>
+	 * A {@link GitException} will be thrown when the revision can not be
+	 * resolved to an {@link ObjectId}
+	 *
+	 * @param repository
+	 * @param revision
+	 * @return commit id
+	 */
+	protected static ObjectId strictResolve(final Repository repository,
+			final String revision) {
+		final ObjectId resolved = resolve(repository, revision);
+		if (resolved == null)
+			throw new GitException(MessageFormat.format(
+					"Revision ''{0}'' could not be resolved", revision),
+					repository);
+		return resolved;
 	}
 
 	private static RevCommit walkToBase(final Repository repository,

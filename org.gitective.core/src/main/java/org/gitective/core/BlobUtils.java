@@ -172,7 +172,7 @@ public abstract class BlobUtils {
 			throw new IllegalArgumentException(Assert.formatNotEmpty("Path"));
 
 		final RevCommit commit = CommitUtils.parse(repository,
-				CommitUtils.resolve(repository, revision));
+				CommitUtils.strictResolve(repository, revision));
 		return getBytes(repository, commit, path);
 	}
 
@@ -279,7 +279,7 @@ public abstract class BlobUtils {
 			throw new IllegalArgumentException(Assert.formatNotEmpty("Path"));
 
 		final RevCommit commit = CommitUtils.parse(repository,
-				CommitUtils.resolve(repository, revision));
+				CommitUtils.strictResolve(repository, revision));
 		return lookupId(repository, commit, path);
 	}
 
@@ -392,7 +392,7 @@ public abstract class BlobUtils {
 			throw new IllegalArgumentException(Assert.formatNotEmpty("Path"));
 
 		final RevCommit commit = CommitUtils.parse(repository,
-				CommitUtils.resolve(repository, revision));
+				CommitUtils.strictResolve(repository, revision));
 		final ObjectId blobId = lookupId(repository, commit, path);
 		if (blobId == null)
 			return null;
