@@ -21,6 +21,7 @@
  */
 package org.gitective.tests;
 
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.DiffFileCountFilter;
@@ -56,7 +57,7 @@ public class DiffFileCountFilterTest extends GitTestCase {
 
 	/**
 	 * Add single file
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -73,7 +74,7 @@ public class DiffFileCountFilterTest extends GitTestCase {
 
 	/**
 	 * Add multiple files
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -89,7 +90,7 @@ public class DiffFileCountFilterTest extends GitTestCase {
 
 	/**
 	 * Add, edit, and delete the same file
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -102,5 +103,24 @@ public class DiffFileCountFilterTest extends GitTestCase {
 		assertEquals(1, filter.getAdded());
 		assertEquals(1, filter.getEdited());
 		assertEquals(1, filter.getDeleted());
+	}
+
+	/**
+	 * Verify single file edit using a
+	 * {@link CommitFinder#findBetween(org.eclipse.jgit.lib.ObjectId, org.eclipse.jgit.lib.ObjectId)}
+	 * call
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void singleEditFindBetween() throws Exception {
+		RevCommit commit1 = add("test.txt", "content");
+		RevCommit commit2 = add("test.txt", "content2");
+		DiffFileCountFilter filter = new DiffFileCountFilter();
+		new CommitFinder(testRepo).setFilter(filter).findBetween(commit2,
+				commit1);
+		assertEquals(0, filter.getAdded());
+		assertEquals(1, filter.getEdited());
+		assertEquals(0, filter.getDeleted());
 	}
 }
