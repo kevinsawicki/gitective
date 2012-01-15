@@ -21,8 +21,12 @@
  */
 package org.gitective.core.filter.commit;
 
+import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
+
+import java.util.Arrays;
 import java.util.Comparator;
 
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
@@ -48,7 +52,7 @@ public class CommitImpact {
 
 	private final int delete;
 
-	private final RevCommit commit;
+	private final byte[] commit;
 
 	/**
 	 * Create impact
@@ -59,7 +63,8 @@ public class CommitImpact {
 	 * @param delete
 	 */
 	public CommitImpact(RevCommit commit, int add, int edit, int delete) {
-		this.commit = commit;
+		this.commit = new byte[OBJECT_ID_LENGTH];
+		commit.copyRawTo(this.commit, 0);
 		this.add = add;
 		this.edit = edit;
 		this.delete = delete;
@@ -89,16 +94,16 @@ public class CommitImpact {
 	/**
 	 * @return commit
 	 */
-	public RevCommit getCommit() {
-		return commit;
+	public ObjectId getCommit() {
+		return ObjectId.fromRaw(commit);
 	}
 
 	public String toString() {
-		return commit.name() + " +" + add + "/" + edit + "/-" + delete;
+		return getCommit().name() + " +" + add + "/" + edit + "/-" + delete;
 	}
 
 	public int hashCode() {
-		return commit.hashCode();
+		return getCommit().hashCode();
 	}
 
 	public boolean equals(Object obj) {
@@ -108,6 +113,6 @@ public class CommitImpact {
 			return false;
 		CommitImpact other = (CommitImpact) obj;
 		return other.add == add && other.edit == edit && other.delete == delete
-				&& commit.equals(other.commit);
+				&& Arrays.equals(commit, other.commit);
 	}
 }
