@@ -81,7 +81,9 @@ public class CommitLineImpactFilter extends CommitDiffFilter implements
 		int add = 0;
 		int edit = 0;
 		int delete = 0;
-		for (DiffEntry diff : diffs)
+		for (DiffEntry diff : diffs) {
+			if (!isFileDiff(diff))
+				continue;
 			for (Edit hunk : BlobUtils.diff(repository, diff.getOldId()
 					.toObjectId(), diff.getNewId().toObjectId()))
 				switch (hunk.getType()) {
@@ -95,6 +97,7 @@ public class CommitLineImpactFilter extends CommitDiffFilter implements
 					edit += hunk.getLengthB();
 					break;
 				}
+		}
 		commits.add(new CommitImpact(commit, add, edit, delete));
 		if (commits.size() > limit)
 			commits.remove(commits.last());

@@ -21,6 +21,9 @@
  */
 package org.gitective.core.filter.commit;
 
+import static org.eclipse.jgit.lib.FileMode.EXECUTABLE_FILE;
+import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -113,6 +116,29 @@ public class CommitDiffFilter extends CommitFilter {
 			}
 		}
 		return include(commit, diffs) ? true : include(false);
+	}
+
+	/**
+	 * Is the given diff entry a file?
+	 *
+	 * @param diff
+	 * @return true if a regular or executable file, false otherwise
+	 */
+	protected boolean isFileDiff(DiffEntry diff) {
+		switch (diff.getChangeType()) {
+		case DELETE:
+			return EXECUTABLE_FILE == diff.getOldMode()
+					|| REGULAR_FILE == diff.getOldMode();
+		case ADD:
+			return EXECUTABLE_FILE == diff.getNewMode()
+					|| REGULAR_FILE == diff.getNewMode();
+		default:
+			return (EXECUTABLE_FILE == diff.getNewMode() //
+					|| REGULAR_FILE == diff.getNewMode())
+					&& //
+					(EXECUTABLE_FILE == diff.getOldMode() //
+					|| REGULAR_FILE == diff.getOldMode());
+		}
 	}
 
 	/**

@@ -37,11 +37,14 @@ public class CommitDiffEditFilter extends CommitDiffFilter {
 	@Override
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
-		for (DiffEntry diff : diffs)
+		for (DiffEntry diff : diffs) {
+			if (!isFileDiff(diff))
+				continue;
 			for (Edit edit : BlobUtils.diff(repository, diff.getOldId()
 					.toObjectId(), diff.getNewId().toObjectId()))
 				if (!include(commit, diff, edit))
 					return include(false);
+		}
 		return true;
 	}
 

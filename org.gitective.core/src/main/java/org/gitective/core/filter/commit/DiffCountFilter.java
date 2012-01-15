@@ -39,7 +39,9 @@ public class DiffCountFilter extends CommitDiffFilter {
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		int count = 0;
-		for (DiffEntry diff : diffs)
+		for (DiffEntry diff : diffs) {
+			if (!isFileDiff(diff))
+				continue;
 			for (Edit edit : BlobUtils.diff(repository, diff.getOldId()
 					.toObjectId(), diff.getNewId().toObjectId()))
 				switch (edit.getType()) {
@@ -53,6 +55,7 @@ public class DiffCountFilter extends CommitDiffFilter {
 				default:
 					break;
 				}
+		}
 		return include(commit, diffs, count) ? true : include(false);
 	}
 

@@ -63,7 +63,9 @@ public class DiffLineCountFilter extends CommitDiffFilter {
 
 	@Override
 	public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
-		for (DiffEntry diff : diffs)
+		for (DiffEntry diff : diffs) {
+			if (!isFileDiff(diff))
+				continue;
 			for (Edit hunk : BlobUtils.diff(repository, diff.getOldId()
 					.toObjectId(), diff.getNewId().toObjectId()))
 				switch (hunk.getType()) {
@@ -77,6 +79,7 @@ public class DiffLineCountFilter extends CommitDiffFilter {
 					edited += hunk.getLengthB();
 					break;
 				}
+		}
 		return true;
 	}
 
