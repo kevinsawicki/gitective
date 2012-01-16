@@ -44,7 +44,7 @@ public class DiffSizeFilter extends CommitDiffFilter {
 	 * @param detectRenames
 	 * @param diffTotal
 	 */
-	public DiffSizeFilter(boolean detectRenames, final int diffTotal) {
+	public DiffSizeFilter(final boolean detectRenames, final int diffTotal) {
 		super(detectRenames);
 		total = diffTotal;
 	}

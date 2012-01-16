@@ -50,7 +50,7 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 	 *
 	 * @param detectRenames
 	 */
-	public DiffFileCountFilter(boolean detectRenames) {
+	public DiffFileCountFilter(final boolean detectRenames) {
 		super(detectRenames);
 	}
 
@@ -76,7 +76,8 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 	}
 
 	@Override
-	public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
+	public boolean include(final RevCommit commit,
+			final Collection<DiffEntry> diffs) {
 		for (DiffEntry diff : diffs)
 			switch (diff.getChangeType()) {
 			case ADD:

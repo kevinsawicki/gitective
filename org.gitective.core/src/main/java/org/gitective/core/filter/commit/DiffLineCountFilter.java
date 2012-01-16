@@ -52,7 +52,7 @@ public class DiffLineCountFilter extends CommitDiffFilter {
 	 *
 	 * @param detectRenames
 	 */
-	public DiffLineCountFilter(boolean detectRenames) {
+	public DiffLineCountFilter(final boolean detectRenames) {
 		super(detectRenames);
 	}
 
@@ -78,7 +78,8 @@ public class DiffLineCountFilter extends CommitDiffFilter {
 	}
 
 	@Override
-	public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
+	public boolean include(final RevCommit commit,
+			final Collection<DiffEntry> diffs) {
 		for (DiffEntry diff : diffs) {
 			if (!isFileDiff(diff))
 				continue;

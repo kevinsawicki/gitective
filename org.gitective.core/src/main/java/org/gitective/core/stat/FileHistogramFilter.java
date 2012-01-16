@@ -49,7 +49,7 @@ public class FileHistogramFilter extends CommitDiffFilter {
 	 *
 	 * @param detectRenames
 	 */
-	public FileHistogramFilter(boolean detectRenames) {
+	public FileHistogramFilter(final boolean detectRenames) {
 		super(detectRenames);
 	}
 
