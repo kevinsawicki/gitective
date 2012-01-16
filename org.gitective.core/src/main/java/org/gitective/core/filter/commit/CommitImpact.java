@@ -99,7 +99,7 @@ public class CommitImpact {
 	}
 
 	public String toString() {
-		return getCommit().name() + " +" + add + "/" + edit + "/-" + delete;
+		return getCommit().name() + " +" + add + '/' + edit + "/-" + delete;
 	}
 
 	public int hashCode() {
