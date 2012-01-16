@@ -21,8 +21,6 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.util.Arrays;
-
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
@@ -42,9 +40,10 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * @param filters
 	 */
 	public CompositeCommitFilter(final RevFilter... filters) {
-		if (filters != null && filters.length > 0)
-			this.filters = Arrays.copyOf(filters, filters.length);
-		else
+		if (filters != null && filters.length > 0) {
+			this.filters = new RevFilter[filters.length];
+			System.arraycopy(filters, 0, this.filters, 0, filters.length);
+		} else
 			this.filters = new RevFilter[0];
 	}
 
@@ -64,7 +63,8 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 		if (added == 0)
 			return this;
 		final int current = filters.length;
-		final RevFilter[] resized = Arrays.copyOf(filters, added + current);
+		final RevFilter[] resized = new RevFilter[added + current];
+		System.arraycopy(filters, 0, resized, 0, current);
 		System.arraycopy(addedFilters, 0, resized, current, added);
 		filters = resized;
 		return this;
@@ -92,7 +92,9 @@ public abstract class CompositeCommitFilter extends CommitFilter {
 	 * @return non-null but possibly empty array of child filters
 	 */
 	protected RevFilter[] cloneFilters() {
-		return Arrays.copyOf(filters, filters.length);
+		final RevFilter[] copy = new RevFilter[filters.length];
+		System.arraycopy(filters, 0, copy, 0, filters.length);
+		return copy;
 	}
 
 	/**

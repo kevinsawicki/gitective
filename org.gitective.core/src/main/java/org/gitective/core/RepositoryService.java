@@ -24,7 +24,6 @@ package org.gitective.core;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -102,7 +101,9 @@ public class RepositoryService {
 			throw new IllegalArgumentException(
 					Assert.formatNotEmpty("Repositories"));
 
-		this.repositories = Arrays.copyOf(repositories, repositories.length);
+		this.repositories = new Repository[repositories.length];
+		System.arraycopy(repositories, 0, this.repositories, 0,
+				repositories.length);
 	}
 
 	/**

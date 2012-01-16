@@ -26,7 +26,6 @@ import static java.lang.Long.MIN_VALUE;
 import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -108,8 +107,12 @@ public class UserCommitActivity implements Serializable {
 			// Grow arrays by either GROWTH percentage or SIZE value, whichever
 			// is higher
 			newSize += Math.max(SIZE, (int) (newSize / GROWTH));
-			commits = Arrays.copyOf(commits, newSize);
-			times = Arrays.copyOf(times, newSize);
+			byte[][] newCommits = new byte[newSize][];
+			System.arraycopy(commits, 0, newCommits, 0, commits.length);
+			commits = newCommits;
+			long[] newTimes = new long[newSize];
+			System.arraycopy(times, 0, newTimes, 0, times.length);
+			times = newTimes;
 		}
 		final byte[] id = new byte[OBJECT_ID_LENGTH];
 		commit.copyRawTo(id, 0);
@@ -130,7 +133,9 @@ public class UserCommitActivity implements Serializable {
 	 * @return non-null but possibly empty array
 	 */
 	public long[] getTimes() {
-		return Arrays.copyOf(times, index);
+		final long[] copy = new long[index];
+		System.arraycopy(times, 0, copy, 0, index);
+		return copy;
 	}
 
 	/**
@@ -139,7 +144,9 @@ public class UserCommitActivity implements Serializable {
 	 * @return non-null but possibly empty array
 	 */
 	public byte[][] getRawIds() {
-		return Arrays.copyOf(commits, index);
+		final byte[][] raw = new byte[index][];
+		System.arraycopy(commits, 0, raw, 0, index);
+		return raw;
 	}
 
 	/**

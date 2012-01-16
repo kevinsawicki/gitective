@@ -21,8 +21,6 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.util.Arrays;
-
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.DepthWalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
@@ -51,9 +49,10 @@ public class CompositeDiffFilter extends CommitDiffFilter {
 	public CompositeDiffFilter(final boolean detectRenames,
 			final CommitDiffFilter... filters) {
 		super(detectRenames);
-		if (filters != null && filters.length > 0)
-			this.filters = Arrays.copyOf(filters, filters.length);
-		else
+		if (filters != null && filters.length > 0) {
+			this.filters = new CommitDiffFilter[filters.length];
+			System.arraycopy(filters, 0, this.filters, 0, filters.length);
+		} else
 			this.filters = new CommitDiffFilter[0];
 	}
 
@@ -82,8 +81,8 @@ public class CompositeDiffFilter extends CommitDiffFilter {
 		if (added == 0)
 			return this;
 		final int current = filters.length;
-		final CommitDiffFilter[] resized = Arrays.copyOf(filters, added
-				+ current);
+		final CommitDiffFilter[] resized = new CommitDiffFilter[added + current];
+		System.arraycopy(filters, 0, resized, 0, current);
 		System.arraycopy(addedFilters, 0, resized, current, added);
 		filters = resized;
 		return this;
@@ -109,7 +108,9 @@ public class CompositeDiffFilter extends CommitDiffFilter {
 	 * @return non-null but possibly empty array of child filters
 	 */
 	protected CommitDiffFilter[] cloneFilters() {
-		return Arrays.copyOf(filters, filters.length);
+		final CommitDiffFilter[] copy = new CommitDiffFilter[filters.length];
+		System.arraycopy(filters, 0, copy, 0, filters.length);
+		return copy;
 	}
 
 	/**
