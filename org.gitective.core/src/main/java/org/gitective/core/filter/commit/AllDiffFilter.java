@@ -42,7 +42,7 @@ public class AllDiffFilter extends CompositeDiffFilter {
 	 */
 	public AllDiffFilter(final boolean detectRenames,
 			final CommitDiffFilter... filters) {
-		super(filters);
+		super(detectRenames, filters);
 	}
 
 	/**
