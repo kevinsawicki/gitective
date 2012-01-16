@@ -25,6 +25,7 @@ import java.util.Collection;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
  * Parent filter that invokes
@@ -34,10 +35,23 @@ import org.eclipse.jgit.revwalk.RevCommit;
 public class AllDiffFilter extends CompositeDiffFilter {
 
 	/**
+	 * Create all diff filter
+	 *
+	 * @param detectRenames
+	 * @param filters
+	 */
+	public AllDiffFilter(final boolean detectRenames,
+			final CommitDiffFilter... filters) {
+		super(filters);
+	}
+
+	/**
+	 * Create all diff filter
+	 *
 	 * @param filters
 	 */
 	public AllDiffFilter(final CommitDiffFilter... filters) {
-		super(filters);
+		this(false, filters);
 	}
 
 	@Override
@@ -47,5 +61,10 @@ public class AllDiffFilter extends CompositeDiffFilter {
 		for (int i = 0; i < length; i++)
 			filters[i].include(commit, diffs);
 		return true;
+	}
+
+	@Override
+	public RevFilter clone() {
+		return new AllDiffFilter(detectRenames, cloneFilters());
 	}
 }

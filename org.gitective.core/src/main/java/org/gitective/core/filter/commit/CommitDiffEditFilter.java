@@ -34,6 +34,22 @@ import org.gitective.core.BlobUtils;
  */
 public class CommitDiffEditFilter extends CommitDiffFilter {
 
+	/**
+	 * Create commit diff edit filter
+	 */
+	public CommitDiffEditFilter() {
+		super();
+	}
+
+	/**
+	 * Create commit diff edit filter
+	 *
+	 * @param detectRenames
+	 */
+	public CommitDiffEditFilter(final boolean detectRenames) {
+		super(detectRenames);
+	}
+
 	@Override
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {

@@ -45,10 +45,31 @@ public class CommitLineImpactFilter extends CommitDiffFilter implements
 			new DescendingImpactComparator());
 
 	/**
+	 * Create an impact filter that retains the given number of most impacting
+	 * commits
+	 *
+	 * @param detectRenames
+	 * @param limit
+	 */
+	public CommitLineImpactFilter(final boolean detectRenames, final int limit) {
+		super(detectRenames);
+		this.limit = limit;
+	}
+
+	/**
+	 * Create an impact filter that tracks the 10 most impacting commits
+	 *
+	 * @param detectRenames
+	 */
+	public CommitLineImpactFilter(final boolean detectRenames) {
+		this(detectRenames, 10);
+	}
+
+	/**
 	 * Create an impact filter that tracks the 10 most impacting commits
 	 */
 	public CommitLineImpactFilter() {
-		this(10);
+		this(false);
 	}
 
 	/**
@@ -58,7 +79,7 @@ public class CommitLineImpactFilter extends CommitDiffFilter implements
 	 * @param limit
 	 */
 	public CommitLineImpactFilter(final int limit) {
-		this.limit = limit;
+		this(false, limit);
 	}
 
 	/**
@@ -106,7 +127,7 @@ public class CommitLineImpactFilter extends CommitDiffFilter implements
 
 	@Override
 	public RevFilter clone() {
-		return new CommitLineImpactFilter(limit);
+		return new CommitLineImpactFilter(detectRenames, limit);
 	}
 
 	@Override

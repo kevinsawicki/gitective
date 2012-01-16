@@ -41,6 +41,22 @@ public class DiffLineCountFilter extends CommitDiffFilter {
 	private long deleted;
 
 	/**
+	 * Create diff line count filter
+	 */
+	public DiffLineCountFilter() {
+		super();
+	}
+
+	/**
+	 * Create diff line count filter
+	 *
+	 * @param detectRenames
+	 */
+	public DiffLineCountFilter(boolean detectRenames) {
+		super(detectRenames);
+	}
+
+	/**
 	 * @return added
 	 */
 	public long getAdded() {

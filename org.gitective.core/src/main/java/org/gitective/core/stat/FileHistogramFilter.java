@@ -38,8 +38,24 @@ public class FileHistogramFilter extends CommitDiffFilter {
 	private FileHistogram histogram = new FileHistogram();
 
 	/**
+	 * Create file histogram filter
+	 */
+	public FileHistogramFilter() {
+		super();
+	}
+
+	/**
+	 * Create file histogram filter
+	 *
+	 * @param detectRenames
+	 */
+	public FileHistogramFilter(boolean detectRenames) {
+		super(detectRenames);
+	}
+
+	/**
 	 * Get file histogram
-	 * 
+	 *
 	 * @return histogram
 	 */
 	public FileHistogram getHistogram() {
@@ -62,6 +78,6 @@ public class FileHistogramFilter extends CommitDiffFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new FileHistogramFilter();
+		return new FileHistogramFilter(detectRenames);
 	}
 }

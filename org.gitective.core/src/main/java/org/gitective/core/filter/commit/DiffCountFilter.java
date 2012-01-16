@@ -35,6 +35,22 @@ import org.gitective.core.BlobUtils;
  */
 public class DiffCountFilter extends CommitDiffFilter {
 
+	/**
+	 * Create diff count filter
+	 */
+	public DiffCountFilter() {
+		super();
+	}
+
+	/**
+	 * Create diff count filter
+	 *
+	 * @param detectRenames
+	 */
+	public DiffCountFilter(final boolean detectRenames) {
+		super(detectRenames);
+	}
+
 	@Override
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
@@ -78,6 +94,6 @@ public class DiffCountFilter extends CommitDiffFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new DiffCountFilter();
+		return new DiffCountFilter(detectRenames);
 	}
 }

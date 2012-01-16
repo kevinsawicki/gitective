@@ -25,7 +25,6 @@ import java.util.Arrays;
 
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.DepthWalk.RevWalk;
-import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
@@ -46,13 +45,25 @@ public class CompositeDiffFilter extends CommitDiffFilter {
 	/**
 	 * Create a composite filter with given child filters
 	 *
+	 * @param detectRenames
 	 * @param filters
 	 */
-	public CompositeDiffFilter(final CommitDiffFilter... filters) {
+	public CompositeDiffFilter(final boolean detectRenames,
+			final CommitDiffFilter... filters) {
+		super(detectRenames);
 		if (filters != null && filters.length > 0)
 			this.filters = Arrays.copyOf(filters, filters.length);
 		else
 			this.filters = new CommitDiffFilter[0];
+	}
+
+	/**
+	 * Create a composite filter with given child filters
+	 *
+	 * @param filters
+	 */
+	public CompositeDiffFilter(final CommitDiffFilter... filters) {
+		this(false, filters);
 	}
 
 	/**
@@ -97,7 +108,7 @@ public class CompositeDiffFilter extends CommitDiffFilter {
 	 *
 	 * @return non-null but possibly empty array of child filters
 	 */
-	protected RevFilter[] cloneFilters() {
+	protected CommitDiffFilter[] cloneFilters() {
 		return Arrays.copyOf(filters, filters.length);
 	}
 

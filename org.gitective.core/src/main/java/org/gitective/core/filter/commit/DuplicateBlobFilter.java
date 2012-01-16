@@ -40,6 +40,22 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 	private final Map<RevCommit, DuplicateContainer> duplicates = new HashMap<RevCommit, DuplicateContainer>();
 
+	/**
+	 * Create duplicate blob filter
+	 */
+	public DuplicateBlobFilter() {
+		super();
+	}
+
+	/**
+	 * Create duplicate blob filter
+	 *
+	 * @param detectRenames
+	 */
+	public DuplicateBlobFilter(final boolean detectRenames) {
+		super(detectRenames);
+	}
+
 	@Override
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
@@ -80,6 +96,6 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new DuplicateBlobFilter();
+		return new DuplicateBlobFilter(detectRenames);
 	}
 }

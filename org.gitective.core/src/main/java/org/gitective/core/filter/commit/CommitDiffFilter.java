@@ -23,6 +23,7 @@ package org.gitective.core.filter.commit;
 
 import static org.eclipse.jgit.lib.FileMode.EXECUTABLE_FILE;
 import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
+import static org.eclipse.jgit.lib.NullProgressMonitor.INSTANCE;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,9 +32,11 @@ import java.util.List;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
+import org.eclipse.jgit.diff.RenameDetector;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.MutableObjectId;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
@@ -54,6 +57,11 @@ public class CommitDiffFilter extends CommitFilter {
 			newPath = path;
 		}
 
+		private LocalDiffEntry setOldMode(final FileMode mode) {
+			oldMode = mode;
+			return this;
+		}
+
 		private LocalDiffEntry setNewMode(final FileMode mode) {
 			newMode = mode;
 			return this;
@@ -68,6 +76,40 @@ public class CommitDiffFilter extends CommitFilter {
 			newId = id;
 			return this;
 		}
+	}
+
+	/**
+	 * True to detect renames, false otherwise
+	 */
+	protected final boolean detectRenames;
+
+	/**
+	 * Rename detector
+	 */
+	protected RenameDetector renameDetector;
+
+	/**
+	 * Create commit diff filter
+	 */
+	public CommitDiffFilter() {
+		this(false);
+	}
+
+	/**
+	 * Create commit diff filter
+	 *
+	 * @param detectRenames
+	 *            true to detect renames, false otherwise
+	 */
+	public CommitDiffFilter(final boolean detectRenames) {
+		this.detectRenames = detectRenames;
+	}
+
+	@Override
+	public CommitFilter setRepository(Repository repository) {
+		if (detectRenames)
+			renameDetector = new RenameDetector(repository);
+		return super.setRepository(repository);
 	}
 
 	@Override
@@ -103,6 +145,7 @@ public class CommitDiffFilter extends CommitFilter {
 
 				final LocalDiffEntry diff = new LocalDiffEntry(
 						walk.getPathString());
+				diff.setOldMode(FileMode.fromBits(parentMode));
 				diff.setNewMode(FileMode.fromBits(currentMode));
 				walk.getObjectId(objectId, parentCount);
 				diff.setNewId(AbbreviatedObjectId.fromObjectId(objectId));
@@ -115,7 +158,14 @@ public class CommitDiffFilter extends CommitFilter {
 				diffs.add(diff);
 			}
 		}
-		return include(commit, diffs) ? true : include(false);
+		if (detectRenames) {
+			renameDetector.reset();
+			renameDetector.addAll(diffs);
+			return include(commit,
+					renameDetector.compute(walker.getObjectReader(), INSTANCE)) ? true
+					: include(false);
+		} else
+			return include(commit, diffs) ? true : include(false);
 	}
 
 	/**

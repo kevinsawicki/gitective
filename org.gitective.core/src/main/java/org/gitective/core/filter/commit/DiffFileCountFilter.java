@@ -39,6 +39,22 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 	private long deleted;
 
 	/**
+	 * Create diff file count filter
+	 */
+	public DiffFileCountFilter() {
+		super();
+	}
+
+	/**
+	 * Create diff file count filter
+	 *
+	 * @param detectRenames
+	 */
+	public DiffFileCountFilter(boolean detectRenames) {
+		super(detectRenames);
+	}
+
+	/**
 	 * @return added
 	 */
 	public long getAdded() {
@@ -86,6 +102,6 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new DiffFileCountFilter();
+		return new DiffFileCountFilter(detectRenames);
 	}
 }

@@ -38,12 +38,25 @@ public class DiffSizeFilter extends CommitDiffFilter {
 	private final int total;
 
 	/**
-	 * Create a filter that introduced given number of line differences
+	 * Create a filter that includes commits that introduced a minimum number of
+	 * line differences
+	 *
+	 * @param detectRenames
+	 * @param diffTotal
+	 */
+	public DiffSizeFilter(boolean detectRenames, final int diffTotal) {
+		super(detectRenames);
+		total = diffTotal;
+	}
+
+	/**
+	 * Create a filter that includes commits that introduced a minimum number of
+	 * line differences
 	 *
 	 * @param diffTotal
 	 */
 	public DiffSizeFilter(final int diffTotal) {
-		total = diffTotal;
+		this(false, diffTotal);
 	}
 
 	/**
@@ -84,6 +97,6 @@ public class DiffSizeFilter extends CommitDiffFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new DiffSizeFilter(total);
+		return new DiffSizeFilter(detectRenames, total);
 	}
 }
