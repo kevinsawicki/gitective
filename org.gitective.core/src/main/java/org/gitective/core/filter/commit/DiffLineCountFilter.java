@@ -74,6 +74,13 @@ public class DiffLineCountFilter extends CommitDiffEditFilter {
 		return deleted;
 	}
 
+	/**
+	 * @return total
+	 */
+	public long getTotal() {
+		return added + edited + deleted;
+	}
+
 	protected boolean include(RevCommit commit, DiffEntry diff, Edit hunk) {
 		switch (hunk.getType()) {
 		case DELETE:
