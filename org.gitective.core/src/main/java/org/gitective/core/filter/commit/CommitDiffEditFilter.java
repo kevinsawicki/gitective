@@ -50,17 +50,68 @@ public class CommitDiffEditFilter extends CommitDiffFilter {
 		super(detectRenames);
 	}
 
+	/**
+	 * Mark the start of a commit being processed
+	 * <p>
+	 * Sub-classes should override this method instead of overriding
+	 * {@link #include(org.eclipse.jgit.revwalk.RevWalk, RevCommit)} and calling
+	 * super.
+	 *
+	 * @param commit
+	 * @return this filter
+	 */
+	protected CommitDiffEditFilter markStart(RevCommit commit) {
+		return this;
+	}
+
+	/**
+	 * Mark the end of a commit being processed
+	 *
+	 * <p>
+	 * Sub-classes should override this method instead of overriding
+	 * {@link #include(org.eclipse.jgit.revwalk.RevWalk, RevCommit)} and calling
+	 * super.
+	 *
+	 * @param commit
+	 * @return this filter
+	 */
+	protected CommitDiffEditFilter markEnd(RevCommit commit) {
+		return this;
+	}
+
 	@Override
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
+		markStart(commit);
 		for (DiffEntry diff : diffs) {
 			if (!isFileDiff(diff))
 				continue;
-			for (Edit edit : BlobUtils.diff(repository, diff.getOldId()
-					.toObjectId(), diff.getNewId().toObjectId()))
-				if (!include(commit, diff, edit))
-					return include(false);
+			if (!include(commit, diff, BlobUtils.diff(repository, diff
+					.getOldId().toObjectId(), diff.getNewId().toObjectId())))
+				return markEnd(commit).include(false);
 		}
+		return true;
+	}
+
+	/**
+	 * Handle the edits introduced by given commit.
+	 * <p>
+	 * Sub-classes should override this method. The default implementation call
+	 * {@link #include(RevCommit, DiffEntry, Edit)} for each edit.
+	 *
+	 * @param commit
+	 *            non-null
+	 * @param diff
+	 *            non-null
+	 * @param edits
+	 *            non-null
+	 * @return true to continue, false to abort
+	 */
+	protected boolean include(final RevCommit commit, final DiffEntry diff,
+			final Collection<Edit> edits) {
+		for (Edit edit : edits)
+			if (!include(commit, diff, edit))
+				return false;
 		return true;
 	}
 

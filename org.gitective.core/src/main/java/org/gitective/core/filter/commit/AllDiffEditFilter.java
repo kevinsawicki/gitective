@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Kevin Sawicki <kevinsawicki@gmail.com>
+ * Copyright (c) 2012 Kevin Sawicki <kevinsawicki@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -21,84 +21,51 @@
  */
 package org.gitective.core.filter.commit;
 
+import java.util.Collection;
+
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * Filter that tracks the cumulative amount of lines added, edited, and deleted
+ * Parent filter that invokes
+ * {@link #include(org.eclipse.jgit.revwalk.RevCommit, java.util.Collection)} on
+ * all child filters ignoring the return value
  */
-public class DiffLineCountFilter extends CommitDiffEditFilter {
-
-	private long added;
-
-	private long edited;
-
-	private long deleted;
+public class AllDiffEditFilter extends CompositeDiffEditFilter {
 
 	/**
-	 * Create diff line count filter
-	 */
-	public DiffLineCountFilter() {
-		super();
-	}
-
-	/**
-	 * Create diff line count filter
+	 * Create all diff edit filter
 	 *
 	 * @param detectRenames
+	 * @param filters
 	 */
-	public DiffLineCountFilter(final boolean detectRenames) {
-		super(detectRenames);
+	public AllDiffEditFilter(final boolean detectRenames,
+			final CommitDiffEditFilter... filters) {
+		super(detectRenames, filters);
 	}
 
 	/**
-	 * @return added
+	 * Create all diff edit filter
+	 *
+	 * @param filters
 	 */
-	public long getAdded() {
-		return added;
+	public AllDiffEditFilter(final CommitDiffEditFilter... filters) {
+		this(false, filters);
 	}
 
-	/**
-	 * @return edited
-	 */
-	public long getEdited() {
-		return edited;
-	}
-
-	/**
-	 * @return deleted
-	 */
-	public long getDeleted() {
-		return deleted;
-	}
-
-	protected boolean include(RevCommit commit, DiffEntry diff, Edit hunk) {
-		switch (hunk.getType()) {
-		case DELETE:
-			deleted += hunk.getLengthA();
-			break;
-		case INSERT:
-			added += hunk.getLengthB();
-			break;
-		case REPLACE:
-			edited += hunk.getLengthB();
-			break;
-		}
+	@Override
+	protected boolean include(final RevCommit commit, final DiffEntry diff,
+			final Collection<Edit> edits) {
+		final int length = filters.length;
+		for (int i = 0; i < length; i++)
+			filters[i].include(commit, diff, edits);
 		return true;
 	}
 
 	@Override
-	public CommitFilter reset() {
-		added = 0;
-		edited = 0;
-		deleted = 0;
-		return super.reset();
-	}
-
-	@Override
 	public RevFilter clone() {
-		return new DiffLineCountFilter(detectRenames);
+		return new AllDiffFilter(detectRenames, cloneFilters());
 	}
 }

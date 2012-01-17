@@ -21,7 +21,6 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -30,19 +29,24 @@ import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.gitective.core.BlobUtils;
 import org.gitective.core.filter.commit.CommitImpact.DescendingImpactComparator;
 
 /**
  * Filter that tracks the impact of commits measure in terms of lines changed
  */
-public class CommitLineImpactFilter extends CommitDiffFilter implements
+public class CommitLineImpactFilter extends CommitDiffEditFilter implements
 		Iterable<CommitImpact> {
 
 	private final int limit;
 
 	private final SortedSet<CommitImpact> commits = new TreeSet<CommitImpact>(
 			new DescendingImpactComparator());
+
+	private int add;
+
+	private int edit;
+
+	private int delete;
 
 	/**
 	 * Create an impact filter that retains the given number of most impacting
@@ -97,31 +101,34 @@ public class CommitLineImpactFilter extends CommitDiffFilter implements
 	}
 
 	@Override
-	public boolean include(final RevCommit commit,
-			final Collection<DiffEntry> diffs) {
-		int add = 0;
-		int edit = 0;
-		int delete = 0;
-		for (DiffEntry diff : diffs) {
-			if (!isFileDiff(diff))
-				continue;
-			for (Edit hunk : BlobUtils.diff(repository, diff.getOldId()
-					.toObjectId(), diff.getNewId().toObjectId()))
-				switch (hunk.getType()) {
-				case DELETE:
-					delete += hunk.getLengthA();
-					break;
-				case INSERT:
-					add += hunk.getLengthB();
-					break;
-				case REPLACE:
-					edit += hunk.getLengthB();
-					break;
-				}
-		}
+	protected CommitDiffEditFilter markStart(final RevCommit commit) {
+		add = 0;
+		edit = 0;
+		delete = 0;
+		return super.markStart(commit);
+	}
+
+	@Override
+	protected CommitDiffEditFilter markEnd(final RevCommit commit) {
 		commits.add(new CommitImpact(commit, add, edit, delete));
 		if (commits.size() > limit)
 			commits.remove(commits.last());
+		return super.markEnd(commit);
+	}
+
+	@Override
+	protected boolean include(RevCommit commit, DiffEntry diff, Edit hunk) {
+		switch (hunk.getType()) {
+		case DELETE:
+			delete += hunk.getLengthA();
+			break;
+		case INSERT:
+			add += hunk.getLengthB();
+			break;
+		case REPLACE:
+			edit += hunk.getLengthB();
+			break;
+		}
 		return true;
 	}
 
