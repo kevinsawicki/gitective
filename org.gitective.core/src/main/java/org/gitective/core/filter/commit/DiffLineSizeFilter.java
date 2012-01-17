@@ -29,10 +29,10 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * Filter for including commits that introduced a configurable number of
+ * Filter for including commits that introduced a configurable number of line
  * differences
  */
-public class DiffSizeFilter extends CommitDiffEditFilter {
+public class DiffLineSizeFilter extends CommitDiffEditFilter {
 
 	private final int total;
 
@@ -45,7 +45,7 @@ public class DiffSizeFilter extends CommitDiffEditFilter {
 	 * @param detectRenames
 	 * @param diffTotal
 	 */
-	public DiffSizeFilter(final boolean detectRenames, final int diffTotal) {
+	public DiffLineSizeFilter(final boolean detectRenames, final int diffTotal) {
 		super(detectRenames);
 		total = diffTotal;
 	}
@@ -56,7 +56,7 @@ public class DiffSizeFilter extends CommitDiffEditFilter {
 	 *
 	 * @param diffTotal
 	 */
-	public DiffSizeFilter(final int diffTotal) {
+	public DiffLineSizeFilter(final int diffTotal) {
 		this(false, diffTotal);
 	}
 
@@ -105,6 +105,6 @@ public class DiffSizeFilter extends CommitDiffEditFilter {
 
 	@Override
 	public RevFilter clone() {
-		return new DiffSizeFilter(detectRenames, total);
+		return new DiffLineSizeFilter(detectRenames, total);
 	}
 }

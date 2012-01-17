@@ -27,11 +27,11 @@ import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AllCommitFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
-import org.gitective.core.filter.commit.DiffSizeFilter;
+import org.gitective.core.filter.commit.DiffLineSizeFilter;
 import org.junit.Test;
 
 /**
- * Unit tests of {@link DiffSizeFilter}
+ * Unit tests of {@link DiffLineSizeFilter}
  */
 public class DiffSizeTest extends GitTestCase {
 
@@ -47,7 +47,7 @@ public class DiffSizeTest extends GitTestCase {
 		RevCommit commit3 = add("file.txt", "");
 		CommitListFilter commits = new CommitListFilter();
 		new CommitFinder(testRepo).setFilter(
-				new AllCommitFilter(new AndCommitFilter(new DiffSizeFilter(3),
+				new AllCommitFilter(new AndCommitFilter(new DiffLineSizeFilter(3),
 						commits))).find();
 		assertTrue(commits.getCommits().contains(commit1));
 		assertFalse(commits.getCommits().contains(commit2));
@@ -65,22 +65,22 @@ public class DiffSizeTest extends GitTestCase {
 		RevCommit commit2 = mv("file.txt", "file2.txt");
 		CommitListFilter commits = new CommitListFilter();
 		new CommitFinder(testRepo).setFilter(
-				new AllCommitFilter(new AndCommitFilter(new DiffSizeFilter(
+				new AllCommitFilter(new AndCommitFilter(new DiffLineSizeFilter(
 						true, 1), commits))).find();
 		assertTrue(commits.getCommits().contains(commit1));
 		assertFalse(commits.getCommits().contains(commit2));
 	}
 
 	/**
-	 * Test of {@link DiffSizeFilter#clone()}
+	 * Test of {@link DiffLineSizeFilter#clone()}
 	 */
 	@Test
 	public void cloneFilter() {
-		DiffSizeFilter filter = new DiffSizeFilter(10);
+		DiffLineSizeFilter filter = new DiffLineSizeFilter(10);
 		RevFilter clone = filter.clone();
 		assertNotNull(clone);
 		assertNotSame(filter, clone);
-		assertTrue(clone instanceof DiffSizeFilter);
-		assertEquals(filter.getTotal(), ((DiffSizeFilter) clone).getTotal());
+		assertTrue(clone instanceof DiffLineSizeFilter);
+		assertEquals(filter.getTotal(), ((DiffLineSizeFilter) clone).getTotal());
 	}
 }
