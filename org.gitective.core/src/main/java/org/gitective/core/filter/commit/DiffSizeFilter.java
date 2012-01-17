@@ -27,15 +27,16 @@ import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.gitective.core.BlobUtils;
 
 /**
  * Filter for including commits that introduced a configurable number of
  * differences
  */
-public class DiffSizeFilter extends CommitDiffFilter {
+public class DiffSizeFilter extends CommitDiffEditFilter {
 
 	private final int total;
+
+	private int count;
 
 	/**
 	 * Create a filter that includes commits that introduced a minimum number of
@@ -69,30 +70,37 @@ public class DiffSizeFilter extends CommitDiffFilter {
 	}
 
 	@Override
-	public boolean include(final RevCommit commit,
-			final Collection<DiffEntry> diffs) {
-		int count = 0;
-		for (DiffEntry diff : diffs) {
-			if (!isFileDiff(diff))
-				continue;
-			for (Edit edit : BlobUtils.diff(repository, diff.getOldId()
-					.toObjectId(), diff.getNewId().toObjectId()))
-				switch (edit.getType()) {
-				case DELETE:
-					count += edit.getLengthA();
-					if (count >= total)
-						return true;
-					break;
-				case INSERT:
-				case REPLACE:
-					count += edit.getLengthB();
-					if (count >= total)
-						return true;
-				default:
-					break;
-				}
+	protected CommitDiffEditFilter markStart(final RevCommit commit) {
+		count = 0;
+		return super.markStart(commit);
+	}
+
+	@Override
+	protected boolean include(RevCommit commit, DiffEntry diff,
+			Collection<Edit> edits) {
+		if (edits.isEmpty())
+			return include(false);
+		return super.include(commit, diff, edits);
+	}
+
+	@Override
+	protected boolean include(final RevCommit commit, final DiffEntry diff,
+			final Edit edit) {
+		switch (edit.getType()) {
+		case DELETE:
+			count += edit.getLengthA();
+			if (count >= total)
+				return true;
+			break;
+		case INSERT:
+		case REPLACE:
+			count += edit.getLengthB();
+			if (count >= total)
+				return true;
+		default:
+			break;
 		}
-		return include(false);
+		return false;
 	}
 
 	@Override
