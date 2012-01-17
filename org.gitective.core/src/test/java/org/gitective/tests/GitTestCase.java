@@ -64,7 +64,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Set up method that initializes git repository
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Before
@@ -74,7 +74,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Initialize a new repo in a new directory
-	 * 
+	 *
 	 * @return created .git folder
 	 */
 	protected File initRepo() {
@@ -92,7 +92,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Create branch with name and checkout
-	 * 
+	 *
 	 * @param name
 	 * @return branch ref
 	 * @throws Exception
@@ -103,7 +103,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Create branch with name and checkout
-	 * 
+	 *
 	 * @param repo
 	 * @param name
 	 * @return branch ref
@@ -117,7 +117,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Checkout branch
-	 * 
+	 *
 	 * @param name
 	 * @return branch ref
 	 * @throws Exception
@@ -128,7 +128,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Checkout branch
-	 * 
+	 *
 	 * @param repo
 	 * @param name
 	 * @return branch ref
@@ -143,7 +143,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Create tag with name
-	 * 
+	 *
 	 * @param name
 	 * @return tag ref
 	 * @throws Exception
@@ -154,7 +154,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Create tag with name
-	 * 
+	 *
 	 * @param repo
 	 * @param name
 	 * @return tag ref
@@ -170,7 +170,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Add file to test repository
-	 * 
+	 *
 	 * @param path
 	 * @param content
 	 * @return commit
@@ -182,9 +182,9 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Add file to test repository
-	 * 
+	 *
 	 * @param repo
-	 * 
+	 *
 	 * @param path
 	 * @param content
 	 * @return commit
@@ -199,7 +199,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Add file to test repository
-	 * 
+	 *
 	 * @param path
 	 * @param content
 	 * @param message
@@ -213,7 +213,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Add file to test repository
-	 * 
+	 *
 	 * @param repo
 	 * @param path
 	 * @param content
@@ -245,8 +245,58 @@ public abstract class GitTestCase extends Assert {
 	}
 
 	/**
+	 * Move file in test repository
+	 *
+	 * @param from
+	 * @param to
+	 * @return commit
+	 * @throws Exception
+	 */
+	protected RevCommit mv(String from, String to) throws Exception {
+		return mv(testRepo, from, to, MessageFormat.format(
+				"Moving {0} to {1} at {2}", from, to, new Date()));
+	}
+
+	/**
+	 * Move file in test repository
+	 *
+	 * @param from
+	 * @param to
+	 * @param message
+	 * @return commit
+	 * @throws Exception
+	 */
+	protected RevCommit mv(String from, String to, String message)
+			throws Exception {
+		return mv(testRepo, from, to, message);
+	}
+
+	/**
+	 * Move file in test repository
+	 *
+	 * @param repo
+	 * @param from
+	 * @param to
+	 * @param message
+	 * @return commit
+	 * @throws Exception
+	 */
+	protected RevCommit mv(File repo, String from, String to, String message)
+			throws Exception {
+		File file = new File(repo.getParentFile(), from);
+		file.renameTo(new File(repo.getParentFile(), to));
+		Git git = Git.open(repo);
+		git.rm().addFilepattern(from);
+		git.add().addFilepattern(to).call();
+		RevCommit commit = git.commit().setAll(true).setMessage(message)
+				.setAuthor(author).setCommitter(committer).call();
+		assertNotNull(commit);
+		return commit;
+	}
+
+	/**
 	 * Add files to test repository
-	 * 
+	 *
 	 * @param repo
 	 * @param paths
 	 * @param contents
@@ -283,7 +333,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Merge ref into current branch
-	 * 
+	 *
 	 * @param ref
 	 * @return result
 	 * @throws Exception
@@ -297,7 +347,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Add note to latest commit with given content
-	 * 
+	 *
 	 * @param content
 	 * @return note
 	 * @throws Exception
@@ -308,7 +358,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Add note to latest commit with given content
-	 * 
+	 *
 	 * @param content
 	 * @param ref
 	 * @return note
@@ -325,7 +375,7 @@ public abstract class GitTestCase extends Assert {
 
 	/**
 	 * Delete and commit file at path
-	 * 
+	 *
 	 * @param path
 	 * @return commit
 	 * @throws Exception

@@ -37,7 +37,7 @@ public class DiffSizeTest extends GitTestCase {
 
 	/**
 	 * Test selecting commits where only one file differs
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -52,6 +52,23 @@ public class DiffSizeTest extends GitTestCase {
 		assertTrue(commits.getCommits().contains(commit1));
 		assertFalse(commits.getCommits().contains(commit2));
 		assertTrue(commits.getCommits().contains(commit3));
+	}
+
+	/**
+	 * Test file with single non-rename revision
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void diffMovedFile() throws Exception {
+		RevCommit commit1 = add("file.txt", "a\nb\nc");
+		RevCommit commit2 = mv("file.txt", "file2.txt");
+		CommitListFilter commits = new CommitListFilter();
+		new CommitFinder(testRepo).setFilter(
+				new AllCommitFilter(new AndCommitFilter(new DiffSizeFilter(
+						true, 1), commits))).find();
+		assertTrue(commits.getCommits().contains(commit1));
+		assertFalse(commits.getCommits().contains(commit2));
 	}
 
 	/**
