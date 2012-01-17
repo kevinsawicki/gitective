@@ -90,6 +90,7 @@ public class CommitDiffEditFilter extends CommitDiffFilter {
 					.getOldId().toObjectId(), diff.getNewId().toObjectId())))
 				return markEnd(commit).include(false);
 		}
+		markEnd(commit);
 		return true;
 	}
 
