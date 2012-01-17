@@ -9,7 +9,7 @@
 
 	<groupId>org.gitective</groupId>
 	<artifactId>gitective-core</artifactId>
-	<version>0.9.4-SNAPSHOT</version>
+	<version>0.9.4</version>
 	<name>gitective core</name>
 	<description>gitective core library</description>
 	<url>http://gitective.org</url>
