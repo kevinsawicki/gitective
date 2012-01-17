@@ -7,7 +7,7 @@
 '/home/kevin/repositories/gitective/org.gitective.core/src/main/java'
 -author
 -bottom
-'Copyright &#169; 2011. All Rights Reserved.'
+'Copyright &#169; 2011-2012. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
@@ -15,10 +15,10 @@
 -docencoding
 'UTF-8'
 -doctitle
-'gitective core 0.9.3 API'
+'gitective core 0.9.4 API'
 -linkoffline
 'http://download.oracle.com/javase/1.5.0/docs/api' '/home/kevin/repositories/gitective/org.gitective.core/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
-'gitective core 0.9.3 API'
+'gitective core 0.9.4 API'
