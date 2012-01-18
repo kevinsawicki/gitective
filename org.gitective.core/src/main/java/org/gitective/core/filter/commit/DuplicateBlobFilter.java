@@ -60,6 +60,8 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 			final Collection<DiffEntry> diffs) {
 		final DuplicateContainer dupes = new DuplicateContainer(commit);
 		for (DiffEntry diff : diffs) {
+			if (!isFileDiff(diff))
+				continue;
 			switch (diff.getChangeType()) {
 			case DELETE:
 				continue;
