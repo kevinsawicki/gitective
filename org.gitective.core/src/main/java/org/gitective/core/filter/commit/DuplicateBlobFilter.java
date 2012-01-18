@@ -26,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
@@ -61,9 +60,19 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 			final Collection<DiffEntry> diffs) {
 		final DuplicateContainer dupes = new DuplicateContainer(commit);
 		for (DiffEntry diff : diffs) {
-			if (diff.getChangeType() == ChangeType.DELETE)
+			switch (diff.getChangeType()) {
+			case DELETE:
 				continue;
-			dupes.include(diff.getNewId().toObjectId(), diff.getNewPath());
+			case COPY:
+			case MODIFY:
+			case RENAME:
+				if (diff.getOldMode() != diff.getNewMode()
+						&& diff.getOldId().equals(diff.getNewId()))
+					continue;
+			default:
+				dupes.include(diff.getNewId().toObjectId(), diff.getNewPath());
+				break;
+			}
 		}
 		if (dupes.validate())
 			duplicates.put(commit, dupes);
