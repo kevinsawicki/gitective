@@ -113,4 +113,16 @@ public class DuplicateContainer implements
 	public Iterator<Entry<AnyObjectId, List<String>>> iterator() {
 		return objects.entrySet().iterator();
 	}
+
+	/**
+	 * Get total number of duplicates
+	 *
+	 * @return total
+	 */
+	public int getTotal() {
+		int total = 0;
+		for (List<String> dupe : objects.values())
+			total += dupe.size();
+		return total;
+	}
 }
