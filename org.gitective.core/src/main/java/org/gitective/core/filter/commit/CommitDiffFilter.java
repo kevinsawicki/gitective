@@ -21,8 +21,9 @@
  */
 package org.gitective.core.filter.commit;
 
+import static org.eclipse.jgit.lib.FileMode.TYPE_FILE;
+import static org.eclipse.jgit.lib.FileMode.TYPE_MASK;
 import static org.eclipse.jgit.lib.NullProgressMonitor.INSTANCE;
-import static org.eclipse.jgit.lib.FileMode.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -176,12 +177,12 @@ public class CommitDiffFilter extends CommitFilter {
 	protected boolean isFileDiff(DiffEntry diff) {
 		switch (diff.getChangeType()) {
 		case DELETE:
-			return (TYPE_FILE & diff.getOldMode().getBits()) != 0;
+			return TYPE_FILE == (diff.getOldMode().getBits() & TYPE_MASK);
 		case ADD:
-			return (TYPE_FILE & diff.getNewMode().getBits()) != 0;
+			return TYPE_FILE == (diff.getNewMode().getBits() & TYPE_MASK);
 		default:
-			return (TYPE_FILE & diff.getOldMode().getBits()) != 0
-					&& (TYPE_FILE & diff.getNewMode().getBits()) != 0;
+			return TYPE_FILE == (diff.getOldMode().getBits() & TYPE_MASK)
+					&& TYPE_FILE == (diff.getNewMode().getBits() & TYPE_MASK);
 		}
 	}
 
