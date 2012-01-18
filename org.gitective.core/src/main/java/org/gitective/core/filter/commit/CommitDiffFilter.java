@@ -21,9 +21,8 @@
  */
 package org.gitective.core.filter.commit;
 
-import static org.eclipse.jgit.lib.FileMode.EXECUTABLE_FILE;
-import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
 import static org.eclipse.jgit.lib.NullProgressMonitor.INSTANCE;
+import static org.eclipse.jgit.lib.FileMode.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -177,17 +176,12 @@ public class CommitDiffFilter extends CommitFilter {
 	protected boolean isFileDiff(DiffEntry diff) {
 		switch (diff.getChangeType()) {
 		case DELETE:
-			return EXECUTABLE_FILE == diff.getOldMode()
-					|| REGULAR_FILE == diff.getOldMode();
+			return (TYPE_FILE & diff.getOldMode().getBits()) != 0;
 		case ADD:
-			return EXECUTABLE_FILE == diff.getNewMode()
-					|| REGULAR_FILE == diff.getNewMode();
+			return (TYPE_FILE & diff.getNewMode().getBits()) != 0;
 		default:
-			return (EXECUTABLE_FILE == diff.getNewMode() //
-					|| REGULAR_FILE == diff.getNewMode())
-					&& //
-					(EXECUTABLE_FILE == diff.getOldMode() //
-					|| REGULAR_FILE == diff.getOldMode());
+			return (TYPE_FILE & diff.getOldMode().getBits()) != 0
+					&& (TYPE_FILE & diff.getNewMode().getBits()) != 0;
 		}
 	}
 
