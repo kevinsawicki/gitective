@@ -22,7 +22,7 @@
 package org.gitective.core.filter.commit;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.jgit.diff.DiffEntry;
@@ -38,7 +38,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  */
 public class DuplicateBlobFilter extends CommitDiffFilter {
 
-	private final Map<RevCommit, DuplicateContainer> duplicates = new HashMap<RevCommit, DuplicateContainer>();
+	private final Map<RevCommit, DuplicateContainer> duplicates = new LinkedHashMap<RevCommit, DuplicateContainer>();
 
 	/**
 	 * Create duplicate blob filter
