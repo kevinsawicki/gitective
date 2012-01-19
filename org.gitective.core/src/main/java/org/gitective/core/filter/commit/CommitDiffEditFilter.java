@@ -25,6 +25,7 @@ import java.util.Collection;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
+import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.BlobUtils;
 
@@ -86,8 +87,11 @@ public class CommitDiffEditFilter extends CommitDiffFilter {
 		for (DiffEntry diff : diffs) {
 			if (!isFileDiff(diff))
 				continue;
-			if (!include(commit, diff, BlobUtils.diff(repository, diff
-					.getOldId().toObjectId(), diff.getNewId().toObjectId())))
+			final AbbreviatedObjectId oldId = diff.getOldId();
+			if (oldId == null)
+				continue;
+			if (!include(commit, diff, BlobUtils.diff(repository,
+					oldId.toObjectId(), diff.getNewId().toObjectId())))
 				return markEnd(commit).include(false);
 		}
 		markEnd(commit);

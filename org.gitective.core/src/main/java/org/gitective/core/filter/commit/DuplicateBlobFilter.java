@@ -69,7 +69,7 @@ public class DuplicateBlobFilter extends CommitDiffFilter {
 			case MODIFY:
 			case RENAME:
 				if (diff.getOldMode() != diff.getNewMode()
-						&& diff.getOldId().equals(diff.getNewId()))
+						&& diff.getNewId().equals(diff.getOldId()))
 					continue;
 			default:
 				dupes.include(diff.getNewId().toObjectId(), diff.getNewPath());
