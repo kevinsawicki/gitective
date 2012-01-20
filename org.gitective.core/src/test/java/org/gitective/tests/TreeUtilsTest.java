@@ -22,8 +22,13 @@
 package org.gitective.tests;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -31,6 +36,7 @@ import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.gitective.core.BlobUtils;
 import org.gitective.core.TreeUtils;
+import org.gitective.core.TreeUtils.ITreeVisitor;
 import org.junit.Test;
 
 /**
@@ -348,5 +354,81 @@ public class TreeUtilsTest extends GitTestCase {
 		assertFalse(treeId.equals(commit.getTree()));
 		assertNull(BlobUtils.getId(repo, commit, "d1"));
 		assertFalse(treeId.equals(BlobUtils.getId(repo, commit, "d1/f1.txt")));
+	}
+
+	/**
+	 * Visit with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void visitNullRepository() {
+		TreeUtils.visit(null, ObjectId.zeroId(), new ITreeVisitor() {
+
+			public boolean accept(FileMode mode, String path, String name,
+					AnyObjectId id) {
+				return false;
+			}
+		});
+	}
+
+	/**
+	 * Visit with null tree id
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void visitNullTreeId() throws IOException {
+		TreeUtils.visit(new FileRepository(testRepo), null, new ITreeVisitor() {
+
+			public boolean accept(FileMode mode, String path, String name,
+					AnyObjectId id) {
+				return false;
+			}
+		});
+	}
+
+	/**
+	 * Visit with null visitor
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void visitNullVisitor() throws IOException {
+		TreeUtils.visit(new FileRepository(testRepo), ObjectId.zeroId(), null);
+	}
+
+	/**
+	 * Visit tree
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void visit() throws Exception {
+		RevCommit commit = add("d/f.txt", "content");
+		final AtomicInteger files = new AtomicInteger(0);
+		final AtomicInteger folders = new AtomicInteger(0);
+		final List<String> names = new ArrayList<String>();
+		final List<String> paths = new ArrayList<String>();
+		assertTrue(TreeUtils.visit(new FileRepository(testRepo),
+				commit.getTree(), new ITreeVisitor() {
+
+					public boolean accept(FileMode mode, String path,
+							String name, AnyObjectId id) {
+						if (mode == FileMode.REGULAR_FILE)
+							files.incrementAndGet();
+						if (mode == FileMode.TREE)
+							folders.incrementAndGet();
+						names.add(name);
+						if (path != null)
+							paths.add(path);
+						return true;
+					}
+				}));
+		assertEquals(1, files.get());
+		assertEquals(1, folders.get());
+		assertEquals(2, names.size());
+		assertTrue(names.contains("d"));
+		assertTrue(names.contains("f.txt"));
+		assertEquals(1, paths.size());
+		assertTrue(paths.contains("d"));
 	}
 }

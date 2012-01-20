@@ -28,6 +28,8 @@ import static org.eclipse.jgit.treewalk.filter.TreeFilter.ANY_DIFF;
 import java.io.IOException;
 
 import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.lib.FileMode;
+import org.eclipse.jgit.lib.MutableObjectId;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
@@ -41,6 +43,27 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  * Utilities for dealing with Git trees.
  */
 public abstract class TreeUtils {
+
+	/**
+	 * Interface for visiting elements in a tree
+	 */
+	public static interface ITreeVisitor {
+
+		/**
+		 * Visit the given element
+		 *
+		 * @param mode
+		 *            mode of current entry
+		 * @param path
+		 *            parent path of entry, null for root entries
+		 * @param name
+		 *            name of current entry
+		 * @param id
+		 *            id of current entry
+		 * @return true to continue, false to abort
+		 */
+		boolean accept(FileMode mode, String path, String name, AnyObjectId id);
+	}
 
 	/**
 	 * Get the tree associated with the given commit.
@@ -370,5 +393,46 @@ public abstract class TreeUtils {
 		final RevCommit commit = CommitUtils.parse(repository,
 				CommitUtils.strictResolve(repository, revision));
 		return lookupId(repository, commit, path);
+	}
+
+	/**
+	 * Visit entries in the given tree
+	 *
+	 * @param repository
+	 * @param treeId
+	 * @param visitor
+	 * @return true if completely completely, false if terminated early
+	 */
+	public static boolean visit(final Repository repository,
+			final ObjectId treeId, final ITreeVisitor visitor) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (treeId == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Tree Id"));
+		if (visitor == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Visitor"));
+
+		final TreeWalk walk = new TreeWalk(repository);
+		final MutableObjectId id = new MutableObjectId();
+		String path = null;
+		try {
+			walk.addTree(treeId);
+			while (walk.next()) {
+				walk.getObjectId(id, 0);
+				if (!visitor.accept(walk.getFileMode(0), path,
+						walk.getNameString(), id))
+					return false;
+				if (walk.isSubtree()) {
+					path = walk.getPathString();
+					walk.enterSubtree();
+				}
+			}
+		} catch (IOException e) {
+			throw new GitException(e, repository);
+		} finally {
+			walk.release();
+		}
+		return true;
 	}
 }
