@@ -226,4 +226,127 @@ public class TreeUtilsTest extends GitTestCase {
 	public void withCommitsEmptyCommits() throws IOException {
 		TreeUtils.withCommits(new FileRepository(testRepo), new ObjectId[0]);
 	}
+
+	/**
+	 * Get tree id with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullRepository1() {
+		TreeUtils.getId(null, ObjectId.zeroId(), "folder");
+	}
+
+	/**
+	 * Get tree id with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullRepository2() {
+		TreeUtils.getId(null, Constants.MASTER, "folder");
+	}
+
+	/**
+	 * Get tree id with null commit id
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullCommitId() throws IOException {
+		TreeUtils
+				.getId(new FileRepository(testRepo), (ObjectId) null, "folder");
+	}
+
+	/**
+	 * Get tree id with null commit id
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullRevision() throws IOException {
+		TreeUtils.getId(new FileRepository(testRepo), (String) null, "folder");
+	}
+
+	/**
+	 * Get tree id with null commit id
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdEmptyRevision() throws IOException {
+		TreeUtils.getId(new FileRepository(testRepo), "", "folder");
+	}
+
+	/**
+	 * Get tree id with null path
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullPath1() throws IOException {
+		TreeUtils.getId(new FileRepository(testRepo), ObjectId.zeroId(), null);
+	}
+
+	/**
+	 * Get tree id with null path
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdNullPath2() throws IOException {
+		TreeUtils.getId(new FileRepository(testRepo), Constants.MASTER, null);
+	}
+
+	/**
+	 * Get tree id with empty path
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdEmptyPath1() throws IOException {
+		TreeUtils.getId(new FileRepository(testRepo), ObjectId.zeroId(), "");
+	}
+
+	/**
+	 * Get tree id with empty path
+	 *
+	 * @throws IOException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getIdEmptyPath2() throws IOException {
+		TreeUtils.getId(new FileRepository(testRepo), Constants.MASTER, "");
+	}
+
+	/**
+	 * Get id with commit id
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getIdWithCommit() throws Exception {
+		Repository repo = new FileRepository(testRepo);
+		RevCommit commit = add("d1/f1.txt", "content");
+		assertNull(TreeUtils.getId(repo, commit, "d2/f1.txt"));
+		assertNull(TreeUtils.getId(repo, commit, "d1/f1.txt"));
+		ObjectId treeId = TreeUtils.getId(repo, commit, "d1");
+		assertNotNull(treeId);
+		assertFalse(treeId.equals(commit.getTree()));
+		assertNull(BlobUtils.getId(repo, commit, "d1"));
+		assertFalse(treeId.equals(BlobUtils.getId(repo, commit, "d1/f1.txt")));
+	}
+
+	/**
+	 * Get id with revision
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getIdWithRevision() throws Exception {
+		Repository repo = new FileRepository(testRepo);
+		RevCommit commit = add("d1/f1.txt", "content");
+		assertNull(TreeUtils.getId(repo, Constants.MASTER, "d2/f1.txt"));
+		assertNull(TreeUtils.getId(repo, Constants.MASTER, "d1/f1.txt"));
+		ObjectId treeId = TreeUtils.getId(repo, Constants.MASTER, "d1");
+		assertNotNull(treeId);
+		assertFalse(treeId.equals(commit.getTree()));
+		assertNull(BlobUtils.getId(repo, commit, "d1"));
+		assertFalse(treeId.equals(BlobUtils.getId(repo, commit, "d1/f1.txt")));
+	}
 }

@@ -21,6 +21,8 @@
  */
 package org.gitective.core;
 
+import static org.eclipse.jgit.lib.FileMode.TYPE_MASK;
+import static org.eclipse.jgit.lib.FileMode.TYPE_TREE;
 import static org.eclipse.jgit.treewalk.filter.TreeFilter.ANY_DIFF;
 
 import java.io.IOException;
@@ -215,8 +217,8 @@ public abstract class TreeUtils {
 	 * @param revisions
 	 * @return tree walk
 	 */
-	public static TreeWalk withCommits(Repository repository,
-			String... revisions) {
+	public static TreeWalk withCommits(final Repository repository,
+			final String... revisions) {
 		if (repository == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Repository"));
@@ -245,8 +247,8 @@ public abstract class TreeUtils {
 	 * @param commits
 	 * @return tree walk
 	 */
-	public static TreeWalk withCommits(Repository repository,
-			ObjectId... commits) {
+	public static TreeWalk withCommits(final Repository repository,
+			final ObjectId... commits) {
 		if (repository == null)
 			throw new IllegalArgumentException(
 					Assert.formatNotNull("Repository"));
@@ -273,8 +275,8 @@ public abstract class TreeUtils {
 	 * @param commits
 	 * @return tree walk
 	 */
-	public static TreeWalk diffWithCommits(Repository repository,
-			ObjectId... commits) {
+	public static TreeWalk diffWithCommits(final Repository repository,
+			final ObjectId... commits) {
 		final TreeWalk walk = withCommits(repository, commits);
 		walk.setFilter(ANY_DIFF);
 		return walk;
@@ -287,10 +289,86 @@ public abstract class TreeUtils {
 	 * @param revisions
 	 * @return tree walk
 	 */
-	public static TreeWalk diffWithCommits(Repository repository,
-			String... revisions) {
+	public static TreeWalk diffWithCommits(final Repository repository,
+			final String... revisions) {
 		final TreeWalk walk = withCommits(repository, revisions);
 		walk.setFilter(ANY_DIFF);
 		return walk;
+	}
+
+	/**
+	 * Get the id of the tree at the path in the given commit.
+	 *
+	 * @param repository
+	 * @param commit
+	 * @param path
+	 * @return tree id, null if not present
+	 */
+	protected static ObjectId lookupId(final Repository repository,
+			final RevCommit commit, final String path) {
+		final TreeWalk walk;
+		try {
+			walk = TreeWalk.forPath(repository, path, commit.getTree());
+		} catch (IOException e) {
+			throw new GitException(e, repository);
+		}
+		if (walk == null)
+			return null;
+		if ((walk.getRawMode(0) & TYPE_MASK) != TYPE_TREE)
+			return null;
+		return walk.getObjectId(0);
+	}
+
+	/**
+	 * Get the id of the tree at the path in the given commit
+	 *
+	 * @param repository
+	 * @param commitId
+	 * @param path
+	 * @return tree id or null if no tree id at path
+	 */
+	public static ObjectId getId(final Repository repository,
+			final ObjectId commitId, final String path) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (commitId == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Commit Id"));
+		if (path == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Path"));
+		if (path.length() == 0)
+			throw new IllegalArgumentException(Assert.formatNotNull("Path"));
+
+		final RevCommit commit = CommitUtils.parse(repository, commitId);
+		return lookupId(repository, commit, path);
+	}
+
+	/**
+	 * Get the id of the tree at the path in the given revision
+	 *
+	 * @param repository
+	 * @param revision
+	 * @param path
+	 * @return tree id or null if no tree id at path
+	 */
+	public static ObjectId getId(final Repository repository,
+			final String revision, final String path) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (revision == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Revision"));
+		if (revision.length() == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Revision"));
+		if (path == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Path"));
+		if (path.length() == 0)
+			throw new IllegalArgumentException(Assert.formatNotNull("Path"));
+
+		final RevCommit commit = CommitUtils.parse(repository,
+				CommitUtils.strictResolve(repository, revision));
+		return lookupId(repository, commit, path);
 	}
 }
