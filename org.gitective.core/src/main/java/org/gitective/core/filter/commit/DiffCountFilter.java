@@ -67,8 +67,8 @@ public class DiffCountFilter extends CommitDiffEditFilter {
 	}
 
 	@Override
-	protected boolean include(RevCommit commit, DiffEntry diff,
-			Collection<Edit> edits) {
+	protected boolean include(final RevCommit commit, final DiffEntry diff,
+			final Collection<Edit> edits) {
 		for (Edit edit : edits)
 			switch (edit.getType()) {
 			case DELETE:
