@@ -66,6 +66,7 @@ public class DiffCountFilter extends CommitDiffEditFilter {
 		return include(commit, diffs, count) ? true : include(false);
 	}
 
+	@Override
 	protected boolean include(RevCommit commit, DiffEntry diff,
 			Collection<Edit> edits) {
 		for (Edit edit : edits)
