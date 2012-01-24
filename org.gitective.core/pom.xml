@@ -43,13 +43,6 @@
 		</developer>
 	</developers>
 
-	<repositories>
-		<repository>
-			<id>jgit-repository</id>
-			<url>http://download.eclipse.org/jgit/maven</url>
-		</repository>
-	</repositories>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -196,7 +189,7 @@
 		<dependency>
 			<groupId>org.eclipse.jgit</groupId>
 			<artifactId>org.eclipse.jgit</artifactId>
-			<version>1.1.0.201109151100-r</version>
+			<version>1.2.0.201112221803-r</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
