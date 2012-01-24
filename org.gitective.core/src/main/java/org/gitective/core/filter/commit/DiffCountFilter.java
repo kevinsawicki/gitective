@@ -56,7 +56,7 @@ public class DiffCountFilter extends CommitDiffEditFilter {
 	@Override
 	protected CommitDiffEditFilter markStart(final RevCommit commit) {
 		count = 0;
-		return super.markEnd(commit);
+		return super.markStart(commit);
 	}
 
 	@Override
