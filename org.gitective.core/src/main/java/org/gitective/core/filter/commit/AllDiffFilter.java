@@ -25,12 +25,12 @@ import java.util.Collection;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * Parent filter that invokes
- * {@link #include(org.eclipse.jgit.revwalk.RevCommit, java.util.Collection)} on
- * all child filters ignoring the return value
+ * Parent filter that invokes {@link #include(RevWalk, RevCommit, Collection)}
+ * on all child filters ignoring the return value
  */
 public class AllDiffFilter extends CompositeDiffFilter {
 
@@ -55,11 +55,11 @@ public class AllDiffFilter extends CompositeDiffFilter {
 	}
 
 	@Override
-	public boolean include(final RevCommit commit,
+	public boolean include(final RevWalk walker, final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		final int length = filters.length;
 		for (int i = 0; i < length; i++)
-			filters[i].include(commit, diffs);
+			filters[i].include(walker, commit, diffs);
 		return true;
 	}
 

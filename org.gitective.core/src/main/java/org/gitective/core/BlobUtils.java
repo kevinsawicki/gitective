@@ -40,6 +40,7 @@ import org.eclipse.jgit.diff.HistogramDiff;
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.ObjectStream;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -69,6 +70,22 @@ public abstract class BlobUtils {
 			return repository.open(id, OBJ_BLOB).getCachedBytes(MAX_VALUE);
 		} catch (IOException e) {
 			throw new GitException(e, repository);
+		}
+	}
+
+	/**
+	 * Get the contents of the the blob with the given id as a byte array.
+	 *
+	 * @param reader
+	 * @param id
+	 * @return blob bytes
+	 */
+	protected static byte[] getBytes(final ObjectReader reader,
+			final ObjectId id) {
+		try {
+			return reader.open(id, OBJ_BLOB).getCachedBytes(MAX_VALUE);
+		} catch (IOException e) {
+			throw new GitException(e, null);
 		}
 	}
 
@@ -421,7 +438,6 @@ public abstract class BlobUtils {
 
 	/**
 	 * Diff the blobs at the given object ids.
-	 *
 	 * <p>
 	 * This method will return an empty list if the content of either blob is
 	 * binary.
@@ -462,6 +478,72 @@ public abstract class BlobUtils {
 		final byte[] data2;
 		if (!blob2.equals(ObjectId.zeroId())) {
 			data2 = getBytes(repository, blob2);
+			if (RawText.isBinary(data2))
+				return Collections.emptyList();
+		} else
+			data2 = new byte[0];
+
+		return new HistogramDiff().diff(comparator, //
+				data1.length > 0 ? new RawText(data1) : EMPTY_TEXT, //
+				data2.length > 0 ? new RawText(data2) : EMPTY_TEXT);
+	}
+
+	/**
+	 * Diff the blobs at the given object ids using the
+	 * {@link RawTextComparator#DEFAULT} comparator.
+	 *
+	 * @see #diff(ObjectReader, ObjectId, ObjectId, RawTextComparator)
+	 * @param reader
+	 * @param blob1
+	 * @param blob2
+	 * @return list of edits
+	 */
+	public static Collection<Edit> diff(final ObjectReader reader,
+			final ObjectId blob1, final ObjectId blob2) {
+		return diff(reader, blob1, blob2, DEFAULT);
+	}
+
+	/**
+	 * Diff the blobs at the given object ids.
+	 * <p>
+	 * This method will return an empty list if the content of either blob is
+	 * binary.
+	 *
+	 * @param reader
+	 * @param blob1
+	 * @param blob2
+	 * @param comparator
+	 * @return list of edits, never null
+	 */
+	public static Collection<Edit> diff(final ObjectReader reader,
+			final ObjectId blob1, final ObjectId blob2,
+			final RawTextComparator comparator) {
+		if (reader == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Reader"));
+		if (blob1 == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Blob id 1"));
+		if (blob2 == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Blob id 2"));
+		if (comparator == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Comparator"));
+
+		if (blob1.equals(blob2))
+			return Collections.emptyList();
+
+		final byte[] data1;
+		if (!blob1.equals(ObjectId.zeroId())) {
+			data1 = getBytes(reader, blob1);
+			if (RawText.isBinary(data1))
+				return Collections.emptyList();
+		} else
+			data1 = new byte[0];
+
+		final byte[] data2;
+		if (!blob2.equals(ObjectId.zeroId())) {
+			data2 = getBytes(reader, blob2);
 			if (RawText.isBinary(data2))
 				return Collections.emptyList();
 		} else

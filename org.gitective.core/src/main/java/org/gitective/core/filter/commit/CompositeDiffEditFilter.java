@@ -26,7 +26,7 @@ import java.util.Collection;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.DepthWalk.RevWalk;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
@@ -108,12 +108,12 @@ public class CompositeDiffEditFilter extends CommitDiffEditFilter {
 	}
 
 	@Override
-	public boolean include(final RevCommit commit,
+	public boolean include(final RevWalk walker, final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		final int length = filters.length;
 		for (int i = 0; i < length; i++)
 			filters[i].markStart(commit);
-		boolean include = super.include(commit, diffs);
+		boolean include = super.include(walker, commit, diffs);
 		for (int i = 0; i < length; i++)
 			filters[i].markEnd(commit);
 		return include;

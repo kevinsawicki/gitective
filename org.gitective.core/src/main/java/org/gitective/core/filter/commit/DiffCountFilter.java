@@ -26,14 +26,16 @@ import java.util.Collection;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.gitective.core.BlobUtils;
 
 /**
  * Filter that include commits based on number of differences introduced in each
  * commit visited.
  */
-public class DiffCountFilter extends CommitDiffFilter {
+public class DiffCountFilter extends CommitDiffEditFilter {
+
+	private int count;
 
 	/**
 	 * Create diff count filter
@@ -52,27 +54,33 @@ public class DiffCountFilter extends CommitDiffFilter {
 	}
 
 	@Override
-	public boolean include(final RevCommit commit,
+	protected CommitDiffEditFilter markStart(final RevCommit commit) {
+		count = 0;
+		return super.markEnd(commit);
+	}
+
+	@Override
+	public boolean include(final RevWalk walker, final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
-		int count = 0;
-		for (DiffEntry diff : diffs) {
-			if (!isFileDiff(diff))
-				continue;
-			for (Edit edit : BlobUtils.diff(repository, diff.getOldId()
-					.toObjectId(), diff.getNewId().toObjectId()))
-				switch (edit.getType()) {
-				case DELETE:
-					count += edit.getLengthA();
-					break;
-				case INSERT:
-				case REPLACE:
-					count += edit.getLengthB();
-					break;
-				default:
-					break;
-				}
-		}
+		super.include(walker, commit, diffs);
 		return include(commit, diffs, count) ? true : include(false);
+	}
+
+	protected boolean include(RevCommit commit, DiffEntry diff,
+			Collection<Edit> edits) {
+		for (Edit edit : edits)
+			switch (edit.getType()) {
+			case DELETE:
+				count += edit.getLengthA();
+				break;
+			case INSERT:
+			case REPLACE:
+				count += edit.getLengthB();
+				break;
+			default:
+				break;
+			}
+		return true;
 	}
 
 	/**

@@ -26,7 +26,9 @@ import java.util.Collection;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.gitective.core.BlobUtils;
 
 /**
@@ -81,16 +83,17 @@ public class CommitDiffEditFilter extends CommitDiffFilter {
 	}
 
 	@Override
-	public boolean include(final RevCommit commit,
+	public boolean include(final RevWalk walker, final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
 		markStart(commit);
+		final ObjectReader reader = walker.getObjectReader();
 		for (DiffEntry diff : diffs) {
 			if (!isFileDiff(diff))
 				continue;
 			final AbbreviatedObjectId oldId = diff.getOldId();
 			if (oldId == null)
 				continue;
-			if (!include(commit, diff, BlobUtils.diff(repository,
+			if (!include(commit, diff, BlobUtils.diff(reader,
 					oldId.toObjectId(), diff.getNewId().toObjectId())))
 				return markEnd(commit).include(false);
 		}

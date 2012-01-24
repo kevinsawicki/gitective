@@ -44,9 +44,9 @@ import org.gitective.core.TreeUtils;
 
 /**
  * Commit diff filter that computes the differences introduced by each commit
- * visited and calls {@link #include(RevCommit, Collection)}.
+ * visited and calls {@link #include(RevWalk, RevCommit, Collection)}.
  *
- * @see #include(RevCommit, Collection)
+ * @see #include(RevWalk, RevCommit, Collection)
  */
 public class CommitDiffFilter extends CommitFilter {
 
@@ -175,11 +175,11 @@ public class CommitDiffFilter extends CommitFilter {
 		if (detectRenames) {
 			renameDetector.reset();
 			renameDetector.addAll(diffs);
-			return include(commit,
+			return include(walker, commit,
 					renameDetector.compute(walker.getObjectReader(), INSTANCE)) ? true
 					: include(false);
 		} else
-			return include(commit, diffs) ? true : include(false);
+			return include(walker, commit, diffs) ? true : include(false);
 	}
 
 	/**
@@ -198,6 +198,25 @@ public class CommitDiffFilter extends CommitFilter {
 			return TYPE_FILE == (diff.getOldMode().getBits() & TYPE_MASK)
 					&& TYPE_FILE == (diff.getNewMode().getBits() & TYPE_MASK);
 		}
+	}
+
+	/**
+	 * Handle the differences introduced by given commit.
+	 * <p>
+	 * Sub-classes should override this method. The default implementation calls
+	 * {@link #include(RevCommit, Collection)}.
+	 *
+	 * @param walker
+	 *            non-null
+	 * @param commit
+	 *            non-null
+	 * @param diffs
+	 *            non-null
+	 * @return true to continue, false to abort
+	 */
+	public boolean include(final RevWalk walker, final RevCommit commit,
+			final Collection<DiffEntry> diffs) {
+		return include(commit, diffs);
 	}
 
 	/**

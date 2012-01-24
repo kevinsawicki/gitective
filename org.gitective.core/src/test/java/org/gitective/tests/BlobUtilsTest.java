@@ -268,7 +268,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void diffWithNullRepo() {
-		BlobUtils.diff(null, ObjectId.zeroId(), ObjectId.zeroId());
+		BlobUtils.diff((Repository) null, ObjectId.zeroId(), ObjectId.zeroId());
 	}
 
 	/**
