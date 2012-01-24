@@ -31,7 +31,7 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  * Filter for including commits that introduced a configurable number of file
  * differences
  */
-public class DiffFileSizeFilter extends CommitDiffEditFilter {
+public class DiffFileSizeFilter extends CommitDiffFilter {
 
 	private final int total;
 
@@ -66,12 +66,6 @@ public class DiffFileSizeFilter extends CommitDiffEditFilter {
 	 */
 	public int getTotal() {
 		return total;
-	}
-
-	@Override
-	protected CommitDiffEditFilter markStart(RevCommit commit) {
-		count = 0;
-		return super.markStart(commit);
 	}
 
 	@Override
