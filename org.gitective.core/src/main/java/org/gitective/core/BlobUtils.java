@@ -22,6 +22,7 @@
 package org.gitective.core;
 
 import static java.lang.Integer.MAX_VALUE;
+import static org.eclipse.jgit.diff.RawText.EMPTY_TEXT;
 import static org.eclipse.jgit.diff.RawTextComparator.DEFAULT;
 import static org.eclipse.jgit.lib.Constants.CHARACTER_ENCODING;
 import static org.eclipse.jgit.lib.Constants.HEAD;
@@ -451,22 +452,23 @@ public abstract class BlobUtils {
 			return Collections.emptyList();
 
 		final byte[] data1;
-		if (!blob1.equals(ObjectId.zeroId()))
+		if (!blob1.equals(ObjectId.zeroId())) {
 			data1 = getBytes(repository, blob1);
-		else
+			if (RawText.isBinary(data1))
+				return Collections.emptyList();
+		} else
 			data1 = new byte[0];
-		if (RawText.isBinary(data1))
-			return Collections.emptyList();
 
 		final byte[] data2;
-		if (!blob2.equals(ObjectId.zeroId()))
+		if (!blob2.equals(ObjectId.zeroId())) {
 			data2 = getBytes(repository, blob2);
-		else
+			if (RawText.isBinary(data2))
+				return Collections.emptyList();
+		} else
 			data2 = new byte[0];
-		if (RawText.isBinary(data2))
-			return Collections.emptyList();
 
-		final HistogramDiff diff = new HistogramDiff();
-		return diff.diff(comparator, new RawText(data1), new RawText(data2));
+		return new HistogramDiff().diff(comparator, //
+				data1.length > 0 ? new RawText(data1) : EMPTY_TEXT, //
+				data2.length > 0 ? new RawText(data2) : EMPTY_TEXT);
 	}
 }
