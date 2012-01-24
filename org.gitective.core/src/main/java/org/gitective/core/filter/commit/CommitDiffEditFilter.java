@@ -65,7 +65,7 @@ public class CommitDiffEditFilter extends CommitDiffFilter {
 	 * @param commit
 	 * @return this filter
 	 */
-	protected CommitDiffEditFilter markStart(RevCommit commit) {
+	protected CommitDiffEditFilter markStart(final RevCommit commit) {
 		return this;
 	}
 
@@ -80,7 +80,7 @@ public class CommitDiffEditFilter extends CommitDiffFilter {
 	 * @param commit
 	 * @return this filter
 	 */
-	protected CommitDiffEditFilter markEnd(RevCommit commit) {
+	protected CommitDiffEditFilter markEnd(final RevCommit commit) {
 		return this;
 	}
 
