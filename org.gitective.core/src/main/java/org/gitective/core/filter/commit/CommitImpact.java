@@ -28,6 +28,7 @@ import java.util.Comparator;
 
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.util.NB;
 
 /**
  * Class that tracks the impact of a specific commit
@@ -40,9 +41,34 @@ public class CommitImpact {
 	public static class DescendingImpactComparator implements
 			Comparator<CommitImpact> {
 
-		public int compare(CommitImpact o1, CommitImpact o2) {
-			return (o2.add + o2.edit + o2.delete)
+		public int compare(final CommitImpact o1, final CommitImpact o2) {
+			int diff = (o2.add + o2.edit + o2.delete)
 					- (o1.add + o1.edit + o1.delete);
+			if (diff != 0)
+				return diff;
+
+			diff = NB.compareUInt32(NB.decodeInt32(o1.commit, 0),
+					NB.decodeInt32(o2.commit, 0));
+			if (diff != 0)
+				return diff;
+
+			diff = NB.compareUInt32(NB.decodeInt32(o1.commit, 4),
+					NB.decodeInt32(o2.commit, 4));
+			if (diff != 0)
+				return diff;
+
+			diff = NB.compareUInt32(NB.decodeInt32(o1.commit, 8),
+					NB.decodeInt32(o2.commit, 8));
+			if (diff != 0)
+				return diff;
+
+			diff = NB.compareUInt32(NB.decodeInt32(o1.commit, 12),
+					NB.decodeInt32(o2.commit, 12));
+			if (diff != 0)
+				return diff;
+
+			return NB.compareUInt32(NB.decodeInt32(o1.commit, 16),
+					NB.decodeInt32(o2.commit, 16));
 		}
 	}
 
