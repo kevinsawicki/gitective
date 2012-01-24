@@ -97,8 +97,6 @@ public class DiffLineSizeFilter extends CommitDiffEditFilter {
 			count += edit.getLengthB();
 			if (count >= total)
 				return true;
-		default:
-			break;
 		}
 		return false;
 	}
