@@ -112,14 +112,28 @@ public class CommitDiffFilter extends CommitFilter {
 		return super.setRepository(repository);
 	}
 
+	/**
+	 * Create tree walk to compute differences for the given commits
+	 * <p>
+	 * Sub-classes may override this method to create a custom tree walk with
+	 * different filtering options set.
+	 *
+	 * @param walker
+	 * @param commit
+	 * @return tree walk
+	 */
+	protected TreeWalk createTreeWalk(final RevWalk walker,
+			final RevCommit commit) {
+		final TreeWalk walk = TreeUtils.diffWithParents(walker, commit);
+		walk.setRecursive(true);
+		return walk;
+	}
+
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
+		final TreeWalk walk = createTreeWalk(walker, commit);
 		final List<DiffEntry> diffs;
-
-		final TreeWalk walk = TreeUtils.diffWithParents(walker, commit);
-		walk.setRecursive(true);
-
 		final int parentCount = commit.getParentCount();
 		switch (parentCount) {
 		case 0:
