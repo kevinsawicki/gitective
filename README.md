@@ -5,7 +5,7 @@ that makes investigating Git repositories simpler and easier.  Gitective makes
 it straight-forward to find interesting commits in a Git repository through
 combining the included filters.
 
-This library is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cgitective)
+This library is available from [Maven Central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.gitective%22%20AND%20a%3A%22gitective-core%22)
 
 ```xml
 <dependency>
