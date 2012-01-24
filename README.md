@@ -11,7 +11,7 @@ This library is available from [Maven Central](http://search.maven.org/#search%7
 <dependency>
   <groupId>org.gitective</groupId>
   <artifactId>gitective-core</artifactId>
-  <version>0.9.4</version>
+  <version>0.9.5</version>
 </dependency>
 ```
 
