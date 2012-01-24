@@ -32,8 +32,10 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.gitective.core.BlobUtils;
 
 /**
- * Commit diff filter that computes the edits introduced by each commit visited
- * and calls {@link #include(org.eclipse.jgit.revwalk.RevWalk, RevCommit)}.
+ * Commit diff filter that computes the line edits introduced by each commit
+ * visited and calls {@link #include(RevCommit, DiffEntry, Collection)} with all
+ * the edits and {@link #include(RevCommit, DiffEntry, Edit)} for each
+ * individual edit.
  */
 public class CommitDiffEditFilter extends CommitDiffFilter {
 
