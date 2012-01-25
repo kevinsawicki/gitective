@@ -26,8 +26,8 @@ import static org.eclipse.jgit.lib.Constants.OBJECT_ID_LENGTH;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.util.NB;
 
 /**
@@ -88,7 +88,7 @@ public class CommitImpact {
 	 * @param edit
 	 * @param delete
 	 */
-	public CommitImpact(RevCommit commit, int add, int edit, int delete) {
+	public CommitImpact(AnyObjectId commit, int add, int edit, int delete) {
 		this.commit = new byte[OBJECT_ID_LENGTH];
 		commit.copyRawTo(this.commit, 0);
 		this.add = add;
