@@ -15,10 +15,10 @@
 -docencoding
 'UTF-8'
 -doctitle
-'gitective core 0.9.5 API'
+'gitective core 0.9.6 API'
 -linkoffline
 'http://download.oracle.com/javase/1.5.0/docs/api' '/home/kevin/repositories/gitective/org.gitective.core/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
-'gitective core 0.9.5 API'
+'gitective core 0.9.6 API'
