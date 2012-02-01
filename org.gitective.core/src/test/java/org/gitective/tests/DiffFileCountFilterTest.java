@@ -41,6 +41,9 @@ public class DiffFileCountFilterTest extends GitTestCase {
 		assertEquals(0, filter.getAdded());
 		assertEquals(0, filter.getDeleted());
 		assertEquals(0, filter.getDeleted());
+		assertEquals(0, filter.getRenamed());
+		assertEquals(0, filter.getCopied());
+		assertEquals(0, filter.getTotal());
 	}
 
 	/**
@@ -68,8 +71,31 @@ public class DiffFileCountFilterTest extends GitTestCase {
 		assertEquals(1, filter.getAdded());
 		assertEquals(0, filter.getEdited());
 		assertEquals(0, filter.getDeleted());
+		assertEquals(0, filter.getRenamed());
+		assertEquals(0, filter.getCopied());
+		assertEquals(1, filter.getTotal());
 		filter.reset();
 		assertEquals(0, filter.getAdded());
+		assertEquals(0, filter.getTotal());
+	}
+
+	/**
+	 * Add renamed file
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void renamedFile() throws Exception {
+		add("test.txt", "content");
+		mv("test.txt", "test2.txt");
+		DiffFileCountFilter filter = new DiffFileCountFilter(true);
+		new CommitFinder(testRepo).setFilter(filter).find();
+		assertEquals(1, filter.getAdded());
+		assertEquals(0, filter.getEdited());
+		assertEquals(0, filter.getDeleted());
+		assertEquals(1, filter.getRenamed());
+		assertEquals(0, filter.getCopied());
+		assertEquals(2, filter.getTotal());
 	}
 
 	/**
@@ -86,6 +112,9 @@ public class DiffFileCountFilterTest extends GitTestCase {
 		assertEquals(2, filter.getAdded());
 		assertEquals(0, filter.getEdited());
 		assertEquals(0, filter.getDeleted());
+		assertEquals(0, filter.getRenamed());
+		assertEquals(0, filter.getCopied());
+		assertEquals(2, filter.getTotal());
 	}
 
 	/**
@@ -103,6 +132,9 @@ public class DiffFileCountFilterTest extends GitTestCase {
 		assertEquals(1, filter.getAdded());
 		assertEquals(1, filter.getEdited());
 		assertEquals(1, filter.getDeleted());
+		assertEquals(0, filter.getRenamed());
+		assertEquals(0, filter.getCopied());
+		assertEquals(3, filter.getTotal());
 	}
 
 	/**
@@ -122,5 +154,8 @@ public class DiffFileCountFilterTest extends GitTestCase {
 		assertEquals(0, filter.getAdded());
 		assertEquals(1, filter.getEdited());
 		assertEquals(0, filter.getDeleted());
+		assertEquals(0, filter.getRenamed());
+		assertEquals(0, filter.getCopied());
+		assertEquals(1, filter.getTotal());
 	}
 }

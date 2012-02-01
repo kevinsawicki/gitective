@@ -28,7 +28,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
- * Filter that tracks the cumulative amount of files added, edited, and deleted
+ * Filter that tracks the cumulative amount of files added, edited, deleted,
+ * renamed, and copied
  */
 public class DiffFileCountFilter extends CommitDiffFilter {
 
@@ -37,6 +38,10 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 	private long edited;
 
 	private long deleted;
+
+	private long renamed;
+
+	private long copied;
 
 	/**
 	 * Create diff file count filter
@@ -75,6 +80,27 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 		return deleted;
 	}
 
+	/**
+	 * @return renamed
+	 */
+	public long getRenamed() {
+		return renamed;
+	}
+
+	/**
+	 * @return copied
+	 */
+	public long getCopied() {
+		return copied;
+	}
+
+	/**
+	 * @return total
+	 */
+	public long getTotal() {
+		return added + edited + deleted + renamed + copied;
+	}
+
 	@Override
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
@@ -89,6 +115,12 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 			case DELETE:
 				deleted++;
 				break;
+			case RENAME:
+				renamed++;
+				break;
+			case COPY:
+				copied++;
+				break;
 			}
 		return true;
 	}
@@ -98,6 +130,8 @@ public class DiffFileCountFilter extends CommitDiffFilter {
 		added = 0;
 		edited = 0;
 		deleted = 0;
+		renamed = 0;
+		copied = 0;
 		return super.reset();
 	}
 
