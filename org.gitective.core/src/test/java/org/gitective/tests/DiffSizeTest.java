@@ -21,17 +21,20 @@
  */
 package org.gitective.tests;
 
+import java.util.Arrays;
+
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AllCommitFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
+import org.gitective.core.filter.commit.DiffFileSizeFilter;
 import org.gitective.core.filter.commit.DiffLineSizeFilter;
 import org.junit.Test;
 
 /**
- * Unit tests of {@link DiffLineSizeFilter}
+ * Unit tests of {@link DiffLineSizeFilter} and {@link DiffFileSizeFilter}
  */
 public class DiffSizeTest extends GitTestCase {
 
@@ -41,14 +44,40 @@ public class DiffSizeTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void diffSingleFile() throws Exception {
+	public void lineDiffSingleFile() throws Exception {
 		RevCommit commit1 = add("file.txt", "a\nb\nc");
 		RevCommit commit2 = add("file.txt", "a\nb2\nc");
 		RevCommit commit3 = add("file.txt", "");
 		CommitListFilter commits = new CommitListFilter();
 		new CommitFinder(testRepo).setFilter(
-				new AllCommitFilter(new AndCommitFilter(new DiffLineSizeFilter(3),
-						commits))).find();
+				new AllCommitFilter(new AndCommitFilter(new DiffLineSizeFilter(
+						3), commits))).find();
+		assertTrue(commits.getCommits().contains(commit1));
+		assertFalse(commits.getCommits().contains(commit2));
+		assertTrue(commits.getCommits().contains(commit3));
+	}
+
+	/**
+	 * Test selecting commits multiple files are changed
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void fileDiffMultipleFiles() throws Exception {
+		RevCommit commit1 = add(testRepo,
+				Arrays.asList("file1.txt", "file2.txt"),
+				Arrays.asList("a", "b"), "commit1");
+		RevCommit commit2 = add(testRepo, Arrays.asList("file1.txt"),
+				Arrays.asList("a1"), "commit1");
+		RevCommit commit3 = add(testRepo,
+				Arrays.asList("file1.txt", "file2.txt"),
+				Arrays.asList("a2", "b1"), "commit3");
+		CommitListFilter commits = new CommitListFilter();
+		DiffFileSizeFilter diffFilter = new DiffFileSizeFilter(2);
+		assertEquals(2, diffFilter.getTotal());
+		new CommitFinder(testRepo).setFilter(
+				new AllCommitFilter(new AndCommitFilter(diffFilter, commits)))
+				.find();
 		assertTrue(commits.getCommits().contains(commit1));
 		assertFalse(commits.getCommits().contains(commit2));
 		assertTrue(commits.getCommits().contains(commit3));
