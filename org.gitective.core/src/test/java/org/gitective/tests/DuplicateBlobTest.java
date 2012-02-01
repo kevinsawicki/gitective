@@ -62,6 +62,7 @@ public class DuplicateBlobTest extends GitTestCase {
 		assertNotNull(dupes);
 		assertTrue(dupes.containsKey(commit));
 		DuplicateContainer container = dupes.get(commit);
+		assertEquals(2, container.getTotal());
 		assertNotNull(container);
 		assertEquals(commit, container.getCommit());
 		Map<AnyObjectId, List<String>> files = container.getDuplicates();
