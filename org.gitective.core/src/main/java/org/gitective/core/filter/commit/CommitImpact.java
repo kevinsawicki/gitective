@@ -41,34 +41,35 @@ public class CommitImpact {
 	public static class DescendingImpactComparator implements
 			Comparator<CommitImpact> {
 
+		private int compare(final CommitImpact o1, final CommitImpact o2,
+				final int offset) {
+			return NB.compareUInt32(NB.decodeInt32(o1.commit, offset),
+					NB.decodeInt32(o2.commit, offset));
+		}
+
 		public int compare(final CommitImpact o1, final CommitImpact o2) {
 			int diff = (o2.add + o2.edit + o2.delete)
 					- (o1.add + o1.edit + o1.delete);
 			if (diff != 0)
 				return diff;
 
-			diff = NB.compareUInt32(NB.decodeInt32(o1.commit, 0),
-					NB.decodeInt32(o2.commit, 0));
+			diff = compare(o1, o2, 0);
 			if (diff != 0)
 				return diff;
 
-			diff = NB.compareUInt32(NB.decodeInt32(o1.commit, 4),
-					NB.decodeInt32(o2.commit, 4));
+			diff = compare(o1, o2, 4);
 			if (diff != 0)
 				return diff;
 
-			diff = NB.compareUInt32(NB.decodeInt32(o1.commit, 8),
-					NB.decodeInt32(o2.commit, 8));
+			diff = compare(o1, o2, 8);
 			if (diff != 0)
 				return diff;
 
-			diff = NB.compareUInt32(NB.decodeInt32(o1.commit, 12),
-					NB.decodeInt32(o2.commit, 12));
+			diff = compare(o1, o2, 12);
 			if (diff != 0)
 				return diff;
 
-			return NB.compareUInt32(NB.decodeInt32(o1.commit, 16),
-					NB.decodeInt32(o2.commit, 16));
+			return compare(o1, o2, 16);
 		}
 	}
 
