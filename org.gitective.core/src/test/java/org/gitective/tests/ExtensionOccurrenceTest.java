@@ -59,6 +59,7 @@ public class ExtensionOccurrenceTest extends GitTestCase {
 	@Test
 	public void noFileExtensions() throws Exception {
 		add("file", "content");
+		add("file.", "content2");
 		ExtensionOccurrenceFilter filter = new ExtensionOccurrenceFilter();
 		new CommitFinder(testRepo).setFilter(new CommitTreeFilter(filter))
 				.find();
@@ -103,6 +104,8 @@ public class ExtensionOccurrenceTest extends GitTestCase {
 			count++;
 		}
 		assertEquals(2, count);
+		filter.reset();
+		assertTrue(filter.getOccurrences().isEmpty());
 	}
 
 	/**
