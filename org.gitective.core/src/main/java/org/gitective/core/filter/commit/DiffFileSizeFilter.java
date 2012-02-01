@@ -29,13 +29,11 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 /**
  * Filter for including commits that introduced a configurable number of file
- * differences
+ * differences per commit
  */
 public class DiffFileSizeFilter extends CommitDiffFilter {
 
 	private final int total;
-
-	private int count;
 
 	/**
 	 * Create a filter that includes commits that introduced a minimum number of
@@ -71,6 +69,10 @@ public class DiffFileSizeFilter extends CommitDiffFilter {
 	@Override
 	public boolean include(final RevCommit commit,
 			final Collection<DiffEntry> diffs) {
+		if (diffs.size() < total)
+			return false;
+
+		int count = 0;
 		for (DiffEntry diff : diffs)
 			switch (diff.getChangeType()) {
 			case ADD:
