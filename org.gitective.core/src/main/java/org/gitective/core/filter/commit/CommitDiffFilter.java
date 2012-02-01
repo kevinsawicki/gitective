@@ -28,6 +28,7 @@ import static org.eclipse.jgit.lib.NullProgressMonitor.INSTANCE;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jgit.diff.DiffEntry;
@@ -117,6 +118,9 @@ public class CommitDiffFilter extends CommitFilter {
 	 * <p>
 	 * Sub-classes may override this method to create a custom tree walk with
 	 * different filtering options set.
+	 * <p>
+	 * The last tree in the tree walk is assumed to be the tree of the current
+	 * commit
 	 *
 	 * @param walker
 	 * @param commit
@@ -134,22 +138,26 @@ public class CommitDiffFilter extends CommitFilter {
 			throws IOException {
 		final TreeWalk walk = createTreeWalk(walker, commit);
 		final List<DiffEntry> diffs;
-		final int parentCount = commit.getParentCount();
-		switch (parentCount) {
+		final int treeCount = walk.getTreeCount();
+		switch (treeCount) {
 		case 0:
 		case 1:
+			diffs = Collections.emptyList();
+			break;
+		case 2:
 			diffs = DiffEntry.scan(walk);
 			break;
 		default:
 			diffs = new ArrayList<DiffEntry>();
-			final MutableObjectId objectId = new MutableObjectId();
+			final MutableObjectId currentId = new MutableObjectId();
+			final int currentTree = treeCount - 1;
 			while (walk.next()) {
-				final int currentMode = walk.getRawMode(parentCount);
+				final int currentMode = walk.getRawMode(currentTree);
 				int parentMode = 0;
 				boolean same = false;
-				for (int i = 0; i < parentCount; i++) {
+				for (int i = 0; i < currentTree; i++) {
 					final int mode = walk.getRawMode(i);
-					same = mode == currentMode && walk.idEqual(parentCount, i);
+					same = mode == currentMode && walk.idEqual(currentTree, i);
 					if (same)
 						break;
 					parentMode |= mode;
@@ -161,8 +169,8 @@ public class CommitDiffFilter extends CommitFilter {
 						walk.getPathString());
 				diff.setOldMode(FileMode.fromBits(parentMode));
 				diff.setNewMode(FileMode.fromBits(currentMode));
-				walk.getObjectId(objectId, parentCount);
-				diff.setNewId(AbbreviatedObjectId.fromObjectId(objectId));
+				walk.getObjectId(currentId, currentTree);
+				diff.setNewId(AbbreviatedObjectId.fromObjectId(currentId));
 				if (parentMode == 0 && currentMode != 0)
 					diff.setChangeType(ChangeType.ADD);
 				else if (parentMode != 0 && currentMode == 0)
