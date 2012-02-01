@@ -47,7 +47,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Create file activity for file at given path
-	 * 
+	 *
 	 * @param path
 	 */
 	public FileCommitActivity(final String path) {
@@ -56,7 +56,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Get current path of this file
-	 * 
+	 *
 	 * @return path
 	 */
 	public String getPath() {
@@ -65,7 +65,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Get previous paths this file was known as
-	 * 
+	 *
 	 * @return non-null but possibly empty ordered set
 	 */
 	public Set<String> getPreviousPaths() {
@@ -74,7 +74,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Get total number of revisions for this file
-	 * 
+	 *
 	 * @return total revisions
 	 */
 	public int getRevisions() {
@@ -83,7 +83,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Get number of adds
-	 * 
+	 *
 	 * @return adds
 	 */
 	public int getAdds() {
@@ -92,7 +92,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Get number of copies
-	 * 
+	 *
 	 * @return copies
 	 */
 	public int getCopies() {
@@ -101,7 +101,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Get number of deletes
-	 * 
+	 *
 	 * @return deletes
 	 */
 	public int getDeletes() {
@@ -110,7 +110,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Get number of edits
-	 * 
+	 *
 	 * @return edits
 	 */
 	public int getEdits() {
@@ -119,7 +119,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Get number of renames
-	 * 
+	 *
 	 * @return renames
 	 */
 	public int getRenames() {
@@ -128,7 +128,7 @@ public class FileCommitActivity implements Serializable {
 
 	/**
 	 * Include diff introduced by given commit
-	 * 
+	 *
 	 * @param commit
 	 * @param entry
 	 * @return this activity
@@ -139,20 +139,18 @@ public class FileCommitActivity implements Serializable {
 		case ADD:
 			adds++;
 			break;
-		case COPY:
-			copies++;
+		case MODIFY:
+			edits++;
 			break;
 		case DELETE:
 			deletes++;
-			break;
-		case MODIFY:
-			edits++;
 			break;
 		case RENAME:
 			renames++;
 			previousPaths.add(entry.getOldPath());
 			break;
-		default:
+		case COPY:
+			copies++;
 			break;
 		}
 		return this;
