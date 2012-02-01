@@ -40,8 +40,9 @@ public class BadRepository extends FileRepository {
 	 * @param exception
 	 * @throws IOException
 	 */
-	public BadRepository(BaseRepositoryBuilder options, IOException exception)
-			throws IOException {
+	public BadRepository(
+			@SuppressWarnings("rawtypes") BaseRepositoryBuilder options,
+			IOException exception) throws IOException {
 		super(options);
 		db = new BadRefDatabase(exception);
 	}

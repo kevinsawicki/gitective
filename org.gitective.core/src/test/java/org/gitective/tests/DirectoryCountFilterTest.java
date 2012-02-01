@@ -30,7 +30,7 @@ import org.gitective.core.filter.tree.TypeCountFilter;
 import org.junit.Test;
 
 /**
- * Unit tests of {@link DirectoryCountFilter}
+ * Unit tests of {@link TypeCountFilter}
  */
 public class DirectoryCountFilterTest extends GitTestCase {
 

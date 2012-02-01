@@ -37,6 +37,11 @@ public class BadRefDatabase extends RefDatabase {
 
 	private final IOException exception;
 
+	/**
+	 * Create bad ref database
+	 *
+	 * @param exception
+	 */
 	public BadRefDatabase(IOException exception) {
 		this.exception = exception;
 	}
