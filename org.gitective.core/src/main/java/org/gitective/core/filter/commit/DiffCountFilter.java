@@ -78,8 +78,6 @@ public class DiffCountFilter extends CommitDiffEditFilter {
 			case REPLACE:
 				count += edit.getLengthB();
 				break;
-			default:
-				break;
 			}
 		return true;
 	}
