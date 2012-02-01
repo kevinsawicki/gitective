@@ -53,6 +53,8 @@ public class DuplicateTreeTest extends GitTestCase {
 		assertEquals(1, dupes.size());
 		assertEquals(commit, dupes.keySet().iterator().next());
 		assertTrue(filter.hasDuplicates());
+		filter.reset();
+		assertFalse(filter.hasDuplicates());
 	}
 
 	/**
