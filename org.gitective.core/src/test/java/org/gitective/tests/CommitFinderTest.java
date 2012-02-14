@@ -180,4 +180,40 @@ public class CommitFinderTest extends GitTestCase {
 		assertEquals(1, diffLines.getAdded());
 		assertEquals(1, diffLines.getEdited());
 	}
+
+	/**
+	 * Find until with given end revision
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void findUntilRevision() throws Exception {
+		add("test.txt", "content");
+		add("test.txt", "content2");
+		RevCommit commit3 = add("test.txt", "content3");
+
+		CommitListFilter commits = new CommitListFilter();
+		new CommitFinder(testRepo).setMatcher(commits).findUntil("HEAD~1");
+		assertEquals(1, commits.getCommits().size());
+		assertTrue(commits.getCommits().contains(commit3));
+	}
+
+	/**
+	 * Find until with given end commit id
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void findUntilCommitId() throws Exception {
+		add("test.txt", "content");
+		RevCommit commit2 = add("test.txt", "content2");
+		RevCommit commit3 = add("test.txt", "content3");
+		RevCommit commit4 = add("test.txt", "content4");
+
+		CommitListFilter commits = new CommitListFilter();
+		new CommitFinder(testRepo).setMatcher(commits).findUntil(commit2);
+		assertEquals(2, commits.getCommits().size());
+		assertTrue(commits.getCommits().contains(commit4));
+		assertTrue(commits.getCommits().contains(commit3));
+	}
 }

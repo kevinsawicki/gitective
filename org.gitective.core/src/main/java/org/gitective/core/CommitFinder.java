@@ -387,4 +387,24 @@ public class CommitFinder extends RepositoryService {
 		}
 		return this;
 	}
+
+	/**
+	 * Search the commits starting at HEAD and ending with the given revision
+	 *
+	 * @param end
+	 * @return this service
+	 */
+	public CommitFinder findUntil(final String end) {
+		return findBetween(HEAD, end);
+	}
+
+	/**
+	 * Search the commits starting at HEAD and ending with the given commit id
+	 *
+	 * @param end
+	 * @return this service
+	 */
+	public CommitFinder findUntil(final ObjectId end) {
+		return findBetween(HEAD, end);
+	}
 }
