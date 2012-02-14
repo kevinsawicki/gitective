@@ -297,6 +297,19 @@ public abstract class GitTestCase extends Assert {
 	/**
 	 * Add files to test repository
 	 *
+	 * @param paths
+	 * @param contents
+	 * @return commit
+	 * @throws Exception
+	 */
+	protected RevCommit add(List<String> paths, List<String> contents)
+			throws Exception {
+		return add(testRepo, paths, contents, "Committing multiple files");
+	}
+
+	/**
+	 * Add files to test repository
+	 *
 	 * @param repo
 	 * @param paths
 	 * @param contents

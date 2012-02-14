@@ -25,8 +25,12 @@ import java.util.Collection;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
+import org.eclipse.jgit.lib.AbbreviatedObjectId;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
+import org.gitective.core.BlobUtils;
 
 /**
  * Filter for including commits that introduced a configurable number of line
@@ -70,17 +74,33 @@ public class DiffLineSizeFilter extends CommitDiffEditFilter {
 	}
 
 	@Override
-	protected CommitDiffEditFilter markStart(final RevCommit commit) {
+	public boolean include(RevWalk walker, RevCommit commit,
+			Collection<DiffEntry> diffs) {
 		count = 0;
-		return super.markStart(commit);
+		final ObjectReader reader = walker.getObjectReader();
+		for (DiffEntry diff : diffs) {
+			if (!isFileDiff(diff))
+				continue;
+			final AbbreviatedObjectId oldId = diff.getOldId();
+			if (oldId == null)
+				continue;
+			include(commit, diff, BlobUtils.diff(reader, oldId.toObjectId(),
+					diff.getNewId().toObjectId()));
+			if (count >= total)
+				break;
+		}
+		return count >= total ? true : include(false);
 	}
 
 	@Override
 	protected boolean include(final RevCommit commit, final DiffEntry diff,
 			final Collection<Edit> edits) {
-		if (edits.isEmpty())
-			return include(false);
-		return super.include(commit, diff, edits);
+		for (Edit edit : edits) {
+			include(commit, diff, edit);
+			if (count >= total)
+				break;
+		}
+		return true;
 	}
 
 	@Override
@@ -89,16 +109,13 @@ public class DiffLineSizeFilter extends CommitDiffEditFilter {
 		switch (edit.getType()) {
 		case DELETE:
 			count += edit.getLengthA();
-			if (count >= total)
-				return true;
 			break;
 		case INSERT:
 		case REPLACE:
 			count += edit.getLengthB();
-			if (count >= total)
-				return true;
+			break;
 		}
-		return false;
+		return true;
 	}
 
 	@Override

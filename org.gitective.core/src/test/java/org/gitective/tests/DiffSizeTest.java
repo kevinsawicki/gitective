@@ -58,6 +58,28 @@ public class DiffSizeTest extends GitTestCase {
 	}
 
 	/**
+	 * Test selecting commits where multiple files differ
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void lineDiffMultipleFiles() throws Exception {
+		RevCommit commit1 = add(Arrays.asList("file1.txt", "file2.txt"),
+				Arrays.asList("a\n", "b\n"));
+		RevCommit commit2 = add(Arrays.asList("file1.txt", "file2.txt"),
+				Arrays.asList("a1\n", "b\nc\nd\n"));
+		RevCommit commit3 = add(Arrays.asList("file1.txt", "file2.txt"),
+				Arrays.asList("a1\n", "b\nc\n"));
+		CommitListFilter commits = new CommitListFilter();
+		new CommitFinder(testRepo).setMatcher(
+				new AllCommitFilter(new AndCommitFilter(new DiffLineSizeFilter(
+						3), commits))).find();
+		assertFalse(commits.getCommits().contains(commit1));
+		assertTrue(commits.getCommits().contains(commit2));
+		assertFalse(commits.getCommits().contains(commit3));
+	}
+
+	/**
 	 * Test selecting commits multiple files are changed
 	 *
 	 * @throws Exception
