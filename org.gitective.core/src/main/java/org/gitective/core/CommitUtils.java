@@ -27,6 +27,7 @@ import static org.eclipse.jgit.lib.Constants.R_HEADS;
 import static org.eclipse.jgit.lib.Constants.R_REMOTES;
 import static org.eclipse.jgit.lib.Constants.R_TAGS;
 import static org.eclipse.jgit.revwalk.filter.RevFilter.MERGE_BASE;
+import static org.eclipse.jgit.treewalk.filter.TreeFilter.ANY_DIFF;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -39,6 +40,8 @@ import org.eclipse.jgit.lib.RefDatabase;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 /**
  * Utilities for dealing with Git commits.
@@ -345,6 +348,58 @@ public abstract class CommitUtils {
 		walk.setRetainBody(true);
 		try {
 			return walk.parseCommit(commit);
+		} catch (IOException e) {
+			throw new GitException(e, repository);
+		} finally {
+			walk.release();
+		}
+	}
+
+	/**
+	 * Find the commit that last changed the given path starting at the commit
+	 * that HEAD currently points to
+	 *
+	 * @param repository
+	 * @param path
+	 * @return commit
+	 */
+	public static RevCommit getLastCommit(final Repository repository,
+			final String path) {
+		return getLastCommit(repository, HEAD, path);
+	}
+
+	/**
+	 * Find the commit that last changed the given path starting with the commit
+	 * at the given revision
+	 *
+	 * @param repository
+	 * @param revision
+	 * @param path
+	 * @return commit
+	 */
+	public static RevCommit getLastCommit(final Repository repository,
+			final String revision, final String path) {
+		if (repository == null)
+			throw new IllegalArgumentException(
+					Assert.formatNotNull("Repository"));
+		if (revision == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Revision"));
+		if (revision.length() == 0)
+			throw new IllegalArgumentException(
+					Assert.formatNotEmpty("Revision"));
+		if (path == null)
+			throw new IllegalArgumentException(Assert.formatNotNull("Path"));
+		if (path.length() == 0)
+			throw new IllegalArgumentException(Assert.formatNotEmpty("Path"));
+
+		final RevWalk walk = new RevWalk(repository);
+		walk.setRetainBody(true);
+		try {
+			walk.markStart(walk
+					.parseCommit(strictResolve(repository, revision)));
+			walk.setTreeFilter(AndTreeFilter.create(PathFilter.create(path),
+					ANY_DIFF));
+			return walk.next();
 		} catch (IOException e) {
 			throw new GitException(e, repository);
 		} finally {

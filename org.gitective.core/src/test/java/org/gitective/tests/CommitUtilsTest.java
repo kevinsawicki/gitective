@@ -412,4 +412,68 @@ public class CommitUtilsTest extends GitTestCase {
 	public void getCommitWithZeroId() throws Exception {
 		CommitUtils.getCommit(new FileRepository(testRepo), ObjectId.zeroId());
 	}
+
+	/**
+	 * Get last commit that changed path
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getLastCommit() throws Exception {
+		RevCommit commit1 = add("file1.txt", "content1");
+		RevCommit commit2 = add("file2.txt", "content2");
+		assertEquals(commit1, CommitUtils.getLastCommit(new FileRepository(
+				testRepo), "file1.txt"));
+		assertEquals(commit2, CommitUtils.getLastCommit(new FileRepository(
+				testRepo), "file2.txt"));
+	}
+
+	/**
+	 * Get last commit with null repository
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getLastCommitNullRepository() {
+		CommitUtils.getLastCommit(null, "d/f.txt");
+	}
+
+	/**
+	 * Get last commit with null path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getLastCommitNullPath() throws Exception {
+		CommitUtils.getLastCommit(new FileRepository(testRepo), null);
+	}
+
+	/**
+	 * Get last commit with empty path
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getLastCommitEmptyPath() throws Exception {
+		CommitUtils.getLastCommit(new FileRepository(testRepo), "");
+	}
+
+	/**
+	 * Get last commit with null revision
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getLastCommitNullRevision() throws Exception {
+		CommitUtils
+				.getLastCommit(new FileRepository(testRepo), null, "d/f.txt");
+	}
+
+	/**
+	 * Get last commit with empty revision
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getLastCommitEmptyRevision() throws Exception {
+		CommitUtils.getLastCommit(new FileRepository(testRepo), "", "d/f.txt");
+	}
 }
