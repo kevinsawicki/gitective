@@ -76,8 +76,8 @@ public class DiffLineSizeFilter extends CommitDiffEditFilter {
 	}
 
 	@Override
-	protected boolean include(RevCommit commit, DiffEntry diff,
-			Collection<Edit> edits) {
+	protected boolean include(final RevCommit commit, final DiffEntry diff,
+			final Collection<Edit> edits) {
 		if (edits.isEmpty())
 			return include(false);
 		return super.include(commit, diff, edits);
