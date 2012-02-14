@@ -81,7 +81,6 @@ public class DiffFileSizeFilter extends CommitDiffFilter {
 				count++;
 				if (count >= total)
 					return true;
-				break;
 			}
 		return false;
 	}
