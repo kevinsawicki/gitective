@@ -23,6 +23,7 @@ package org.gitective.tests;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
@@ -475,5 +476,47 @@ public class CommitUtilsTest extends GitTestCase {
 	@Test(expected = IllegalArgumentException.class)
 	public void getLastCommitEmptyRevision() throws Exception {
 		CommitUtils.getLastCommit(new FileRepository(testRepo), "", "d/f.txt");
+	}
+
+	/**
+	 * Get head commits with null repository
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getHeadCommitsNullRepository() throws Exception {
+		CommitUtils.getHeadCommits(null);
+	}
+
+	/**
+	 * Get head commits with null reader
+	 *
+	 * @throws Exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void getHeadCommitsNullReader() throws Exception {
+		CommitUtils.getHeadCommits(new FileRepository(testRepo), null);
+	}
+
+	/**
+	 * Get last commit that last modified paths
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadCommits() throws Exception {
+		add("a.txt", "a");
+		RevCommit commit2 = add("a.txt", "aa");
+		add("b.txt", "b");
+		RevCommit commit4 = add("b.txt", "bb");
+		RevCommit commit5 = add("c.txt", "c");
+
+		Map<String, RevCommit> commits = CommitUtils
+				.getHeadCommits(new FileRepository(testRepo));
+		assertNotNull(commits);
+		assertEquals(3, commits.size());
+		assertEquals(commit2, commits.get("a.txt"));
+		assertEquals(commit4, commits.get("b.txt"));
+		assertEquals(commit5, commits.get("c.txt"));
 	}
 }
