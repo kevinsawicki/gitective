@@ -451,10 +451,14 @@ public abstract class CommitUtils {
 		RevCommit commit;
 		while ((commit = revWalk.next()) != null) {
 			TreeWalk diffWalk = TreeUtils.diffWithParents(revWalk, commit);
+			diffWalk.setRecursive(true);
 			while (diffWalk.next()) {
 				String path = diffWalk.getPathString();
 				RevCommit blobCommit = commits.get(path);
 				if (blobCommit != null)
+					continue;
+				if (!commits.containsKey(path))
+					// deleted blob
 					continue;
 				commits.put(path, commit);
 				blobCount--;
