@@ -21,6 +21,7 @@
  */
 package org.gitective.tests;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -47,7 +48,8 @@ public class DiffTest extends GitTestCase {
 		final AtomicReference<Collection<DiffEntry>> ref = new AtomicReference<Collection<DiffEntry>>();
 		CommitDiffFilter filter = new CommitDiffFilter() {
 
-			public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
+			public boolean include(RevCommit commit, Collection<DiffEntry> diffs)
+					throws IOException {
 				ref.set(diffs);
 				return super.include(commit, diffs);
 			}

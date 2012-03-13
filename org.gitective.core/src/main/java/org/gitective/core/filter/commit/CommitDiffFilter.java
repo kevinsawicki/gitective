@@ -221,9 +221,10 @@ public class CommitDiffFilter extends CommitFilter {
 	 * @param diffs
 	 *            non-null
 	 * @return true to continue, false to abort
+	 * @throws IOException
 	 */
 	public boolean include(final RevWalk walker, final RevCommit commit,
-			final Collection<DiffEntry> diffs) {
+			final Collection<DiffEntry> diffs) throws IOException {
 		return include(commit, diffs);
 	}
 
@@ -238,9 +239,10 @@ public class CommitDiffFilter extends CommitFilter {
 	 * @param diffs
 	 *            non-null
 	 * @return true to continue, false to abort
+	 * @throws IOException
 	 */
 	public boolean include(final RevCommit commit,
-			final Collection<DiffEntry> diffs) {
+			final Collection<DiffEntry> diffs) throws IOException {
 		return true;
 	}
 }
