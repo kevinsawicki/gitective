@@ -519,4 +519,40 @@ public class CommitUtilsTest extends GitTestCase {
 		assertEquals(commit4, commits.get("b.txt"));
 		assertEquals(commit5, commits.get("c.txt"));
 	}
+
+	/**
+	 * Get last commits with file in subfolder
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadCommitsWithFileInSubfolder() throws Exception {
+		RevCommit commit1 = add("f1/a.txt", "a");
+
+		Map<String, RevCommit> commits = CommitUtils
+				.getHeadCommits(new FileRepository(testRepo));
+		assertNotNull(commits);
+		assertEquals(1, commits.size());
+		assertEquals(commit1, commits.get("f1/a.txt"));
+	}
+
+	/**
+	 * Get last commits with deleted file in history
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getHeadCommitsWithDeletedFile() throws Exception {
+		RevCommit commit1 = add("a.txt", "a");
+		add("b.txt", "b");
+		delete("b.txt");
+		RevCommit commit4 = add("c.txt", "c");
+
+		Map<String, RevCommit> commits = CommitUtils
+				.getHeadCommits(new FileRepository(testRepo));
+		assertNotNull(commits);
+		assertEquals(2, commits.size());
+		assertEquals(commit1, commits.get("a.txt"));
+		assertEquals(commit4, commits.get("c.txt"));
+	}
 }
