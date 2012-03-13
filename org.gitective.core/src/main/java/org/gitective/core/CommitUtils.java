@@ -454,10 +454,10 @@ public abstract class CommitUtils {
 			diffWalk.setRecursive(true);
 			while (diffWalk.next()) {
 				String path = diffWalk.getPathString();
+				if (!commits.containsKey(path))
+					continue;
 				RevCommit blobCommit = commits.get(path);
 				if (blobCommit != null)
-					continue;
-				if (!commits.containsKey(path))
 					continue;
 				commits.put(path, commit);
 				blobCount--;
