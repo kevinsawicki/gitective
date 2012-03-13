@@ -21,6 +21,7 @@
  */
 package org.gitective.core.filter.commit;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import org.eclipse.jgit.diff.DiffEntry;
@@ -56,7 +57,7 @@ public class AllDiffFilter extends CompositeDiffFilter {
 
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit,
-			final Collection<DiffEntry> diffs) {
+			final Collection<DiffEntry> diffs) throws IOException {
 		final int length = filters.length;
 		for (int i = 0; i < length; i++)
 			filters[i].include(walker, commit, diffs);
