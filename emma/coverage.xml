@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- EMMA v2.1.5320 (stable) report, generated Fri Feb 17 10:52:32 PST 2012 -->
+<?xml version="1.0" encoding="UTF-8"?><!-- EMMA v2.1.5320 (stable) report, generated Sat Mar 24 14:31:12 PDT 2012 -->
 
 <report>
   <stats>
     <packages value="4"/>
-    <classes value="96"/>
-    <methods value="551"/>
-    <srcfiles value="78"/>
-    <srclines value="1971"/>
+    <classes value="98"/>
+    <methods value="560"/>
+    <srcfiles value="79"/>
+    <srclines value="2012"/>
   </stats>
   <data>
     <all name="all classes">
-      <coverage type="class, %" value="90%  (86/96)"/>
-      <coverage type="method, %" value="89%  (492/551)"/>
-      <coverage type="block, %" value="86%  (7483/8707)"/>
-      <coverage type="line, %" value="86%  (1691.2/1971)"/>
+      <coverage type="class, %" value="90%  (88/98)"/>
+      <coverage type="method, %" value="89%  (496/560)"/>
+      <coverage type="block, %" value="86%  (7606/8876)"/>
+      <coverage type="line, %" value="86%  (1720.7/2012)"/>
 
       <package name="org.gitective.core.filter.commit">
-        <coverage type="class, %" value="85%  (53/62)"/>
-        <coverage type="method, %" value="84%  (248/295)"/>
-        <coverage type="block, %" value="78%  (2795/3586)"/>
-        <coverage type="line, %" value="79%  (632.8/806)"/>
+        <coverage type="class, %" value="86%  (55/64)"/>
+        <coverage type="method, %" value="83%  (252/303)"/>
+        <coverage type="block, %" value="78%  (2918/3736)"/>
+        <coverage type="line, %" value="79%  (662.4/842)"/>
 
         <srcfile name="AllDiffEditFilter.java">
           <coverage type="class, %" value="0%   (0/1)"/>
@@ -363,6 +363,67 @@
             </method>
           </class>
         </srcfile>
+        <srcfile name="LastCommitDiffFilter.java">
+          <coverage type="class, %" value="100% (2/2)"/>
+          <coverage type="method, %" value="50%  (4/8)"/>
+          <coverage type="block, %" value="79%  (119/150)"/>
+          <coverage type="line, %" value="76%  (27.4/36)"/>
+
+          <class name="LastCommitDiffFilter">
+            <coverage type="class, %" value="100% (1/1)"/>
+            <coverage type="method, %" value="43%  (3/7)"/>
+            <coverage type="block, %" value="78%  (108/138)"/>
+            <coverage type="line, %" value="76%  (27.5/36)"/>
+
+            <method name="LastCommitDiffFilter (boolean): void">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/9)"/>
+              <coverage type="line, %" value="0%   (0/3)"/>
+            </method>
+            <method name="clone (): RevFilter">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/6)"/>
+              <coverage type="line, %" value="0%   (0/1)"/>
+            </method>
+            <method name="getTree (): RevTree">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/3)"/>
+              <coverage type="line, %" value="0%   (0/1)"/>
+            </method>
+            <method name="reset (): CommitFilter">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/12)"/>
+              <coverage type="line, %" value="0%   (0/4)"/>
+            </method>
+            <method name="LastCommitDiffFilter (): void">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (8/8)"/>
+              <coverage type="line, %" value="100% (3/3)"/>
+            </method>
+            <method name="getCommits (): Map">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (3/3)"/>
+              <coverage type="line, %" value="100% (1/1)"/>
+            </method>
+            <method name="include (RevWalk, RevCommit, Collection): boolean">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (97/97)"/>
+              <coverage type="line, %" value="100% (24/24)"/>
+            </method>
+          </class>
+          <class name="LastCommitDiffFilter$1">
+            <coverage type="class, %" value="100% (1/1)"/>
+            <coverage type="method, %" value="100% (1/1)"/>
+            <coverage type="block, %" value="92%  (11/12)"/>
+            <coverage type="line, %" value="91%  (0.9/1)"/>
+
+            <method name="&lt;static initializer&gt;">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="92%  (11/12)"/>
+              <coverage type="line, %" value="91%  (0.9/1)"/>
+            </method>
+          </class>
+        </srcfile>
         <srcfile name="CommitterDiffFilter.java">
           <coverage type="class, %" value="100% (1/1)"/>
           <coverage type="method, %" value="100% (4/4)"/>
@@ -673,17 +734,51 @@
             </method>
           </class>
         </srcfile>
+        <srcfile name="DateFilter.java">
+          <coverage type="class, %" value="100% (1/1)"/>
+          <coverage type="method, %" value="100% (4/4)"/>
+          <coverage type="block, %" value="90%  (45/50)"/>
+          <coverage type="line, %" value="92%  (13.8/15)"/>
+
+          <class name="DateFilter">
+            <coverage type="class, %" value="100% (1/1)"/>
+            <coverage type="method, %" value="100% (4/4)"/>
+            <coverage type="block, %" value="90%  (45/50)"/>
+            <coverage type="line, %" value="92%  (13.8/15)"/>
+
+            <method name="include (RevWalk, RevCommit): boolean">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="82%  (18/22)"/>
+              <coverage type="line, %" value="83%  (5/6)"/>
+            </method>
+            <method name="getWhen (PersonIdent): Date">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="86%  (6/7)"/>
+              <coverage type="line, %" value="85%  (0.8/1)"/>
+            </method>
+            <method name="DateFilter (Date): void">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (15/15)"/>
+              <coverage type="line, %" value="100% (5/5)"/>
+            </method>
+            <method name="DateFilter (long): void">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (6/6)"/>
+              <coverage type="line, %" value="100% (3/3)"/>
+            </method>
+          </class>
+        </srcfile>
         <srcfile name="CommitDiffFilter.java">
           <coverage type="class, %" value="100% (3/3)"/>
           <coverage type="method, %" value="100% (18/18)"/>
-          <coverage type="block, %" value="89%  (279/313)"/>
-          <coverage type="line, %" value="89%  (61.6/69)"/>
+          <coverage type="block, %" value="90%  (283/313)"/>
+          <coverage type="line, %" value="92%  (63.7/69)"/>
 
           <class name="CommitDiffFilter">
             <coverage type="class, %" value="100% (1/1)"/>
             <coverage type="method, %" value="100% (8/8)"/>
-            <coverage type="block, %" value="87%  (217/249)"/>
-            <coverage type="line, %" value="87%  (48.6/56)"/>
+            <coverage type="block, %" value="89%  (221/249)"/>
+            <coverage type="line, %" value="91%  (50.8/56)"/>
 
             <method name="isFileDiff (DiffEntry): boolean">
               <coverage type="method, %" value="100% (1/1)"/>
@@ -692,8 +787,8 @@
             </method>
             <method name="include (RevWalk, RevCommit): boolean">
               <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="88%  (145/164)"/>
-              <coverage type="line, %" value="84%  (32.8/39)"/>
+              <coverage type="block, %" value="91%  (149/164)"/>
+              <coverage type="line, %" value="90%  (34.9/39)"/>
             </method>
             <method name="CommitDiffFilter (): void">
               <coverage type="method, %" value="100% (1/1)"/>
@@ -788,40 +883,6 @@
               <coverage type="method, %" value="100% (1/1)"/>
               <coverage type="block, %" value="100% (5/5)"/>
               <coverage type="line, %" value="100% (2/2)"/>
-            </method>
-          </class>
-        </srcfile>
-        <srcfile name="DateFilter.java">
-          <coverage type="class, %" value="100% (1/1)"/>
-          <coverage type="method, %" value="100% (4/4)"/>
-          <coverage type="block, %" value="90%  (45/50)"/>
-          <coverage type="line, %" value="92%  (13.8/15)"/>
-
-          <class name="DateFilter">
-            <coverage type="class, %" value="100% (1/1)"/>
-            <coverage type="method, %" value="100% (4/4)"/>
-            <coverage type="block, %" value="90%  (45/50)"/>
-            <coverage type="line, %" value="92%  (13.8/15)"/>
-
-            <method name="include (RevWalk, RevCommit): boolean">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="82%  (18/22)"/>
-              <coverage type="line, %" value="83%  (5/6)"/>
-            </method>
-            <method name="getWhen (PersonIdent): Date">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="86%  (6/7)"/>
-              <coverage type="line, %" value="85%  (0.8/1)"/>
-            </method>
-            <method name="DateFilter (Date): void">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (15/15)"/>
-              <coverage type="line, %" value="100% (5/5)"/>
-            </method>
-            <method name="DateFilter (long): void">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (6/6)"/>
-              <coverage type="line, %" value="100% (3/3)"/>
             </method>
           </class>
         </srcfile>
@@ -2536,9 +2597,9 @@
       </package>
       <package name="org.gitective.core">
         <coverage type="class, %" value="100% (12/12)"/>
-        <coverage type="method, %" value="96%  (127/132)"/>
-        <coverage type="block, %" value="89%  (2937/3285)"/>
-        <coverage type="line, %" value="89%  (693.9/779)"/>
+        <coverage type="method, %" value="95%  (127/133)"/>
+        <coverage type="block, %" value="89%  (2937/3304)"/>
+        <coverage type="line, %" value="89%  (693.9/784)"/>
 
         <srcfile name="RepositoryService.java">
           <coverage type="class, %" value="100% (1/1)"/>
@@ -2960,104 +3021,23 @@
             </method>
           </class>
         </srcfile>
-        <srcfile name="RepositoryUtils.java">
-          <coverage type="class, %" value="100% (2/2)"/>
-          <coverage type="method, %" value="100% (13/13)"/>
-          <coverage type="block, %" value="96%  (425/442)"/>
-          <coverage type="line, %" value="96%  (91.4/95)"/>
-
-          <class name="RepositoryUtils">
-            <coverage type="class, %" value="100% (1/1)"/>
-            <coverage type="method, %" value="100% (10/10)"/>
-            <coverage type="block, %" value="96%  (410/427)"/>
-            <coverage type="line, %" value="96%  (85.4/89)"/>
-
-            <method name="getBranches (Repository): Collection">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="80%  (40/50)"/>
-              <coverage type="line, %" value="80%  (6.4/8)"/>
-            </method>
-            <method name="diffRemoteRefs (Repository, String): Collection">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="96%  (155/162)"/>
-              <coverage type="line, %" value="94%  (29/31)"/>
-            </method>
-            <method name="RepositoryUtils (): void">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (3/3)"/>
-              <coverage type="line, %" value="100% (2/2)"/>
-            </method>
-            <method name="diffOriginRefs (Repository): Collection">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (4/4)"/>
-              <coverage type="line, %" value="100% (1/1)"/>
-            </method>
-            <method name="getNoteRefs (Repository): Collection">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (36/36)"/>
-              <coverage type="line, %" value="100% (7/7)"/>
-            </method>
-            <method name="getRefs (Repository, String): Collection">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (13/13)"/>
-              <coverage type="line, %" value="100% (3/3)"/>
-            </method>
-            <method name="getTags (Repository): Collection">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (12/12)"/>
-              <coverage type="line, %" value="100% (3/3)"/>
-            </method>
-            <method name="hasRemote (Repository, String): boolean">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (19/19)"/>
-              <coverage type="line, %" value="100% (2/2)"/>
-            </method>
-            <method name="mapEmailsToNames (Collection): Map">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (64/64)"/>
-              <coverage type="line, %" value="100% (16/16)"/>
-            </method>
-            <method name="mapNamesToEmails (Collection): Map">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (64/64)"/>
-              <coverage type="line, %" value="100% (16/16)"/>
-            </method>
-          </class>
-          <class name="RepositoryUtils$RefDiff">
-            <coverage type="class, %" value="100% (1/1)"/>
-            <coverage type="method, %" value="100% (3/3)"/>
-            <coverage type="block, %" value="100% (15/15)"/>
-            <coverage type="line, %" value="100% (6/6)"/>
-
-            <method name="RepositoryUtils$RefDiff (Ref, Ref): void">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (9/9)"/>
-              <coverage type="line, %" value="100% (4/4)"/>
-            </method>
-            <method name="getLocal (): Ref">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (3/3)"/>
-              <coverage type="line, %" value="100% (1/1)"/>
-            </method>
-            <method name="getRemote (): Ref">
-              <coverage type="method, %" value="100% (1/1)"/>
-              <coverage type="block, %" value="100% (3/3)"/>
-              <coverage type="line, %" value="100% (1/1)"/>
-            </method>
-          </class>
-        </srcfile>
         <srcfile name="CommitUtils.java">
           <coverage type="class, %" value="100% (1/1)"/>
-          <coverage type="method, %" value="100% (20/20)"/>
-          <coverage type="block, %" value="97%  (541/560)"/>
-          <coverage type="line, %" value="97%  (125.9/130)"/>
+          <coverage type="method, %" value="95%  (20/21)"/>
+          <coverage type="block, %" value="93%  (541/579)"/>
+          <coverage type="line, %" value="93%  (125.9/135)"/>
 
           <class name="CommitUtils">
             <coverage type="class, %" value="100% (1/1)"/>
-            <coverage type="method, %" value="100% (20/20)"/>
-            <coverage type="block, %" value="97%  (541/560)"/>
-            <coverage type="line, %" value="97%  (125.9/130)"/>
+            <coverage type="method, %" value="95%  (20/21)"/>
+            <coverage type="block, %" value="93%  (541/579)"/>
+            <coverage type="line, %" value="93%  (125.9/135)"/>
 
+            <method name="parse (Repository, ObjectReader, ObjectId): RevCommit">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/19)"/>
+              <coverage type="line, %" value="0%   (0/5)"/>
+            </method>
             <method name="resolve (Repository, String): ObjectId">
               <coverage type="method, %" value="100% (1/1)"/>
               <coverage type="block, %" value="36%  (4/11)"/>
@@ -3157,6 +3137,92 @@
               <coverage type="method, %" value="100% (1/1)"/>
               <coverage type="block, %" value="100% (49/49)"/>
               <coverage type="line, %" value="100% (11/11)"/>
+            </method>
+          </class>
+        </srcfile>
+        <srcfile name="RepositoryUtils.java">
+          <coverage type="class, %" value="100% (2/2)"/>
+          <coverage type="method, %" value="100% (13/13)"/>
+          <coverage type="block, %" value="96%  (425/442)"/>
+          <coverage type="line, %" value="96%  (91.4/95)"/>
+
+          <class name="RepositoryUtils">
+            <coverage type="class, %" value="100% (1/1)"/>
+            <coverage type="method, %" value="100% (10/10)"/>
+            <coverage type="block, %" value="96%  (410/427)"/>
+            <coverage type="line, %" value="96%  (85.4/89)"/>
+
+            <method name="getBranches (Repository): Collection">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="80%  (40/50)"/>
+              <coverage type="line, %" value="80%  (6.4/8)"/>
+            </method>
+            <method name="diffRemoteRefs (Repository, String): Collection">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="96%  (155/162)"/>
+              <coverage type="line, %" value="94%  (29/31)"/>
+            </method>
+            <method name="RepositoryUtils (): void">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (3/3)"/>
+              <coverage type="line, %" value="100% (2/2)"/>
+            </method>
+            <method name="diffOriginRefs (Repository): Collection">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (4/4)"/>
+              <coverage type="line, %" value="100% (1/1)"/>
+            </method>
+            <method name="getNoteRefs (Repository): Collection">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (36/36)"/>
+              <coverage type="line, %" value="100% (7/7)"/>
+            </method>
+            <method name="getRefs (Repository, String): Collection">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (13/13)"/>
+              <coverage type="line, %" value="100% (3/3)"/>
+            </method>
+            <method name="getTags (Repository): Collection">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (12/12)"/>
+              <coverage type="line, %" value="100% (3/3)"/>
+            </method>
+            <method name="hasRemote (Repository, String): boolean">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (19/19)"/>
+              <coverage type="line, %" value="100% (2/2)"/>
+            </method>
+            <method name="mapEmailsToNames (Collection): Map">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (64/64)"/>
+              <coverage type="line, %" value="100% (16/16)"/>
+            </method>
+            <method name="mapNamesToEmails (Collection): Map">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (64/64)"/>
+              <coverage type="line, %" value="100% (16/16)"/>
+            </method>
+          </class>
+          <class name="RepositoryUtils$RefDiff">
+            <coverage type="class, %" value="100% (1/1)"/>
+            <coverage type="method, %" value="100% (3/3)"/>
+            <coverage type="block, %" value="100% (15/15)"/>
+            <coverage type="line, %" value="100% (6/6)"/>
+
+            <method name="RepositoryUtils$RefDiff (Ref, Ref): void">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (9/9)"/>
+              <coverage type="line, %" value="100% (4/4)"/>
+            </method>
+            <method name="getLocal (): Ref">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (3/3)"/>
+              <coverage type="line, %" value="100% (1/1)"/>
+            </method>
+            <method name="getRemote (): Ref">
+              <coverage type="method, %" value="100% (1/1)"/>
+              <coverage type="block, %" value="100% (3/3)"/>
+              <coverage type="line, %" value="100% (1/1)"/>
             </method>
           </class>
         </srcfile>
