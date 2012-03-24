@@ -31,9 +31,7 @@ import static org.eclipse.jgit.revwalk.filter.RevFilter.MERGE_BASE;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
@@ -42,7 +40,6 @@ import org.eclipse.jgit.lib.RefDatabase;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * Utilities for dealing with Git commits.
@@ -424,152 +421,5 @@ public abstract class CommitUtils {
 		} finally {
 			walk.release();
 		}
-	}
-
-	private static Map<String, RevCommit> mapPathCommits(
-			final Repository repository, final ObjectReader reader,
-			final String revision) throws IOException {
-		final RevCommit start = parse(repository, reader,
-				strictResolve(repository, revision));
-
-		final TreeWalk treeWalk = new TreeWalk(reader);
-		treeWalk.setRecursive(true);
-		treeWalk.addTree(start.getTree());
-
-		final Map<String, RevCommit> commits = new HashMap<String, RevCommit>();
-		while (treeWalk.next())
-			commits.put(treeWalk.getPathString(), null);
-
-		if (commits.isEmpty())
-			return commits;
-
-		final RevWalk revWalk = new RevWalk(reader);
-		revWalk.setRetainBody(true);
-		revWalk.markStart(start);
-
-		int blobCount = commits.size();
-		RevCommit commit;
-		while ((commit = revWalk.next()) != null) {
-			TreeWalk diffWalk = TreeUtils.diffWithParents(revWalk, commit);
-			diffWalk.setRecursive(true);
-			while (diffWalk.next()) {
-				String path = diffWalk.getPathString();
-				if (!commits.containsKey(path))
-					continue;
-				RevCommit blobCommit = commits.get(path);
-				if (blobCommit != null)
-					continue;
-				commits.put(path, commit);
-				blobCount--;
-				if (blobCount == 0)
-					return commits;
-			}
-		}
-
-		return commits;
-	}
-
-	/**
-	 * Get the last commit that modified each path in the tree corresponding to
-	 * the given revision
-	 * <p>
-	 * The returned map contains all the paths in the revision's tree and will
-	 * have null mappings for any path where a commit that last modified it was
-	 * not found
-	 *
-	 * @param repository
-	 * @param revision
-	 * @return non-null but possibly empty map of paths mapped to the commits
-	 *         that last modified them
-	 */
-	public static Map<String, RevCommit> getLastCommits(
-			final Repository repository, final String revision) {
-		if (repository == null)
-			throw new IllegalArgumentException(
-					Assert.formatNotNull("Repository"));
-		if (revision == null)
-			throw new IllegalArgumentException(Assert.formatNotNull("Revision"));
-		if (revision.length() == 0)
-			throw new IllegalArgumentException(
-					Assert.formatNotEmpty("Revision"));
-
-		final ObjectReader reader = repository.newObjectReader();
-		try {
-			return mapPathCommits(repository, reader, revision);
-		} catch (IOException e) {
-			throw new GitException(e, repository);
-		} finally {
-			reader.release();
-		}
-	}
-
-	/**
-	 * Get the last commit that modified each path in the tree corresponding to
-	 * the given revision
-	 * <p>
-	 * The returned map contains all the paths in the revision's tree and will
-	 * have null mappings for any path where a commit that last modified it was
-	 * not found
-	 *
-	 * @param repository
-	 * @param reader
-	 * @param revision
-	 * @return non-null but possibly empty map of paths mapped to the commits
-	 *         that last modified them
-	 */
-	public static Map<String, RevCommit> getLastCommits(
-			final Repository repository, final ObjectReader reader,
-			final String revision) {
-		if (repository == null)
-			throw new IllegalArgumentException(
-					Assert.formatNotNull("Repository"));
-		if (reader == null)
-			throw new IllegalArgumentException(Assert.formatNotNull("Reader"));
-		if (revision == null)
-			throw new IllegalArgumentException(Assert.formatNotNull("Revision"));
-		if (revision.length() == 0)
-			throw new IllegalArgumentException(
-					Assert.formatNotEmpty("Revision"));
-
-		try {
-			return mapPathCommits(repository, reader, revision);
-		} catch (IOException e) {
-			throw new GitException(e, repository);
-		}
-	}
-
-	/**
-	 * Get the last commit that modified each path in the tree of the HEAD
-	 * commit
-	 * <p>
-	 * The returned map contains all the paths in the revision's tree and will
-	 * have null mappings for any path where a commit that last modified it was
-	 * not found
-	 *
-	 * @param repository
-	 * @return non-null but possibly empty map of paths mapped to the commits
-	 *         that last modified them
-	 */
-	public static Map<String, RevCommit> getHeadCommits(
-			final Repository repository) {
-		return getLastCommits(repository, HEAD);
-	}
-
-	/**
-	 * Get the last commit that modified each path in the tree of the HEAD
-	 * commit
-	 * <p>
-	 * The returned map contains all the paths in the revision's tree and will
-	 * have null mappings for any path where a commit that last modified it was
-	 * not found
-	 *
-	 * @param repository
-	 * @param reader
-	 * @return non-null but possibly empty map of paths mapped to the commits
-	 *         that last modified them
-	 */
-	public static Map<String, RevCommit> getHeadCommits(
-			final Repository repository, final ObjectReader reader) {
-		return getLastCommits(repository, reader, HEAD);
 	}
 }
