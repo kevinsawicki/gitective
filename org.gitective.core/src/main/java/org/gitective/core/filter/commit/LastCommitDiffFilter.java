@@ -35,8 +35,11 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * Filter that includes commits until all the tree paths in the first commit
- * visited have been attributed to the last commit that edited the given tree
- * path.
+ * visited have been attributed to the last commit that edited each path in the
+ * initial tree.
+ * <p>
+ * Using this filter starting at the HEAD commit will give you the commit that
+ * last modified each file current in the HEAD tree.
  */
 public class LastCommitDiffFilter extends CommitDiffFilter {
 
