@@ -410,6 +410,7 @@ public class TreeUtilsTest extends GitTestCase {
 		final AtomicInteger files = new AtomicInteger(0);
 		final AtomicInteger folders = new AtomicInteger(0);
 		final List<String> fullPaths = new ArrayList<String>();
+		final List<AnyObjectId> ids = new ArrayList<AnyObjectId>();
 		assertTrue(TreeUtils.visit(new FileRepository(testRepo),
 				commit.getTree(), new ITreeVisitor() {
 
@@ -420,6 +421,7 @@ public class TreeUtilsTest extends GitTestCase {
 						if (mode == FileMode.TREE)
 							folders.incrementAndGet();
 						fullPaths.add((path != null) ? (path + "/" + name) : name);
+						ids.add(id);
 						return true;
 					}
 				}));
@@ -431,5 +433,6 @@ public class TreeUtilsTest extends GitTestCase {
 		assertTrue(fullPaths.contains("foo/bar.txt"));
 		assertTrue(fullPaths.contains("foo/baz"));
 		assertTrue(fullPaths.contains("foo/baz/qux.txt"));
+		assertFalse(ids.contains(ObjectId.zeroId()));
 	}
 }

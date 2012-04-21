@@ -443,6 +443,7 @@ public abstract class TreeUtils {
 					return false;
 			}
 
+			walk.getObjectId(id, 0);
 			if (!visitor.accept(walk.getFileMode(0),
 					path, walk.getNameString(), id))
 				return false;
