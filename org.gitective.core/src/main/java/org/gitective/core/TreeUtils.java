@@ -414,24 +414,39 @@ public abstract class TreeUtils {
 			throw new IllegalArgumentException(Assert.formatNotNull("Visitor"));
 
 		final TreeWalk walk = new TreeWalk(repository);
+		walk.setPostOrderTraversal(true);
 		final MutableObjectId id = new MutableObjectId();
-		String path = null;
 		try {
 			walk.addTree(treeId);
-			while (walk.next()) {
-				walk.getObjectId(id, 0);
-				if (!visitor.accept(walk.getFileMode(0), path,
-						walk.getNameString(), id))
-					return false;
-				if (walk.isSubtree()) {
-					path = walk.getPathString();
-					walk.enterSubtree();
-				}
-			}
+			if (!visit(repository, walk, id, null, visitor))
+				return false;
 		} catch (IOException e) {
 			throw new GitException(e, repository);
 		} finally {
 			walk.release();
+		}
+		return true;
+	}
+
+	private static boolean visit(final Repository repository,
+			final TreeWalk walk, final MutableObjectId id,
+			final String path, final ITreeVisitor visitor) throws IOException {
+
+		while (walk.next()) {
+			if (walk.isPostChildren())
+				break;
+
+			if (walk.isSubtree()) {
+				final String subTreePath = walk.getPathString();
+				walk.enterSubtree();
+				if (!visit(repository, walk, id, subTreePath, visitor))
+					return false;
+			}
+
+			walk.getObjectId(id, 0);
+			if (!visitor.accept(walk.getFileMode(0),
+					path, walk.getNameString(), id))
+				return false;
 		}
 		return true;
 	}
