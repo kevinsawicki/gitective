@@ -401,7 +401,7 @@ public abstract class TreeUtils {
 	 * @param repository
 	 * @param treeId
 	 * @param visitor
-	 * @return true if completely completely, false if terminated early
+	 * @return true if fully completed, false if terminated early
 	 */
 	public static boolean visit(final Repository repository,
 			final ObjectId treeId, final ITreeVisitor visitor) {
