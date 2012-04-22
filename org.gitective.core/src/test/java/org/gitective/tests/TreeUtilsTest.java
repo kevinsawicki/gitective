@@ -21,9 +21,15 @@
  */
 package org.gitective.tests;
 
+import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
+import static org.eclipse.jgit.lib.FileMode.TREE;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.jgit.lib.AnyObjectId;
@@ -403,32 +409,36 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void visit() throws Exception {
-		RevCommit commit = add("d/f.txt", "content");
+		RevCommit commit = add(
+				Arrays.asList("test.txt", "foo/bar.txt", "foo/baz/qux.txt"),
+				Arrays.asList("x1", "x2", "x3"));
 		final AtomicInteger files = new AtomicInteger(0);
 		final AtomicInteger folders = new AtomicInteger(0);
-		final List<String> names = new ArrayList<String>();
-		final List<String> paths = new ArrayList<String>();
+		final List<String> fullPaths = new ArrayList<String>();
+		final Set<AnyObjectId> ids = new HashSet<AnyObjectId>();
 		assertTrue(TreeUtils.visit(new FileRepository(testRepo),
 				commit.getTree(), new ITreeVisitor() {
 
 					public boolean accept(FileMode mode, String path,
 							String name, AnyObjectId id) {
-						if (mode == FileMode.REGULAR_FILE)
+						if (mode == REGULAR_FILE)
 							files.incrementAndGet();
-						if (mode == FileMode.TREE)
+						if (mode == TREE)
 							folders.incrementAndGet();
-						names.add(name);
-						if (path != null)
-							paths.add(path);
+						fullPaths.add(path != null ? path + '/' + name : name);
+						ids.add(id);
 						return true;
 					}
 				}));
-		assertEquals(1, files.get());
-		assertEquals(1, folders.get());
-		assertEquals(2, names.size());
-		assertTrue(names.contains("d"));
-		assertTrue(names.contains("f.txt"));
-		assertEquals(1, paths.size());
-		assertTrue(paths.contains("d"));
+		assertEquals(3, files.get());
+		assertEquals(2, folders.get());
+		assertEquals(5, fullPaths.size());
+		assertTrue(fullPaths.contains("test.txt"));
+		assertTrue(fullPaths.contains("foo"));
+		assertTrue(fullPaths.contains("foo/bar.txt"));
+		assertTrue(fullPaths.contains("foo/baz"));
+		assertTrue(fullPaths.contains("foo/baz/qux.txt"));
+		assertFalse(ids.contains(ObjectId.zeroId()));
+		assertEquals(5, ids.size());
 	}
 }
