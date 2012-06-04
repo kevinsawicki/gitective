@@ -21,6 +21,8 @@
  */
 package org.gitective.core.filter.commit;
 
+import static java.lang.Integer.MAX_VALUE;
+
 import java.io.IOException;
 import java.util.Set;
 
@@ -28,21 +30,28 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Filter to track the commit(s) with the longest message
+ * Filter to track the commit(s) with the shortest message
  */
-public class LongestMessageFilter extends CommitFieldLengthFilter {
+public class ShortestMessageFilter extends CommitFieldLengthFilter {
+
+	/**
+	 * Create shortest message filter
+	 */
+	public ShortestMessageFilter() {
+		length = MAX_VALUE;
+	}
 
 	@Override
 	public boolean include(final RevWalk walker, final RevCommit commit)
 			throws IOException {
 		final int messageLength = commit.getFullMessage().length();
-		if (messageLength >= length)
+		if (messageLength <= length)
 			include(messageLength, commit);
 		return true;
 	}
 
 	/**
-	 * Get the commits with the longest message length
+	 * Get the commits with the shortest message length
 	 *
 	 * @return non-null but possibly empty set of commits
 	 */
@@ -51,16 +60,16 @@ public class LongestMessageFilter extends CommitFieldLengthFilter {
 	}
 
 	/**
-	 * Get the length of the longest commit message visited
+	 * Get the length of the shortest commit message visited
 	 *
 	 * @return length or -1 if no commits visited
 	 */
 	public int getLength() {
-		return length;
+		return commits.isEmpty() ? -1 : length;
 	}
 
 	@Override
-	public LongestMessageFilter clone() {
-		return new LongestMessageFilter();
+	public ShortestMessageFilter clone() {
+		return new ShortestMessageFilter();
 	}
 }

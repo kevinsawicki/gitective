@@ -21,46 +21,45 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Filter to track the commit(s) with the longest message
+ * Base filter that tracks commits that have a field with the same length
  */
-public class LongestMessageFilter extends CommitFieldLengthFilter {
-
-	@Override
-	public boolean include(final RevWalk walker, final RevCommit commit)
-			throws IOException {
-		final int messageLength = commit.getFullMessage().length();
-		if (messageLength >= length)
-			include(messageLength, commit);
-		return true;
-	}
+public abstract class CommitFieldLengthFilter extends CommitFilter {
 
 	/**
-	 * Get the commits with the longest message length
-	 *
-	 * @return non-null but possibly empty set of commits
+	 * Commits tracked
 	 */
-	public Set<RevCommit> getCommits() {
-		return commits;
-	}
+	protected final Set<RevCommit> commits = new HashSet<RevCommit>();
 
 	/**
-	 * Get the length of the longest commit message visited
-	 *
-	 * @return length or -1 if no commits visited
+	 * Field length
 	 */
-	public int getLength() {
-		return length;
+	protected int length = -1;
+
+	/**
+	 * Include commit with given field length
+	 *
+	 * @param fieldLength
+	 * @param commit
+	 */
+	protected void include(int fieldLength, RevCommit commit) {
+		if (fieldLength != length) {
+			commits.clear();
+			commits.add(commit);
+			length = fieldLength;
+		} else
+			commits.add(commit);
 	}
 
 	@Override
-	public LongestMessageFilter clone() {
-		return new LongestMessageFilter();
+	public CommitFilter reset() {
+		commits.clear();
+		length = -1;
+		return super.reset();
 	}
 }
