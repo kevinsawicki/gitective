@@ -40,10 +40,7 @@ public class LongestAuthorEmailFilter extends CommitFieldLengthFilter {
 		if (author == null)
 			return true;
 		final String email = author.getEmailAddress();
-		if (email == null)
-			return true;
-
-		final int emailLength = email.length();
+		final int emailLength = email != null ? email.length() : 0;
 		if (emailLength >= length)
 			include(emailLength, commit);
 		return true;
