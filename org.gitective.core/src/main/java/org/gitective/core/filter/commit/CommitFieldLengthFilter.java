@@ -22,6 +22,7 @@
 package org.gitective.core.filter.commit;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -29,7 +30,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 /**
  * Base filter that tracks commits that have a field with the same length
  */
-public abstract class CommitFieldLengthFilter extends CommitFilter {
+public abstract class CommitFieldLengthFilter extends CommitFilter implements
+		Iterable<RevCommit> {
 
 	/**
 	 * Commits tracked
@@ -61,5 +63,9 @@ public abstract class CommitFieldLengthFilter extends CommitFilter {
 		commits.clear();
 		length = -1;
 		return super.reset();
+	}
+
+	public Iterator<RevCommit> iterator() {
+		return commits.iterator();
 	}
 }
