@@ -24,7 +24,6 @@ package org.gitective.tests;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.CommitFinder;
-import org.gitective.core.filter.commit.LongestAuthorEmailFilter;
 import org.gitective.core.filter.commit.ShortestAuthorEmailFilter;
 import org.junit.Test;
 
@@ -50,7 +49,7 @@ public class ShortestEmailTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void singleLongestEmail() throws Exception {
+	public void singleShortestEmail() throws Exception {
 		ShortestAuthorEmailFilter filter = new ShortestAuthorEmailFilter();
 		author = new PersonIdent("a", "a@b.com");
 		add("test.txt", "test1");
@@ -68,12 +67,12 @@ public class ShortestEmailTest extends GitTestCase {
 	}
 
 	/**
-	 * Include commits where multiples have the longest email
+	 * Include commits where multiples have the shortest email
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void multipleLongestEmails() throws Exception {
+	public void multipleShortestEmails() throws Exception {
 		ShortestAuthorEmailFilter filter = new ShortestAuthorEmailFilter();
 		author = new PersonIdent("a", "a@b.com");
 		add("test.txt", "test1");
