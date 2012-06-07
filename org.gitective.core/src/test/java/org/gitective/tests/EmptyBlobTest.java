@@ -22,6 +22,7 @@
 package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.AllCommitFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
@@ -72,6 +73,30 @@ public class EmptyBlobTest extends GitTestCase {
 
 		assertEquals(1, commits.getCommits().size());
 		assertTrue(commits.getCommits().contains(commit));
+	}
+
+	/**
+	 * Test {@link EmptyBlobAddFilter#clone()}
+	 */
+	@Test
+	public void cloneAdd() {
+		EmptyBlobAddFilter filter = new EmptyBlobAddFilter(true);
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof EmptyBlobAddFilter);
+	}
+
+	/**
+	 * Test {@link EmptyBlobRemoveFilter#clone()}
+	 */
+	@Test
+	public void cloneRemove() {
+		EmptyBlobRemoveFilter filter = new EmptyBlobRemoveFilter(true);
+		RevFilter clone = filter.clone();
+		assertNotNull(clone);
+		assertNotSame(filter, clone);
+		assertTrue(clone instanceof EmptyBlobRemoveFilter);
 	}
 
 	/**
