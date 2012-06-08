@@ -28,17 +28,17 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Filter to track the commit(s) with the longest author email address
+ * Filter to track the commit(s) with the longest committer email address
  */
-public class LongestAuthorEmailFilter extends LongestPersonEmailFilter {
+public class LongestCommitterEmailFilter extends LongestPersonEmailFilter {
 
 	@Override
 	protected PersonIdent getPerson(RevWalk walker, RevCommit commit) {
-		return commit.getAuthorIdent();
+		return commit.getCommitterIdent();
 	}
 
 	/**
-	 * Get the commits with the longest author email address length
+	 * Get the commits with the longest committer email address length
 	 *
 	 * @return non-null but possibly empty set of commits
 	 */
@@ -47,7 +47,7 @@ public class LongestAuthorEmailFilter extends LongestPersonEmailFilter {
 	}
 
 	/**
-	 * Get the length of the longest commit author email address visited
+	 * Get the length of the longest commit committer email address visited
 	 *
 	 * @return length or -1 if no commits visited
 	 */
@@ -56,7 +56,7 @@ public class LongestAuthorEmailFilter extends LongestPersonEmailFilter {
 	}
 
 	@Override
-	public LongestAuthorEmailFilter clone() {
-		return new LongestAuthorEmailFilter();
+	public LongestCommitterEmailFilter clone() {
+		return new LongestCommitterEmailFilter();
 	}
 }

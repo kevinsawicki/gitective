@@ -25,6 +25,7 @@ import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.ShortestAuthorEmailFilter;
+import org.gitective.core.filter.commit.ShortestCommitterEmailFilter;
 import org.junit.Test;
 
 /**
@@ -36,8 +37,19 @@ public class ShortestEmailTest extends GitTestCase {
 	 * Verify state when no commits are visited
 	 */
 	@Test
-	public void noCommitsIncluded() {
+	public void noAuthorCommitsIncluded() {
 		ShortestAuthorEmailFilter filter = new ShortestAuthorEmailFilter();
+		assertEquals(-1, filter.getLength());
+		assertNotNull(filter.getCommits());
+		assertEquals(0, filter.getCommits().size());
+	}
+
+	/**
+	 * Verify state when no commits are visited
+	 */
+	@Test
+	public void noCommitterCommitsIncluded() {
+		ShortestCommitterEmailFilter filter = new ShortestCommitterEmailFilter();
 		assertEquals(-1, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(0, filter.getCommits().size());
@@ -49,7 +61,7 @@ public class ShortestEmailTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void singleShortestEmail() throws Exception {
+	public void singleShortestAuthorEmail() throws Exception {
 		ShortestAuthorEmailFilter filter = new ShortestAuthorEmailFilter();
 		author = new PersonIdent("a", "a@b.com");
 		add("test.txt", "test1");
@@ -67,12 +79,35 @@ public class ShortestEmailTest extends GitTestCase {
 	}
 
 	/**
+	 * Include commits where only one has the shortest email
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void singleShortestCommitterEmail() throws Exception {
+		ShortestCommitterEmailFilter filter = new ShortestCommitterEmailFilter();
+		committer = new PersonIdent("a", "a@b.com");
+		add("test.txt", "test1");
+		committer = new PersonIdent("a", "a@b.net");
+		add("test.txt", "test2");
+		committer = new PersonIdent("a", "a@b.ca");
+		RevCommit shortest = add("test.txt", "test3");
+		committer = new PersonIdent("a", "a@b.org");
+		add("test.txt", "test4");
+		new CommitFinder(testRepo).setMatcher(filter).find();
+		assertEquals(6, filter.getLength());
+		assertNotNull(filter.getCommits());
+		assertEquals(1, filter.getCommits().size());
+		assertEquals(shortest, filter.getCommits().iterator().next());
+	}
+
+	/**
 	 * Include commits where multiples have the shortest email
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void multipleShortestEmails() throws Exception {
+	public void multipleShortestAuthorEmails() throws Exception {
 		ShortestAuthorEmailFilter filter = new ShortestAuthorEmailFilter();
 		author = new PersonIdent("a", "a@b.com");
 		add("test.txt", "test1");
@@ -83,6 +118,32 @@ public class ShortestEmailTest extends GitTestCase {
 		author = new PersonIdent("a", "a@b.org");
 		add("test.txt", "test4");
 		author = new PersonIdent("a", "a@b.fr");
+		RevCommit shortest2 = add("test.txt", "test5");
+		new CommitFinder(testRepo).setMatcher(filter).find();
+		assertEquals(6, filter.getLength());
+		assertNotNull(filter.getCommits());
+		assertEquals(2, filter.getCommits().size());
+		assertTrue(filter.getCommits().contains(shortest1));
+		assertTrue(filter.getCommits().contains(shortest2));
+	}
+
+	/**
+	 * Include commits where multiples have the shortest email
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void multipleShortestCommitterEmails() throws Exception {
+		ShortestCommitterEmailFilter filter = new ShortestCommitterEmailFilter();
+		committer = new PersonIdent("a", "a@b.com");
+		add("test.txt", "test1");
+		committer = new PersonIdent("a", "a@b.net");
+		add("test.txt", "test2");
+		committer = new PersonIdent("a", "a@b.ca");
+		RevCommit shortest1 = add("test.txt", "test3");
+		committer = new PersonIdent("a", "a@b.org");
+		add("test.txt", "test4");
+		committer = new PersonIdent("a", "a@b.fr");
 		RevCommit shortest2 = add("test.txt", "test5");
 		new CommitFinder(testRepo).setMatcher(filter).find();
 		assertEquals(6, filter.getLength());

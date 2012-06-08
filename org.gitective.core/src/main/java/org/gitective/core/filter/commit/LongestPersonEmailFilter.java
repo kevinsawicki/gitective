@@ -21,42 +21,38 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.util.Set;
+import java.io.IOException;
 
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Filter to track the commit(s) with the longest author email address
+ * Base filter to track the commit(s) with the longest email address for a
+ * {@link PersonIdent} associated with each commit
  */
-public class LongestAuthorEmailFilter extends LongestPersonEmailFilter {
+public abstract class LongestPersonEmailFilter extends CommitFieldLengthFilter {
 
 	@Override
-	protected PersonIdent getPerson(RevWalk walker, RevCommit commit) {
-		return commit.getAuthorIdent();
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
+		final PersonIdent person = getPerson(walker, commit);
+		if (person == null)
+			return true;
+		final String email = person.getEmailAddress();
+		final int emailLength = email != null ? email.length() : 0;
+		if (emailLength >= length)
+			include(emailLength, commit);
+		return true;
 	}
 
 	/**
-	 * Get the commits with the longest author email address length
+	 * Get person from commit
 	 *
-	 * @return non-null but possibly empty set of commits
+	 * @param walker
+	 * @param commit
+	 * @return person
 	 */
-	public Set<RevCommit> getCommits() {
-		return commits;
-	}
-
-	/**
-	 * Get the length of the longest commit author email address visited
-	 *
-	 * @return length or -1 if no commits visited
-	 */
-	public int getLength() {
-		return length;
-	}
-
-	@Override
-	public LongestAuthorEmailFilter clone() {
-		return new LongestAuthorEmailFilter();
-	}
+	protected abstract PersonIdent getPerson(final RevWalk walker,
+			final RevCommit commit);
 }

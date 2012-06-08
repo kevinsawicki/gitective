@@ -23,7 +23,6 @@ package org.gitective.core.filter.commit;
 
 import static java.lang.Integer.MAX_VALUE;
 
-import java.io.IOException;
 import java.util.Set;
 
 import org.eclipse.jgit.lib.PersonIdent;
@@ -33,7 +32,7 @@ import org.eclipse.jgit.revwalk.RevWalk;
 /**
  * Filter to track the commit(s) with the shortest author email address
  */
-public class ShortestAuthorEmailFilter extends CommitFieldLengthFilter {
+public class ShortestAuthorEmailFilter extends ShortestPersonEmailFilter {
 
 	/**
 	 * Create shortest author email filter
@@ -43,16 +42,8 @@ public class ShortestAuthorEmailFilter extends CommitFieldLengthFilter {
 	}
 
 	@Override
-	public boolean include(final RevWalk walker, final RevCommit commit)
-			throws IOException {
-		final PersonIdent author = commit.getAuthorIdent();
-		if (author == null)
-			return true;
-		final String email = author.getEmailAddress();
-		final int emailLength = email != null ? email.length() : 0;
-		if (emailLength <= length)
-			include(emailLength, commit);
-		return true;
+	protected PersonIdent getPerson(RevWalk walker, RevCommit commit) {
+		return commit.getAuthorIdent();
 	}
 
 	/**
