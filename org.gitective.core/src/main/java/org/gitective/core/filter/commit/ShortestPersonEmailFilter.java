@@ -28,7 +28,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Base filter to track the commit(s) with the shorttest email address for a
+ * Base filter to track the commit(s) with the shortest email address for a
  * {@link PersonIdent} associated with each commit
  */
 public abstract class ShortestPersonEmailFilter extends CommitFieldLengthFilter {
