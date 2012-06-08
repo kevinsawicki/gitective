@@ -25,6 +25,7 @@ import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.LongestAuthorNameFilter;
+import org.gitective.core.filter.commit.LongestCommitterNameFilter;
 import org.junit.Test;
 
 /**
@@ -36,8 +37,19 @@ public class LongestNameTest extends GitTestCase {
 	 * Verify state when no commits are visited
 	 */
 	@Test
-	public void noCommitsIncluded() {
+	public void noAuthorCommitsIncluded() {
 		LongestAuthorNameFilter filter = new LongestAuthorNameFilter();
+		assertEquals(-1, filter.getLength());
+		assertNotNull(filter.getCommits());
+		assertEquals(0, filter.getCommits().size());
+	}
+
+	/**
+	 * Verify state when no commits are visited
+	 */
+	@Test
+	public void noCommitterCommitsIncluded() {
+		LongestCommitterNameFilter filter = new LongestCommitterNameFilter();
 		assertEquals(-1, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(0, filter.getCommits().size());
@@ -49,7 +61,7 @@ public class LongestNameTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	public void singleLongestName() throws Exception {
+	public void singleLongestAuthorName() throws Exception {
 		LongestAuthorNameFilter filter = new LongestAuthorNameFilter();
 		author = new PersonIdent("a", "a@b.c");
 		add("test.txt", "test1");
@@ -67,12 +79,35 @@ public class LongestNameTest extends GitTestCase {
 	}
 
 	/**
+	 * Include commits where only one has the longest name
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void singleLongestCommitterName() throws Exception {
+		LongestCommitterNameFilter filter = new LongestCommitterNameFilter();
+		committer = new PersonIdent("a", "a@b.c");
+		add("test.txt", "test1");
+		committer = new PersonIdent("ab", "a@b.c");
+		add("test.txt", "test2");
+		committer = new PersonIdent("abc", "a@b.c");
+		RevCommit longest = add("test.txt", "test3");
+		committer = new PersonIdent("ad", "a@b.c");
+		add("test.txt", "test4");
+		new CommitFinder(testRepo).setMatcher(filter).find();
+		assertEquals(3, filter.getLength());
+		assertNotNull(filter.getCommits());
+		assertEquals(1, filter.getCommits().size());
+		assertEquals(longest, filter.getCommits().iterator().next());
+	}
+
+	/**
 	 * Include commits where multiples have the longest name
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void multipleLongestNames() throws Exception {
+	public void multipleLongestAuthorNames() throws Exception {
 		LongestAuthorNameFilter filter = new LongestAuthorNameFilter();
 		author = new PersonIdent("a", "a@b.c");
 		add("test.txt", "test1");
@@ -83,6 +118,32 @@ public class LongestNameTest extends GitTestCase {
 		author = new PersonIdent("ad", "a@b.cf");
 		add("test.txt", "test4");
 		author = new PersonIdent("aef", "a@b.cdg");
+		RevCommit longest2 = add("test.txt", "test5");
+		new CommitFinder(testRepo).setMatcher(filter).find();
+		assertEquals(3, filter.getLength());
+		assertNotNull(filter.getCommits());
+		assertEquals(2, filter.getCommits().size());
+		assertTrue(filter.getCommits().contains(longest1));
+		assertTrue(filter.getCommits().contains(longest2));
+	}
+
+	/**
+	 * Include commits where multiples have the longest name
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void multipleLongestCommitterNames() throws Exception {
+		LongestCommitterNameFilter filter = new LongestCommitterNameFilter();
+		committer = new PersonIdent("a", "a@b.c");
+		add("test.txt", "test1");
+		committer = new PersonIdent("ab", "a@b.cd");
+		add("test.txt", "test2");
+		committer = new PersonIdent("abc", "a@b.cde");
+		RevCommit longest1 = add("test.txt", "test3");
+		committer = new PersonIdent("ad", "a@b.cf");
+		add("test.txt", "test4");
+		committer = new PersonIdent("aef", "a@b.cdg");
 		RevCommit longest2 = add("test.txt", "test5");
 		new CommitFinder(testRepo).setMatcher(filter).find();
 		assertEquals(3, filter.getLength());

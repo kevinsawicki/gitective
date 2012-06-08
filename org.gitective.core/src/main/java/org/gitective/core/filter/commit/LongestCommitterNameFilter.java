@@ -28,17 +28,17 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Filter to track the commit(s) with the longest author name
+ * Filter to track the commit(s) with the longest committer name
  */
-public class LongestAuthorNameFilter extends LongestPersonNameFilter {
+public class LongestCommitterNameFilter extends LongestPersonNameFilter {
 
 	@Override
 	protected PersonIdent getPerson(RevWalk walker, RevCommit commit) {
-		return commit.getAuthorIdent();
+		return commit.getCommitterIdent();
 	}
 
 	/**
-	 * Get the commits with the longest author name
+	 * Get the commits with the longest committer name
 	 *
 	 * @return non-null but possibly empty set of commits
 	 */
@@ -47,7 +47,7 @@ public class LongestAuthorNameFilter extends LongestPersonNameFilter {
 	}
 
 	/**
-	 * Get the length of the longest commit author name
+	 * Get the length of the longest commit committer name
 	 *
 	 * @return length or -1 if no commits visited
 	 */
@@ -56,7 +56,7 @@ public class LongestAuthorNameFilter extends LongestPersonNameFilter {
 	}
 
 	@Override
-	public LongestAuthorNameFilter clone() {
-		return new LongestAuthorNameFilter();
+	public LongestCommitterNameFilter clone() {
+		return new LongestCommitterNameFilter();
 	}
 }

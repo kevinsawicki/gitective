@@ -21,42 +21,38 @@
  */
 package org.gitective.core.filter.commit;
 
-import java.util.Set;
+import java.io.IOException;
 
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Filter to track the commit(s) with the longest author name
+ * Base filter to track the commit(s) with the longest name for a
+ * {@link PersonIdent} associated with each commit
  */
-public class LongestAuthorNameFilter extends LongestPersonNameFilter {
+public abstract class LongestPersonNameFilter extends CommitFieldLengthFilter {
 
 	@Override
-	protected PersonIdent getPerson(RevWalk walker, RevCommit commit) {
-		return commit.getAuthorIdent();
+	public boolean include(final RevWalk walker, final RevCommit commit)
+			throws IOException {
+		final PersonIdent person = getPerson(walker, commit);
+		if (person == null)
+			return true;
+		final String name = person.getName();
+		final int nameLength = name != null ? name.length() : 0;
+		if (nameLength >= length)
+			include(nameLength, commit);
+		return true;
 	}
 
 	/**
-	 * Get the commits with the longest author name
+	 * Get person from commit
 	 *
-	 * @return non-null but possibly empty set of commits
+	 * @param walker
+	 * @param commit
+	 * @return person
 	 */
-	public Set<RevCommit> getCommits() {
-		return commits;
-	}
-
-	/**
-	 * Get the length of the longest commit author name
-	 *
-	 * @return length or -1 if no commits visited
-	 */
-	public int getLength() {
-		return length;
-	}
-
-	@Override
-	public LongestAuthorNameFilter clone() {
-		return new LongestAuthorNameFilter();
-	}
+	protected abstract PersonIdent getPerson(final RevWalk walker,
+			final RevCommit commit);
 }

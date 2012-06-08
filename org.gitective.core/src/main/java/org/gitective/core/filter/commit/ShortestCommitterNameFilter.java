@@ -21,6 +21,8 @@
  */
 package org.gitective.core.filter.commit;
 
+import static java.lang.Integer.MAX_VALUE;
+
 import java.util.Set;
 
 import org.eclipse.jgit.lib.PersonIdent;
@@ -28,17 +30,24 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
- * Filter to track the commit(s) with the longest author name
+ * Filter to track the commit(s) with the shortest committer name
  */
-public class LongestAuthorNameFilter extends LongestPersonNameFilter {
+public class ShortestCommitterNameFilter extends ShortestPersonNameFilter {
+
+	/**
+	 * Create shortest committer name filter
+	 */
+	public ShortestCommitterNameFilter() {
+		length = MAX_VALUE;
+	}
 
 	@Override
 	protected PersonIdent getPerson(RevWalk walker, RevCommit commit) {
-		return commit.getAuthorIdent();
+		return commit.getCommitterIdent();
 	}
 
 	/**
-	 * Get the commits with the longest author name
+	 * Get the commits with the shortest committer name
 	 *
 	 * @return non-null but possibly empty set of commits
 	 */
@@ -47,16 +56,16 @@ public class LongestAuthorNameFilter extends LongestPersonNameFilter {
 	}
 
 	/**
-	 * Get the length of the longest commit author name
+	 * Get the length of the shortest commit committer name
 	 *
 	 * @return length or -1 if no commits visited
 	 */
 	public int getLength() {
-		return length;
+		return commits.isEmpty() ? -1 : length;
 	}
 
 	@Override
-	public LongestAuthorNameFilter clone() {
-		return new LongestAuthorNameFilter();
+	public ShortestCommitterNameFilter clone() {
+		return new ShortestCommitterNameFilter();
 	}
 }
