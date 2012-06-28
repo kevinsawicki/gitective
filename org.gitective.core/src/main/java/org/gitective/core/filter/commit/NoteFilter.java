@@ -26,6 +26,7 @@ import java.util.Collection;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ShowNoteCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -72,8 +73,12 @@ public class NoteFilter extends CommitFilter {
 		show.setObjectId(commit);
 		final int refLength = noteRefs.length;
 		for (int i = 0; i < refLength; i++)
-			if (show.setNotesRef(noteRefs[i]).call() != null)
-				return true;
+			try {
+				if (show.setNotesRef(noteRefs[i]).call() != null)
+					return true;
+			} catch (GitAPIException e) {
+				throwIOException(e, "Exception showing notes");
+			}
 		return include(false);
 	}
 

@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeResult;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
@@ -76,8 +77,9 @@ public abstract class GitTestCase extends Assert {
 	 * Initialize a new repo in a new directory
 	 *
 	 * @return created .git folder
+	 * @throws GitAPIException
 	 */
-	protected File initRepo() {
+	protected File initRepo() throws GitAPIException {
 		String tmpDir = System.getProperty("java.io.tmpdir");
 		assertNotNull("java.io.tmpdir was null", tmpDir);
 		File dir = new File(tmpDir, "git-test-case-" + System.nanoTime());

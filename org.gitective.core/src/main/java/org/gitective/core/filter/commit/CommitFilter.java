@@ -21,6 +21,8 @@
  */
 package org.gitective.core.filter.commit;
 
+import java.io.IOException;
+
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
@@ -29,6 +31,20 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
  * Base commit filter class with utility methods to be used by sub-classes.
  */
 public abstract class CommitFilter extends RevFilter implements Cloneable {
+
+	/**
+	 * Wrap the given throwable in an {@link IOException} and throw it
+	 *
+	 * @param cause
+	 * @param message
+	 * @throws IOException
+	 */
+	protected static void throwIOException(Throwable cause, String message)
+			throws IOException {
+		IOException exception = new IOException(message);
+		exception.initCause(cause);
+		throw exception;
+	}
 
 	private boolean stop;
 
