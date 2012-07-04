@@ -32,7 +32,7 @@ import org.gitective.core.filter.commit.CommitFilter;
 
 /**
  * Filter that wraps a {@link TreeFilter} and includes commits included by the
- * tree filter.
+ * tree filter for all paths in the tree for the current commit visited
  */
 public class CommitTreeFilter extends CommitFilter {
 
