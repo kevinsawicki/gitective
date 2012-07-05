@@ -48,7 +48,7 @@ public class EmptyBlobTest extends GitTestCase {
 		delete("file2.txt");
 
 		CommitListFilter commits = new CommitListFilter();
-		new CommitFinder(testRepo).setMatcher(
+		new CommitFinder(testRepo).setFilter(
 				new AllCommitFilter(new AndCommitFilter(
 						new EmptyBlobAddFilter(), commits),
 						new AndCommitFilter(new EmptyBlobRemoveFilter(),
@@ -67,7 +67,7 @@ public class EmptyBlobTest extends GitTestCase {
 		add("file1.txt", "content");
 		RevCommit commit = add("file2.txt", "");
 		CommitListFilter commits = new CommitListFilter();
-		new CommitFinder(testRepo).setMatcher(
+		new CommitFinder(testRepo).setFilter(
 				new AllCommitFilter(new AndCommitFilter(
 						new EmptyBlobAddFilter(), commits))).find();
 
@@ -110,7 +110,7 @@ public class EmptyBlobTest extends GitTestCase {
 		add("file2.txt", "");
 		RevCommit commit = delete("file2.txt");
 		CommitListFilter commits = new CommitListFilter();
-		new CommitFinder(testRepo).setMatcher(
+		new CommitFinder(testRepo).setFilter(
 				new AllCommitFilter(new AndCommitFilter(
 						new EmptyBlobRemoveFilter(), commits))).find();
 

@@ -71,7 +71,7 @@ public class LongestEmailTest extends GitTestCase {
 		RevCommit longest = add("test.txt", "test3");
 		author = new PersonIdent("a", "a@b.f");
 		add("test.txt", "test4");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(7, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(1, filter.getCommits().size());
@@ -94,7 +94,7 @@ public class LongestEmailTest extends GitTestCase {
 		RevCommit longest = add("test.txt", "test3");
 		committer = new PersonIdent("a", "a@b.f");
 		add("test.txt", "test4");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(7, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(1, filter.getCommits().size());
@@ -119,7 +119,7 @@ public class LongestEmailTest extends GitTestCase {
 		add("test.txt", "test4");
 		author = new PersonIdent("a", "a@b.cdg");
 		RevCommit longest2 = add("test.txt", "test5");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(7, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(2, filter.getCommits().size());
@@ -145,7 +145,7 @@ public class LongestEmailTest extends GitTestCase {
 		add("test.txt", "test4");
 		committer = new PersonIdent("a", "a@b.cdg");
 		RevCommit longest2 = add("test.txt", "test5");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(7, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(2, filter.getCommits().size());

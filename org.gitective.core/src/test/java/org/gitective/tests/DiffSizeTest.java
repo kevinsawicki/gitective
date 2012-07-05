@@ -71,7 +71,7 @@ public class DiffSizeTest extends GitTestCase {
 		RevCommit commit3 = add(Arrays.asList("file1.txt", "file2.txt"),
 				Arrays.asList("a1\n", "b\nc\n"));
 		CommitListFilter commits = new CommitListFilter();
-		new CommitFinder(testRepo).setMatcher(
+		new CommitFinder(testRepo).setFilter(
 				new AllCommitFilter(new AndCommitFilter(new DiffLineSizeFilter(
 						3), commits))).find();
 		assertFalse(commits.getCommits().contains(commit1));

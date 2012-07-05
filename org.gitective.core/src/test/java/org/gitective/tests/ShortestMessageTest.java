@@ -54,7 +54,7 @@ public class ShortestMessageTest extends GitTestCase {
 		add("test.txt", "test2", "ab");
 		add("test.txt", "test3", "abcd");
 		add("test.txt", "test4", "abc");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(1, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(1, filter.getCommits().size());
@@ -74,7 +74,7 @@ public class ShortestMessageTest extends GitTestCase {
 		RevCommit shortest1 = add("test.txt", "test3", "a");
 		add("test.txt", "test4", "abcde");
 		RevCommit shortest2 = add("test.txt", "test5", "b");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(1, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(2, filter.getCommits().size());

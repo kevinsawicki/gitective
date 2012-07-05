@@ -45,7 +45,7 @@ import org.junit.Test;
 public class CommitFinderTest extends GitTestCase {
 
 	/**
-	 * Test matcher throwing an {@link IOException} when visiting a commit
+	 * Test filter throwing an {@link IOException} when visiting a commit
 	 *
 	 * @throws Exception
 	 */
@@ -54,7 +54,7 @@ public class CommitFinderTest extends GitTestCase {
 		add("test.txt", "content");
 		CommitFinder finder = new CommitFinder(testRepo);
 		final IOException exception = new IOException("message");
-		finder.setMatcher(new CommitFilter() {
+		finder.setFilter(new CommitFilter() {
 
 			public boolean include(RevWalk walker, RevCommit cmit)
 					throws IOException {
@@ -75,7 +75,7 @@ public class CommitFinderTest extends GitTestCase {
 	}
 
 	/**
-	 * Test matcher throwing a {@link StopWalkException} and it being suppressed
+	 * Test filter throwing a {@link StopWalkException} and it being suppressed
 	 * and the walk stopping
 	 *
 	 * @throws Exception
@@ -85,7 +85,7 @@ public class CommitFinderTest extends GitTestCase {
 		add("test.txt", "content");
 		CommitFinder finder = new CommitFinder(testRepo);
 		CommitCountFilter count = new CommitCountFilter();
-		finder.setMatcher(new AndCommitFilter(new CommitFilter() {
+		finder.setFilter(new AndCommitFilter(new CommitFilter() {
 
 			public boolean include(RevWalk walker, RevCommit cmit)
 					throws IOException {
@@ -169,7 +169,7 @@ public class CommitFinderTest extends GitTestCase {
 		CommitListFilter commits = new CommitListFilter();
 		DiffFileCountFilter diffFiles = new DiffFileCountFilter();
 		DiffLineCountFilter diffLines = new DiffLineCountFilter();
-		finder.setMatcher(new AndCommitFilter(commits, diffFiles, diffLines));
+		finder.setFilter(new AndCommitFilter(commits, diffFiles, diffLines));
 		finder.setReverseOrder(true);
 		finder.find();
 		assertEquals(2, commits.getCommits().size());
@@ -193,7 +193,7 @@ public class CommitFinderTest extends GitTestCase {
 		RevCommit commit3 = add("test.txt", "content3");
 
 		CommitListFilter commits = new CommitListFilter();
-		new CommitFinder(testRepo).setMatcher(commits).findUntil("HEAD~1");
+		new CommitFinder(testRepo).setFilter(commits).findUntil("HEAD~1");
 		assertEquals(1, commits.getCommits().size());
 		assertTrue(commits.getCommits().contains(commit3));
 	}
@@ -211,7 +211,7 @@ public class CommitFinderTest extends GitTestCase {
 		RevCommit commit4 = add("test.txt", "content4");
 
 		CommitListFilter commits = new CommitListFilter();
-		new CommitFinder(testRepo).setMatcher(commits).findUntil(commit2);
+		new CommitFinder(testRepo).setFilter(commits).findUntil(commit2);
 		assertEquals(2, commits.getCommits().size());
 		assertTrue(commits.getCommits().contains(commit4));
 		assertTrue(commits.getCommits().contains(commit3));

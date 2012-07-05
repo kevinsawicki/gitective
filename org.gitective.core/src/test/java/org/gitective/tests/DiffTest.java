@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
+import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.CommitDiffFilter;
@@ -78,10 +79,10 @@ public class DiffTest extends GitTestCase {
 
 			public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
 				ref.set(diffs);
-				return false;
+				throw StopWalkException.INSTANCE;
 			}
 		};
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		Collection<DiffEntry> diffs = ref.get();
 		assertNotNull(diffs);
 		assertEquals(1, diffs.size());
@@ -92,7 +93,7 @@ public class DiffTest extends GitTestCase {
 	}
 
 	/**
-	 * Test diffs introduced by second commit
+	 * Test diffs introduced by merge commit
 	 *
 	 * @throws Exception
 	 */
@@ -109,10 +110,10 @@ public class DiffTest extends GitTestCase {
 
 			public boolean include(RevCommit commit, Collection<DiffEntry> diffs) {
 				ref.set(diffs);
-				return false;
+				throw StopWalkException.INSTANCE;
 			}
 		};
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		Collection<DiffEntry> diffs = ref.get();
 		assertNotNull(diffs);
 		assertEquals(1, diffs.size());

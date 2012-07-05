@@ -56,11 +56,6 @@ public class CommitFinder extends RepositoryService {
 	protected TreeFilter treeFilter;
 
 	/**
-	 * Commit filter for matches
-	 */
-	protected RevFilter commitMatcher;
-
-	/**
 	 * Sort strategy for {@link RevWalk}
 	 */
 	protected RevSort sort;
@@ -113,17 +108,6 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Set the {@link RevFilter} to use to match filtered commits.
-	 *
-	 * @param filter
-	 * @return this service
-	 */
-	public CommitFinder setMatcher(final RevFilter filter) {
-		commitMatcher = filter;
-		return this;
-	}
-
-	/**
 	 * Set the {@link TreeFilter} to use to limit commits visited.
 	 *
 	 * @param filter
@@ -136,10 +120,6 @@ public class CommitFinder extends RepositoryService {
 
 	/**
 	 * Set whether to use {@link RevSort#REVERSE} to sort commits
-	 * <p>
-	 * This will only affect the order that commits are passed to the filter set
-	 * by calling {@link #setMatcher(RevFilter)}. The filter set by calling
-	 * {@link #setFilter(RevFilter)} will still visit commits in starting order.
 	 *
 	 * @param reverse
 	 * @return this service
@@ -165,8 +145,6 @@ public class CommitFinder extends RepositoryService {
 		walk.setTreeFilter(treeFilter);
 		if (commitFilter instanceof CommitFilter)
 			((CommitFilter) commitFilter).setRepository(repository);
-		if (commitMatcher instanceof CommitFilter)
-			((CommitFilter) commitMatcher).setRepository(repository);
 		if (treeFilter instanceof BaseTreeFilter)
 			((BaseTreeFilter) treeFilter).setRepository(repository);
 		if (sort != null)
@@ -182,16 +160,9 @@ public class CommitFinder extends RepositoryService {
 	 * @throws IOException
 	 */
 	protected CommitFinder walk(final RevWalk walk) throws IOException {
-		final RevFilter filter = commitMatcher;
 		try {
-			if (filter != null) {
-				RevCommit commit;
-				while ((commit = walk.next()) != null)
-					if (!filter.include(walk, commit))
-						return this;
-			} else
-				while (walk.next() != null)
-					;
+			while (walk.next() != null)
+				;
 		} catch (StopWalkException ignored) {
 			// Ignored
 		}

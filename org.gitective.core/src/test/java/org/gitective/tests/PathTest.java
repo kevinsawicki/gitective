@@ -95,7 +95,7 @@ public class PathTest extends GitTestCase {
 		LastCommitFilter matcher = new LastCommitFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
 		finder.setFilter(PathFilterUtils.andSuffix(".java"));
-		finder.setMatcher(matcher);
+		finder.setFilter(matcher);
 		finder.find();
 		assertEquals(commit, matcher.getLast());
 	}
@@ -112,7 +112,7 @@ public class PathTest extends GitTestCase {
 		LastCommitFilter matcher = new LastCommitFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
 		finder.setFilter(PathFilterUtils.andSuffix(".java"));
-		finder.setMatcher(matcher);
+		finder.setFilter(matcher);
 		finder.find();
 		assertEquals(commit, matcher.getLast());
 	}
@@ -157,7 +157,7 @@ public class PathTest extends GitTestCase {
 
 		CommitCountFilter count = new CommitCountFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
-		finder.setMatcher(count);
+		finder.setFilter(count);
 		finder.setFilter(PathFilterUtils.and("file0.txt"));
 		finder.find();
 		assertEquals(0, count.getCount());

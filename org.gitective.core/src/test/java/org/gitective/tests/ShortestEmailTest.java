@@ -71,7 +71,7 @@ public class ShortestEmailTest extends GitTestCase {
 		RevCommit shortest = add("test.txt", "test3");
 		author = new PersonIdent("a", "a@b.org");
 		add("test.txt", "test4");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(6, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(1, filter.getCommits().size());
@@ -94,7 +94,7 @@ public class ShortestEmailTest extends GitTestCase {
 		RevCommit shortest = add("test.txt", "test3");
 		committer = new PersonIdent("a", "a@b.org");
 		add("test.txt", "test4");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(6, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(1, filter.getCommits().size());
@@ -119,7 +119,7 @@ public class ShortestEmailTest extends GitTestCase {
 		add("test.txt", "test4");
 		author = new PersonIdent("a", "a@b.fr");
 		RevCommit shortest2 = add("test.txt", "test5");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(6, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(2, filter.getCommits().size());
@@ -145,7 +145,7 @@ public class ShortestEmailTest extends GitTestCase {
 		add("test.txt", "test4");
 		committer = new PersonIdent("a", "a@b.fr");
 		RevCommit shortest2 = add("test.txt", "test5");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(6, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(2, filter.getCommits().size());

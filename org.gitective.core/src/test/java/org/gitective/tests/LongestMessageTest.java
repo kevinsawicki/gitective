@@ -51,7 +51,7 @@ public class LongestMessageTest extends GitTestCase {
 	public void reset() throws Exception {
 		LongestMessageFilter filter = new LongestMessageFilter();
 		RevCommit longest = add("test.txt", "test", "test");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(4, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(1, filter.getCommits().size());
@@ -75,7 +75,7 @@ public class LongestMessageTest extends GitTestCase {
 		add("test.txt", "test2", "ab");
 		RevCommit longest = add("test.txt", "test3", "abcd");
 		add("test.txt", "test4", "abc");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(4, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(1, filter.getCommits().size());
@@ -95,7 +95,7 @@ public class LongestMessageTest extends GitTestCase {
 		RevCommit longest1 = add("test.txt", "test3", "abcd");
 		add("test.txt", "test4", "abc");
 		RevCommit longest2 = add("test.txt", "test5", "abce");
-		new CommitFinder(testRepo).setMatcher(filter).find();
+		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(4, filter.getLength());
 		assertNotNull(filter.getCommits());
 		assertEquals(2, filter.getCommits().size());
