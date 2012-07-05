@@ -119,20 +119,6 @@ public class CommitFinder extends RepositoryService {
 	}
 
 	/**
-	 * Set whether to use {@link RevSort#REVERSE} to sort commits
-	 *
-	 * @param reverse
-	 * @return this service
-	 */
-	public CommitFinder setReverseOrder(final boolean reverse) {
-		if (reverse)
-			sort = RevSort.REVERSE;
-		else
-			sort = null;
-		return this;
-	}
-
-	/**
 	 * Create a newly configured {@link RevWalk} for the repository
 	 *
 	 * @param repository
