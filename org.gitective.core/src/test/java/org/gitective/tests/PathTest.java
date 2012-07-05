@@ -24,10 +24,13 @@ package org.gitective.tests;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.PathFilterUtils;
+import org.gitective.core.filter.commit.AllCommitFilter;
 import org.gitective.core.filter.commit.AndCommitFilter;
 import org.gitective.core.filter.commit.BugFilter;
 import org.gitective.core.filter.commit.CommitCountFilter;
+import org.gitective.core.filter.commit.CommitListFilter;
 import org.gitective.core.filter.commit.LastCommitFilter;
+import org.gitective.core.filter.tree.CommitParentTreeFilter;
 import org.junit.Test;
 
 /**
@@ -46,32 +49,43 @@ public class PathTest extends GitTestCase {
 
 	/**
 	 * Test bugs to paths
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
 	public void bugsToPaths() throws Exception {
 		add("foo.cpp", "a");
-		add("bar.cpp", "a", "Fixing bug\nBug: 123");
-		add("bar.cpp", "b", "Fixing bug\nBug: 124");
-		add("Main.java", "public", "Fixing bug\nBug: 555");
-		add("Buffer.java", "private", "Fixing bug\nBug: 888");
-		CommitCountFilter bugCommits = new CommitCountFilter();
-		CommitCountFilter javaBugCommits = new CommitCountFilter();
-		AndCommitFilter filter = new AndCommitFilter(new BugFilter(),
+		RevCommit commit2 = add("bar.cpp", "a", "Fixing bug\nBug: 123");
+		RevCommit commit3 = add("bar.cpp", "b", "Fixing bug\nBug: 124");
+		RevCommit commit4 = add("Main.java", "public", "Fixing bug\nBug: 555");
+		RevCommit commit5 = add("Buffer.java", "private",
+				"Fixing bug\nBug: 888");
+
+		CommitListFilter bugCommits = new CommitListFilter();
+		AndCommitFilter bugFilters = new AndCommitFilter(new BugFilter(),
 				bugCommits);
+
+		CommitListFilter javaBugCommits = new CommitListFilter();
+		AndCommitFilter javaBugFilters = new AndCommitFilter(
+				new CommitParentTreeFilter(PathFilterUtils.andSuffix(".java")),
+				javaBugCommits);
+
 		CommitFinder finder = new CommitFinder(testRepo);
-		finder.setFilter(filter);
-		finder.setFilter(PathFilterUtils.andSuffix(".java"));
-		finder.setMatcher(javaBugCommits);
+		finder.setFilter(new AllCommitFilter(bugFilters, javaBugFilters));
 		finder.find();
-		assertEquals(2, javaBugCommits.getCount());
-		assertEquals(4, bugCommits.getCount());
+		assertEquals(2, javaBugCommits.getCommits().size());
+		assertTrue(javaBugCommits.getCommits().contains(commit4));
+		assertTrue(javaBugCommits.getCommits().contains(commit5));
+		assertEquals(4, bugCommits.getCommits().size());
+		assertTrue(bugCommits.getCommits().contains(commit2));
+		assertTrue(bugCommits.getCommits().contains(commit3));
+		assertTrue(bugCommits.getCommits().contains(commit4));
+		assertTrue(bugCommits.getCommits().contains(commit5));
 	}
 
 	/**
 	 * Test matching single suffix
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -88,7 +102,7 @@ public class PathTest extends GitTestCase {
 
 	/**
 	 * Test matching two suffixes
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -105,29 +119,31 @@ public class PathTest extends GitTestCase {
 
 	/**
 	 * Test counting some commits that match a path
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
 	public void countingSubset() throws Exception {
 		add("file1.txt", "a");
-		add("file2.txt", "b");
-		add("file2.txt", "c");
+		RevCommit commit2 = add("file2.txt", "b");
+		RevCommit commit3 = add("file2.txt", "c");
 		add("file3.txt", "d");
 		CommitCountFilter all = new CommitCountFilter();
-		CommitCountFilter path = new CommitCountFilter();
+		CommitListFilter path = new CommitListFilter();
 		CommitFinder finder = new CommitFinder(testRepo);
-		finder.setFilter(all);
-		finder.setFilter(PathFilterUtils.and("file2.txt"));
-		finder.setMatcher(path);
+		finder.setFilter(new AllCommitFilter(all, new AndCommitFilter(
+				new CommitParentTreeFilter(PathFilterUtils.and("file2.txt")),
+				path)));
 		finder.find();
 		assertEquals(4, all.getCount());
-		assertEquals(2, path.getCount());
+		assertEquals(2, path.getCommits().size());
+		assertTrue(path.getCommits().contains(commit2));
+		assertTrue(path.getCommits().contains(commit3));
 	}
 
 	/**
 	 * Test filtering paths matching one, two, and three commits
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
