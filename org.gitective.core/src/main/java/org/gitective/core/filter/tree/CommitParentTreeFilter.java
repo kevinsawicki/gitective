@@ -31,7 +31,6 @@ import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.filter.commit.CommitFilter;
-import org.gitective.core.filter.tree.CommitTreeFilter.FilterWrapper;
 
 /**
  * Commit filter that wraps a tree filter that includes commits that the tree
@@ -48,13 +47,7 @@ public class CommitParentTreeFilter extends CommitFilter {
 	 * @param filter
 	 */
 	public CommitParentTreeFilter(final TreeFilter filter) {
-		if (filter == null)
-			throw new IllegalArgumentException("Filter cannot be null");
-
-		if (filter instanceof BaseTreeFilter)
-			this.filter = (BaseTreeFilter) filter;
-		else
-			this.filter = new FilterWrapper(filter);
+		this.filter = BaseTreeFilter.wrap(filter);
 	}
 
 	@Override

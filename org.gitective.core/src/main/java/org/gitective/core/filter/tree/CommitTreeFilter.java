@@ -36,29 +36,6 @@ import org.gitective.core.filter.commit.CommitFilter;
  */
 public class CommitTreeFilter extends CommitFilter {
 
-	/**
-	 * Class that wraps a {@link TreeFilter} in a {@link BaseTreeFilter} so that
-	 * {@link BaseTreeFilter#include(RevWalk, RevCommit, TreeWalk)} can always
-	 * be called from {@link CommitTreeFilter#include(RevWalk, RevCommit)}
-	 */
-	protected static class FilterWrapper extends BaseTreeFilter {
-
-		private final TreeFilter filter;
-
-		/**
-		 * Wrap tree filter in a {@link BaseTreeFilter}
-		 *
-		 * @param filter
-		 */
-		protected FilterWrapper(final TreeFilter filter) {
-			this.filter = filter;
-		}
-
-		public boolean include(final TreeWalk walker) throws IOException {
-			return filter.include(walker);
-		}
-	}
-
 	private final BaseTreeFilter filter;
 
 	/**
@@ -67,13 +44,7 @@ public class CommitTreeFilter extends CommitFilter {
 	 * @param filter
 	 */
 	public CommitTreeFilter(final TreeFilter filter) {
-		if (filter == null)
-			throw new IllegalArgumentException("Filter cannot be null");
-
-		if (filter instanceof BaseTreeFilter)
-			this.filter = (BaseTreeFilter) filter;
-		else
-			this.filter = new FilterWrapper(filter);
+		this.filter = BaseTreeFilter.wrap(filter);
 	}
 
 	@Override

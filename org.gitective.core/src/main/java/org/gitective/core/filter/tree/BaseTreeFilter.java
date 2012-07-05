@@ -35,6 +35,47 @@ import org.eclipse.jgit.treewalk.filter.TreeFilter;
  */
 public abstract class BaseTreeFilter extends TreeFilter {
 
+	/**
+	 * Wrap the given non-null tree filter in a {@link BaseTreeFilter}
+	 * <p>
+	 * This will simply return the given filter if it is already a
+	 * {@link BaseTreeFilter}
+	 *
+	 * @param filter
+	 *            must be non-null
+	 * @return base tree filter
+	 */
+	public static BaseTreeFilter wrap(final TreeFilter filter) {
+		if (filter == null)
+			throw new IllegalArgumentException("Filter cannot be null");
+
+		if (filter instanceof BaseTreeFilter)
+			return (BaseTreeFilter) filter;
+		else
+			return new FilterWrapper(filter);
+	}
+
+	/**
+	 * Class that wraps a {@link TreeFilter} in a {@link BaseTreeFilter}
+	 */
+	private static class FilterWrapper extends BaseTreeFilter {
+
+		private final TreeFilter filter;
+
+		/**
+		 * Wrap tree filter in a {@link BaseTreeFilter}
+		 *
+		 * @param filter
+		 */
+		protected FilterWrapper(final TreeFilter filter) {
+			this.filter = filter;
+		}
+
+		public boolean include(final TreeWalk walker) throws IOException {
+			return filter.include(walker);
+		}
+	}
+
 	private boolean stop;
 
 	/**
