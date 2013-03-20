@@ -26,7 +26,7 @@ import java.io.IOException;
 
 import org.eclipse.jgit.lib.BaseRepositoryBuilder;
 import org.eclipse.jgit.lib.RefDatabase;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
 
 /**
  * Repository that has a bad ref database

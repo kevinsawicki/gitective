@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
 
 /**
  * Base service class for working with one or more {@link Repository} instances.

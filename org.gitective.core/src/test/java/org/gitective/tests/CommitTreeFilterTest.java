@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.gitective.core.filter.tree.BaseTreeFilter;
 import org.gitective.core.filter.tree.CommitTreeFilter;
