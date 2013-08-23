@@ -24,7 +24,7 @@ package org.gitective.tests;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.filter.commit.CommitListFilter;
@@ -50,7 +50,10 @@ public class CommitBaseTest extends GitTestCase {
 		RevCommit commit2 = add("file.txt", "edit 1");
 		RevCommit commit3 = add("file.txt", "edit 2");
 
-		Repository repo = new FileRepository(testRepo);
+    Repository repo = new FileRepositoryBuilder()
+      .setGitDir(testRepo)
+      .readEnvironment()
+      .build();
 		RevCommit base = CommitUtils
 				.getBase(repo, Constants.MASTER, "release1");
 		assertEquals(commit1, base);

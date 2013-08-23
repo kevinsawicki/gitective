@@ -27,8 +27,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 /**
  * Base service class for working with one or more {@link Repository} instances.
@@ -81,8 +82,12 @@ public class RepositoryService {
 		final int length = gitDirs.length;
 		repositories = new Repository[length];
 		try {
-			for (int i = 0; i < length; i++)
-				repositories[i] = new FileRepository(gitDirs[i]);
+			for (int i = 0; i < length; i++) {
+        repositories[i] = new FileRepositoryBuilder()
+          .setGitDir(gitDirs[i])
+          .readEnvironment()
+          .build();
+      }
 		} catch (IOException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -126,9 +131,9 @@ public class RepositoryService {
 		try {
 			for (Object repo : repositories)
 				if (repo instanceof String)
-					created.add(new FileRepository((String) repo));
+					created.add(new FileRepositoryBuilder().setGitDir(new File((String)repo)).readEnvironment().build());
 				else if (repo instanceof File)
-					created.add(new FileRepository((File) repo));
+					created.add(new FileRepositoryBuilder().setGitDir((File)repo).readEnvironment().build());
 				else if (repo instanceof Repository)
 					created.add((Repository) repo);
 		} catch (IOException e) {

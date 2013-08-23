@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.gitective.core.filter.tree.BaseTreeFilter;
 import org.gitective.core.filter.tree.CommitTreeFilter;
@@ -88,7 +88,7 @@ public class CommitTreeFilterTest extends GitTestCase {
 			}
 		};
 		CommitTreeFilter filter = new CommitTreeFilter(treeFilter);
-		Repository fileRepo = new FileRepository(testRepo);
+		Repository fileRepo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		filter.setRepository(fileRepo);
 		assertNotNull(repo.get());
 		assertEquals(fileRepo.getDirectory(), repo.get().getDirectory());

@@ -30,18 +30,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.diff.Edit.Type;
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
-import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.AbbreviatedObjectId;
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectLoader;
-import org.eclipse.jgit.lib.ObjectStream;
-import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gitective.core.BlobUtils;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.GitException;
@@ -77,7 +70,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getContentNullObjectId() throws Exception {
-		BlobUtils.getContent(new FileRepository(testRepo), null);
+		BlobUtils.getContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), null);
 	}
 
 	/**
@@ -87,7 +80,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = GitException.class)
 	public void badObjectLoader() throws Exception {
-		BlobUtils.getContent(new FileRepository(testRepo), ObjectId.zeroId());
+		BlobUtils.getContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId());
 	}
 
 	/**
@@ -114,13 +107,12 @@ public class BlobUtilsTest extends GitTestCase {
 		Repository repo = new FileRepository(testRepo) {
 
 			public ObjectLoader open(AnyObjectId objectId, int typeHint)
-					throws MissingObjectException,
-					IncorrectObjectTypeException, IOException {
+					throws IOException {
 				final ObjectLoader loader = super.open(objectId, typeHint);
 				return new ObjectLoader() {
 
 					public ObjectStream openStream()
-							throws MissingObjectException, IOException {
+							throws IOException {
 						return loader.openStream();
 					}
 
@@ -164,7 +156,7 @@ public class BlobUtilsTest extends GitTestCase {
 		};
 		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(2, ids.size());
-		Collection<Edit> diffs = BlobUtils.diff(new FileRepository(testRepo),
+		Collection<Edit> diffs = BlobUtils.diff(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				ids.get(0).toObjectId(), ids.get(1).toObjectId());
 		assertNotNull(diffs);
 		assertEquals(1, diffs.size());
@@ -178,7 +170,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void diffWithZeroObjectIds() throws IOException {
-		Collection<Edit> edits = BlobUtils.diff(new FileRepository(testRepo),
+		Collection<Edit> edits = BlobUtils.diff(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				ObjectId.zeroId(), ObjectId.zeroId());
 		assertNotNull(edits);
 		assertTrue(edits.isEmpty());
@@ -204,7 +196,7 @@ public class BlobUtilsTest extends GitTestCase {
 		};
 		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(1, ids.size());
-		Collection<Edit> diffs = BlobUtils.diff(new FileRepository(testRepo),
+		Collection<Edit> diffs = BlobUtils.diff(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				ids.get(0).toObjectId(), ObjectId.zeroId());
 		assertNotNull(diffs);
 		assertEquals(1, diffs.size());
@@ -231,7 +223,7 @@ public class BlobUtilsTest extends GitTestCase {
 		};
 		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(1, ids.size());
-		Collection<Edit> diffs = BlobUtils.diff(new FileRepository(testRepo),
+		Collection<Edit> diffs = BlobUtils.diff(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				ids.get(0).toObjectId(), ObjectId.zeroId());
 		assertNotNull(diffs);
 		assertTrue(diffs.isEmpty());
@@ -257,7 +249,7 @@ public class BlobUtilsTest extends GitTestCase {
 		};
 		new CommitFinder(testRepo).setFilter(filter).find();
 		assertEquals(1, ids.size());
-		Collection<Edit> diffs = BlobUtils.diff(new FileRepository(testRepo),
+		Collection<Edit> diffs = BlobUtils.diff(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				ObjectId.zeroId(), ids.get(0).toObjectId());
 		assertNotNull(diffs);
 		assertTrue(diffs.isEmpty());
@@ -278,7 +270,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void diffWithNullObjectId1() throws IOException {
-		BlobUtils.diff(new FileRepository(testRepo), null, ObjectId.zeroId());
+		BlobUtils.diff(new FileRepositoryBuilder().setGitDir(testRepo).build(), null, ObjectId.zeroId());
 	}
 
 	/**
@@ -288,7 +280,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void diffWithNullObjectId2() throws IOException {
-		BlobUtils.diff(new FileRepository(testRepo), ObjectId.zeroId(), null);
+		BlobUtils.diff(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(), null);
 	}
 
 	/**
@@ -298,7 +290,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void diffWithNullComparator() throws IOException {
-		BlobUtils.diff(new FileRepository(testRepo), ObjectId.zeroId(),
+		BlobUtils.diff(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(),
 				ObjectId.zeroId(), null);
 	}
 
@@ -325,7 +317,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRawContentNullCommitId() throws IOException {
-		BlobUtils.getRawContent(new FileRepository(testRepo), (ObjectId) null,
+		BlobUtils.getRawContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), (ObjectId) null,
 				"test.txt");
 	}
 
@@ -336,7 +328,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRawContentNullRevision() throws IOException {
-		BlobUtils.getRawContent(new FileRepository(testRepo), (String) null,
+		BlobUtils.getRawContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String) null,
 				"test.txt");
 	}
 
@@ -347,7 +339,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRawContentEmptyRevision() throws IOException {
-		BlobUtils.getRawContent(new FileRepository(testRepo), "", "test.txt");
+		BlobUtils.getRawContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), "", "test.txt");
 	}
 
 	/**
@@ -357,7 +349,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRawContentNullPath() throws IOException {
-		BlobUtils.getRawContent(new FileRepository(testRepo),
+		BlobUtils.getRawContent(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				ObjectId.zeroId(), null);
 	}
 
@@ -368,7 +360,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRawContentNullPath2() throws IOException {
-		BlobUtils.getRawContent(new FileRepository(testRepo), "master", null);
+		BlobUtils.getRawContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), "master", null);
 	}
 
 	/**
@@ -378,7 +370,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRawContentEmptyPath() throws IOException {
-		BlobUtils.getRawContent(new FileRepository(testRepo),
+		BlobUtils.getRawContent(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				ObjectId.zeroId(), "");
 	}
 
@@ -389,7 +381,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRawContentEmptyPath2() throws IOException {
-		BlobUtils.getRawContent(new FileRepository(testRepo), "master", "");
+		BlobUtils.getRawContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), "master", "");
 	}
 
 	/**
@@ -400,8 +392,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getContent() throws Exception {
 		RevCommit commit = add("test.txt", "content");
-		assertEquals("content", BlobUtils.getContent(new FileRepository(
-				testRepo), commit, "test.txt"));
+		assertEquals("content", BlobUtils.getContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), commit, "test.txt"));
 	}
 
 	/**
@@ -412,8 +403,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getStream() throws Exception {
 		RevCommit commit = add("test.txt", "content");
-		assertNotNull("content", BlobUtils.getStream(new FileRepository(
-				testRepo), commit, "test.txt"));
+		assertNotNull("content", BlobUtils.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), commit, "test.txt"));
 	}
 
 	/**
@@ -424,7 +414,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getStreamNonExistentPath() throws Exception {
 		RevCommit commit = add("test.txt", "content");
-		assertNull("content", BlobUtils.getStream(new FileRepository(testRepo),
+		assertNull("content", BlobUtils.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				commit, "test2.txt"));
 	}
 
@@ -436,8 +426,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getHeadStreamNonExistentPath() throws Exception {
 		add("test.txt", "content");
-		assertNull("content", BlobUtils.getHeadStream(new FileRepository(
-				testRepo), "test2.txt"));
+		assertNull("content", BlobUtils.getHeadStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), "test2.txt"));
 	}
 
 	/**
@@ -448,8 +437,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getHeadStream() throws Exception {
 		add("test.txt", "content");
-		assertNotNull("content", BlobUtils.getHeadStream(new FileRepository(
-				testRepo), "test.txt"));
+		assertNotNull("content", BlobUtils.getHeadStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), "test.txt"));
 	}
 
 	/**
@@ -479,7 +467,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getStreamNullId() throws Exception {
-		BlobUtils.getStream(new FileRepository(testRepo), (ObjectId) null,
+		BlobUtils.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), (ObjectId) null,
 				"test.txt");
 	}
 
@@ -490,7 +478,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getStreamNullRevision() throws Exception {
-		BlobUtils.getStream(new FileRepository(testRepo), (String) null,
+		BlobUtils.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String) null,
 				"test.txt");
 	}
 
@@ -501,7 +489,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getStreamEmptyRevision() throws Exception {
-		BlobUtils.getStream(new FileRepository(testRepo), "", "test.txt");
+		BlobUtils.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), "", "test.txt");
 	}
 
 	/**
@@ -511,7 +499,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getStreamNullPath() throws Exception {
-		BlobUtils.getStream(new FileRepository(testRepo), ObjectId.zeroId(),
+		BlobUtils.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(),
 				null);
 	}
 
@@ -522,7 +510,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getStreamNullPath2() throws Exception {
-		BlobUtils.getStream(new FileRepository(testRepo), "master", null);
+		BlobUtils.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), "master", null);
 	}
 
 	/**
@@ -533,7 +521,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test(expected = IllegalArgumentException.class)
 	public void getStreamEmptyPath() throws Exception {
 		BlobUtils
-				.getStream(new FileRepository(testRepo), ObjectId.zeroId(), "");
+				.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(), "");
 	}
 
 	/**
@@ -543,7 +531,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getStreamEmptyPath2() throws Exception {
-		BlobUtils.getStream(new FileRepository(testRepo), "master", "");
+		BlobUtils.getStream(new FileRepositoryBuilder().setGitDir(testRepo).build(), "master", "");
 	}
 
 	/**
@@ -554,8 +542,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getHeadContent() throws Exception {
 		add("test.txt", "content");
-		assertEquals("content", BlobUtils.getHeadContent(new FileRepository(
-				testRepo), "test.txt"));
+		assertEquals("content", BlobUtils.getHeadContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), "test.txt"));
 	}
 
 	/**
@@ -567,7 +554,7 @@ public class BlobUtilsTest extends GitTestCase {
 	public void getRawHeadContent() throws Exception {
 		add("test.txt", "content");
 		assertArrayEquals("content".getBytes(Constants.CHARACTER_ENCODING),
-				BlobUtils.getRawHeadContent(new FileRepository(testRepo),
+				BlobUtils.getRawHeadContent(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 						"test.txt"));
 	}
 
@@ -579,7 +566,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getHeadContentNonExistentPath() throws Exception {
 		add("test.txt", "content");
-		assertNull(BlobUtils.getHeadContent(new FileRepository(testRepo),
+		assertNull(BlobUtils.getHeadContent(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				"test2.txt"));
 	}
 
@@ -592,7 +579,7 @@ public class BlobUtilsTest extends GitTestCase {
 	public void getHeadContentDirectoryPath() throws Exception {
 		add("src/test.txt", "content");
 		assertNull(BlobUtils
-				.getHeadContent(new FileRepository(testRepo), "src"));
+				.getHeadContent(new FileRepositoryBuilder().setGitDir(testRepo).build(), "src"));
 	}
 
 	/**
@@ -623,7 +610,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdNullRevision() throws Exception {
 		BlobUtils
-				.getId(new FileRepository(testRepo), (String) null, "test.txt");
+				.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String) null, "test.txt");
 	}
 
 	/**
@@ -633,7 +620,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdEmptyRevision() throws Exception {
-		BlobUtils.getId(new FileRepository(testRepo), "", "test.txt");
+		BlobUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), "", "test.txt");
 	}
 
 	/**
@@ -643,7 +630,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdNullId() throws Exception {
-		BlobUtils.getId(new FileRepository(testRepo), (ObjectId) null,
+		BlobUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), (ObjectId) null,
 				"test.txt");
 	}
 
@@ -654,7 +641,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdNullPath() throws Exception {
-		BlobUtils.getId(new FileRepository(testRepo), ObjectId.zeroId(), null);
+		BlobUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(), null);
 	}
 
 	/**
@@ -664,7 +651,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdNullPath2() throws Exception {
-		BlobUtils.getId(new FileRepository(testRepo), "master", null);
+		BlobUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), "master", null);
 	}
 
 	/**
@@ -674,7 +661,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdEmptyPath() throws Exception {
-		BlobUtils.getId(new FileRepository(testRepo), ObjectId.zeroId(), "");
+		BlobUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(), "");
 	}
 
 	/**
@@ -684,7 +671,7 @@ public class BlobUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdEmptyPath2() throws Exception {
-		BlobUtils.getId(new FileRepository(testRepo), "master", "");
+		BlobUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), "master", "");
 	}
 
 	/**
@@ -695,7 +682,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getHeadId() throws Exception {
 		add("test.txt", "content");
-		assertNotNull(BlobUtils.getHeadId(new FileRepository(testRepo),
+		assertNotNull(BlobUtils.getHeadId(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				"test.txt"));
 	}
 
@@ -707,7 +694,7 @@ public class BlobUtilsTest extends GitTestCase {
 	@Test
 	public void getId() throws Exception {
 		RevCommit commit = add("test.txt", "content");
-		assertNotNull(BlobUtils.getId(new FileRepository(testRepo), commit,
+		assertNotNull(BlobUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), commit,
 				"test.txt"));
 	}
 }

@@ -21,29 +21,21 @@
  */
 package org.gitective.tests;
 
-import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
-import static org.eclipse.jgit.lib.FileMode.TREE;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.FileMode;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.gitective.core.BlobUtils;
 import org.gitective.core.TreeUtils;
 import org.gitective.core.TreeUtils.ITreeVisitor;
 import org.junit.Test;
+
+import static org.eclipse.jgit.lib.FileMode.REGULAR_FILE;
+import static org.eclipse.jgit.lib.FileMode.TREE;
 
 /**
  * Unit tests of {@link TreeUtils}
@@ -73,7 +65,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void withParentsNullId() throws IOException {
-		TreeUtils.withParents(new FileRepository(testRepo), (ObjectId) null);
+		TreeUtils.withParents(new FileRepositoryBuilder().setGitDir(testRepo).build(), (ObjectId) null);
 	}
 
 	/**
@@ -83,7 +75,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void withParentsNullRevision() throws IOException {
-		TreeUtils.withParents(new FileRepository(testRepo), (String) null);
+		TreeUtils.withParents(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String) null);
 	}
 
 	/**
@@ -93,7 +85,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void withParentsEmptyRevision() throws IOException {
-		TreeUtils.withParents(new FileRepository(testRepo), "");
+		TreeUtils.withParents(new FileRepositoryBuilder().setGitDir(testRepo).build(), "");
 	}
 
 	/**
@@ -104,7 +96,7 @@ public class TreeUtilsTest extends GitTestCase {
 	@Test
 	public void diffWithNoParents() throws Exception {
 		RevCommit commit = add("test.txt", "content");
-		Repository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		TreeWalk walk = TreeUtils.diffWithParents(repo, Constants.HEAD);
 		assertNotNull(walk);
 		assertEquals(2, walk.getTreeCount());
@@ -123,7 +115,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void diffWithOneParent() throws Exception {
-		Repository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		RevCommit commit1 = add("test.txt", "content");
 		RevCommit commit2 = add("test.txt", "content2");
 		TreeWalk walk = TreeUtils.diffWithParents(repo, Constants.HEAD);
@@ -145,7 +137,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void diffRevisions() throws Exception {
-		Repository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		RevCommit commit1 = add("test.txt", "content");
 		RevCommit commit2 = add("test.txt", "content2");
 		TreeWalk walk = TreeUtils.diffWithCommits(repo,
@@ -168,7 +160,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void diffCommits() throws Exception {
-		Repository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		RevCommit commit1 = add("test.txt", "content");
 		RevCommit commit2 = add("test.txt", "content2");
 		TreeWalk walk = TreeUtils.diffWithCommits(repo, commit1, commit2);
@@ -206,7 +198,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void withCommitsNullIds() throws IOException {
-		TreeUtils.withCommits(new FileRepository(testRepo), (ObjectId[]) null);
+		TreeUtils.withCommits(new FileRepositoryBuilder().setGitDir(testRepo).build(), (ObjectId[]) null);
 	}
 
 	/**
@@ -216,7 +208,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void withCommitsNullRevision() throws IOException {
-		TreeUtils.withCommits(new FileRepository(testRepo), (String[]) null);
+		TreeUtils.withCommits(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String[]) null);
 	}
 
 	/**
@@ -226,7 +218,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void withCommitsEmptyRevision() throws IOException {
-		TreeUtils.withCommits(new FileRepository(testRepo), new String[0]);
+		TreeUtils.withCommits(new FileRepositoryBuilder().setGitDir(testRepo).build(), new String[0]);
 	}
 
 	/**
@@ -236,7 +228,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void withCommitsEmptyCommits() throws IOException {
-		TreeUtils.withCommits(new FileRepository(testRepo), new ObjectId[0]);
+		TreeUtils.withCommits(new FileRepositoryBuilder().setGitDir(testRepo).build(), new ObjectId[0]);
 	}
 
 	/**
@@ -263,7 +255,7 @@ public class TreeUtilsTest extends GitTestCase {
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdNullCommitId() throws IOException {
 		TreeUtils
-				.getId(new FileRepository(testRepo), (ObjectId) null, "folder");
+				.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), (ObjectId) null, "folder");
 	}
 
 	/**
@@ -273,7 +265,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdNullRevision() throws IOException {
-		TreeUtils.getId(new FileRepository(testRepo), (String) null, "folder");
+		TreeUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String) null, "folder");
 	}
 
 	/**
@@ -283,7 +275,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdEmptyRevision() throws IOException {
-		TreeUtils.getId(new FileRepository(testRepo), "", "folder");
+		TreeUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), "", "folder");
 	}
 
 	/**
@@ -293,7 +285,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdNullPath1() throws IOException {
-		TreeUtils.getId(new FileRepository(testRepo), ObjectId.zeroId(), null);
+		TreeUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(), null);
 	}
 
 	/**
@@ -303,7 +295,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdNullPath2() throws IOException {
-		TreeUtils.getId(new FileRepository(testRepo), Constants.MASTER, null);
+		TreeUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), Constants.MASTER, null);
 	}
 
 	/**
@@ -313,7 +305,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdEmptyPath1() throws IOException {
-		TreeUtils.getId(new FileRepository(testRepo), ObjectId.zeroId(), "");
+		TreeUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(), "");
 	}
 
 	/**
@@ -323,7 +315,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getIdEmptyPath2() throws IOException {
-		TreeUtils.getId(new FileRepository(testRepo), Constants.MASTER, "");
+		TreeUtils.getId(new FileRepositoryBuilder().setGitDir(testRepo).build(), Constants.MASTER, "");
 	}
 
 	/**
@@ -333,7 +325,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void getIdWithCommit() throws Exception {
-		Repository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		RevCommit commit = add("d1/f1.txt", "content");
 		assertNull(TreeUtils.getId(repo, commit, "d2/f1.txt"));
 		assertNull(TreeUtils.getId(repo, commit, "d1/f1.txt"));
@@ -351,7 +343,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void getIdWithRevision() throws Exception {
-		Repository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		RevCommit commit = add("d1/f1.txt", "content");
 		assertNull(TreeUtils.getId(repo, Constants.MASTER, "d2/f1.txt"));
 		assertNull(TreeUtils.getId(repo, Constants.MASTER, "d1/f1.txt"));
@@ -383,7 +375,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void visitNullTreeId() throws IOException {
-		TreeUtils.visit(new FileRepository(testRepo), null, new ITreeVisitor() {
+		TreeUtils.visit(new FileRepositoryBuilder().setGitDir(testRepo).build(), null, new ITreeVisitor() {
 
 			public boolean accept(FileMode mode, String path, String name,
 					AnyObjectId id) {
@@ -399,7 +391,7 @@ public class TreeUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void visitNullVisitor() throws IOException {
-		TreeUtils.visit(new FileRepository(testRepo), ObjectId.zeroId(), null);
+		TreeUtils.visit(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId(), null);
 	}
 
 	/**
@@ -416,7 +408,7 @@ public class TreeUtilsTest extends GitTestCase {
 		final AtomicInteger folders = new AtomicInteger(0);
 		final List<String> fullPaths = new ArrayList<String>();
 		final Set<AnyObjectId> ids = new HashSet<AnyObjectId>();
-		assertTrue(TreeUtils.visit(new FileRepository(testRepo),
+		assertTrue(TreeUtils.visit(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				commit.getTree(), new ITreeVisitor() {
 
 					public boolean accept(FileMode mode, String path,

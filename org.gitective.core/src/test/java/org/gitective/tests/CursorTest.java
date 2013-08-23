@@ -26,13 +26,10 @@ import java.util.List;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.CommitUtils;
-import org.gitective.core.filter.commit.AndCommitFilter;
-import org.gitective.core.filter.commit.CommitCursorFilter;
-import org.gitective.core.filter.commit.CommitLimitFilter;
-import org.gitective.core.filter.commit.CommitListFilter;
+import org.gitective.core.filter.commit.*;
 import org.junit.Test;
 
 /**
@@ -61,7 +58,7 @@ public class CursorTest extends GitTestCase {
 				limit, bucket));
 		service.setFilter(cursor);
 		int chunks = 0;
-		RevCommit commit = CommitUtils.getHead(new FileRepository(testRepo));
+		RevCommit commit = CommitUtils.getHead(new FileRepositoryBuilder().setGitDir(testRepo).build());
 		while (commit != null) {
 			service.findFrom(commit);
 			assertEquals(limit.getLimit(), bucket.getCommits().size());

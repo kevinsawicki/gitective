@@ -23,7 +23,8 @@ package org.gitective.tests;
 
 import java.io.IOException;
 
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gitective.core.GitException;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public class GitExceptionTest extends GitTestCase {
 	public void constructors() throws IOException {
 		String message = "test";
 		NullPointerException cause = new NullPointerException();
-		FileRepository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 
 		GitException exception = new GitException(message, repo);
 		assertEquals(repo, exception.getRepository());

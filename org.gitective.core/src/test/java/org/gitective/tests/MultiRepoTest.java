@@ -24,7 +24,7 @@ package org.gitective.tests;
 import java.io.File;
 
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.filter.commit.CommitCountFilter;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class MultiRepoTest extends GitTestCase {
 	@Test
 	public void constructors() throws Exception {
 		new CommitFinder(testRepo);
-		new CommitFinder(new FileRepository(testRepo));
+		new CommitFinder(new FileRepositoryBuilder().setGitDir(testRepo).build());
 		new CommitFinder(testRepo.getAbsolutePath());
 	}
 
