@@ -1,3 +1,11 @@
+:rotating_light::rotating_light::rotating_light:
+
+**This library is no longer maintained or updated. You should fork it and release
+your own version to Maven Central if you need updates for new features or bug
+fixes.**
+
+:rotating_light::rotating_light::rotating_light:
+
 # gitective - Find the commits you're looking for
 
 gitective is a Java library built on top of [JGit](http://www.eclipse.org/jgit)
@@ -216,7 +224,7 @@ UserCommitActivity[] activity = filter.getHistogram().getUserActivity();
 CommitCalendar commits = new CommitCalendar(activity);
 
 for(YearCommitActivity year : commits.getYears())
-     System.out.println(year.getMonthCount(Month.AUGUST) 
+     System.out.println(year.getMonthCount(Month.AUGUST)
                           + " commits in August, " + year.getYear());
 ```
 
