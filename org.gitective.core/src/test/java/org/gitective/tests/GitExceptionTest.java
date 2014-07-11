@@ -23,7 +23,7 @@ package org.gitective.tests;
 
 import java.io.IOException;
 
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.gitective.core.GitException;
 import org.junit.Test;
 
