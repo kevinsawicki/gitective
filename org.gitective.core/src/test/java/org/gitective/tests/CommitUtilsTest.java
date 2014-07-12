@@ -24,12 +24,10 @@ package org.gitective.tests;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.GitException;
 import org.junit.Test;
@@ -58,7 +56,7 @@ public class CommitUtilsTest extends GitTestCase {
 		add("a.txt", "a");
 		RevCommit commit = add("test.txt", "content");
 		tag(testRepo, "tag1");
-		Repository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		RevCommit refCommit = CommitUtils.getRef(repo, "tag1");
 		assertNotNull(refCommit);
 		assertEquals(commit, refCommit);
@@ -75,7 +73,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test
 	public void invalidRef() throws Exception {
-		RevCommit commit = CommitUtils.getRef(new FileRepository(testRepo),
+		RevCommit commit = CommitUtils.getRef(new FileRepositoryBuilder().setGitDir(testRepo).build(),
 				"notatag");
 		assertNull(commit);
 	}
@@ -90,7 +88,7 @@ public class CommitUtilsTest extends GitTestCase {
 		add("a.txt", "a");
 		RevCommit commit = add("test.txt", "content");
 		Ref ref = branch(testRepo, "branch1");
-		Repository repo = new FileRepository(testRepo);
+		Repository repo = new FileRepositoryBuilder().setGitDir(testRepo).build();
 		RevCommit refCommit = CommitUtils.getRef(repo, ref);
 		assertNotNull(refCommit);
 		assertEquals(commit, refCommit);
@@ -123,7 +121,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getCommitWithNullObjectId() throws Exception {
-		CommitUtils.getCommit(new FileRepository(testRepo), (ObjectId) null);
+		CommitUtils.getCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), (ObjectId) null);
 	}
 
 	/**
@@ -133,7 +131,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getCommitWithNullRevision() throws Exception {
-		CommitUtils.getCommit(new FileRepository(testRepo), (String) null);
+		CommitUtils.getCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String) null);
 	}
 
 	/**
@@ -143,7 +141,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getCommitWithEmptyRevision() throws Exception {
-		CommitUtils.getCommit(new FileRepository(testRepo), "");
+		CommitUtils.getCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), "");
 	}
 
 	/**
@@ -169,7 +167,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getBaseWithNullIds() throws Exception {
-		CommitUtils.getBase(new FileRepository(testRepo), (ObjectId[]) null);
+		CommitUtils.getBase(new FileRepositoryBuilder().setGitDir(testRepo).build(), (ObjectId[]) null);
 	}
 
 	/**
@@ -179,7 +177,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getBaseWithEmptyIds() throws Exception {
-		CommitUtils.getBase(new FileRepository(testRepo), new ObjectId[0]);
+		CommitUtils.getBase(new FileRepositoryBuilder().setGitDir(testRepo).build(), new ObjectId[0]);
 	}
 
 	/**
@@ -189,7 +187,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getBaseWithNullRevisions() throws Exception {
-		CommitUtils.getBase(new FileRepository(testRepo), (String[]) null);
+		CommitUtils.getBase(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String[]) null);
 	}
 
 	/**
@@ -199,7 +197,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getBaseWithEmptyRevisions() throws Exception {
-		CommitUtils.getBase(new FileRepository(testRepo), new String[0]);
+		CommitUtils.getBase(new FileRepositoryBuilder().setGitDir(testRepo).build(), new String[0]);
 	}
 
 	/**
@@ -209,7 +207,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = GitException.class)
 	public void getBaseWithUnknownRevision() throws Exception {
-		CommitUtils.getBase(new FileRepository(testRepo), "notaref");
+		CommitUtils.getBase(new FileRepositoryBuilder().setGitDir(testRepo).build(), "notaref");
 	}
 
 	/**
@@ -235,7 +233,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRefWithNullRef() throws Exception {
-		CommitUtils.getRef(new FileRepository(testRepo), (Ref) null);
+		CommitUtils.getRef(new FileRepositoryBuilder().setGitDir(testRepo).build(), (Ref) null);
 	}
 
 	/**
@@ -245,7 +243,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRefWithNullRefName() throws Exception {
-		CommitUtils.getRef(new FileRepository(testRepo), (String) null);
+		CommitUtils.getRef(new FileRepositoryBuilder().setGitDir(testRepo).build(), (String) null);
 	}
 
 	/**
@@ -255,7 +253,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getRefWithEmptyRefName() throws Exception {
-		CommitUtils.getRef(new FileRepository(testRepo), "");
+		CommitUtils.getRef(new FileRepositoryBuilder().setGitDir(testRepo).build(), "");
 	}
 
 	/**
@@ -346,7 +344,7 @@ public class CommitUtilsTest extends GitTestCase {
 				return null;
 			}
 		};
-		assertNull(CommitUtils.getRef(new FileRepository(testRepo), ref));
+		assertNull(CommitUtils.getRef(new FileRepositoryBuilder().setGitDir(testRepo).build(), ref));
 	}
 
 	/**
@@ -390,7 +388,7 @@ public class CommitUtilsTest extends GitTestCase {
 				return null;
 			}
 		};
-		CommitUtils.getRef(new FileRepository(testRepo), ref);
+		CommitUtils.getRef(new FileRepositoryBuilder().setGitDir(testRepo).build(), ref);
 	}
 
 	/**
@@ -400,7 +398,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = GitException.class)
 	public void getBaseWithZeroId() throws Exception {
-		CommitUtils.getBase(new FileRepository(testRepo), ObjectId.zeroId());
+		CommitUtils.getBase(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId());
 	}
 
 	/**
@@ -410,7 +408,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = GitException.class)
 	public void getCommitWithZeroId() throws Exception {
-		CommitUtils.getCommit(new FileRepository(testRepo), ObjectId.zeroId());
+		CommitUtils.getCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), ObjectId.zeroId());
 	}
 
 	/**
@@ -443,7 +441,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getLastCommitNullPath() throws Exception {
-		CommitUtils.getLastCommit(new FileRepository(testRepo), null);
+		CommitUtils.getLastCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), null);
 	}
 
 	/**
@@ -453,7 +451,7 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getLastCommitEmptyPath() throws Exception {
-		CommitUtils.getLastCommit(new FileRepository(testRepo), "");
+		CommitUtils.getLastCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), "");
 	}
 
 	/**
@@ -464,7 +462,7 @@ public class CommitUtilsTest extends GitTestCase {
 	@Test(expected = IllegalArgumentException.class)
 	public void getLastCommitNullRevision() throws Exception {
 		CommitUtils
-				.getLastCommit(new FileRepository(testRepo), null, "d/f.txt");
+				.getLastCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), null, "d/f.txt");
 	}
 
 	/**
@@ -474,6 +472,6 @@ public class CommitUtilsTest extends GitTestCase {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void getLastCommitEmptyRevision() throws Exception {
-		CommitUtils.getLastCommit(new FileRepository(testRepo), "", "d/f.txt");
+		CommitUtils.getLastCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), "", "d/f.txt");
 	}
 }

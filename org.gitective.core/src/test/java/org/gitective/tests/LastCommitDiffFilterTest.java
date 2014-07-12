@@ -24,7 +24,7 @@ package org.gitective.tests;
 import java.util.Map;
 
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.filter.commit.LastCommitDiffFilter;
@@ -113,8 +113,7 @@ public class LastCommitDiffFilterTest extends GitTestCase {
 		checkout("master");
 		RevCommit commit3 = add("b.txt", "b");
 		merge("b1");
-		assertFalse(commit3.equals(CommitUtils.getHead(new FileRepository(
-				testRepo))));
+		assertFalse(commit3.equals(CommitUtils.getHead(new FileRepositoryBuilder().setGitDir(testRepo).build())));
 
 		LastCommitDiffFilter filter = new LastCommitDiffFilter();
 		new CommitFinder(testRepo).setFilter(filter).find();

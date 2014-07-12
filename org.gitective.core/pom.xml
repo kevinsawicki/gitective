@@ -9,7 +9,7 @@
 
 	<groupId>org.gitective</groupId>
 	<artifactId>gitective-core</artifactId>
-	<version>0.9.10-SNAPSHOT</version>
+	<version>0.9.10</version>
 	<name>gitective core</name>
 	<description>gitective core library</description>
 	<url>http://gitective.org</url>
@@ -190,7 +190,7 @@
 		<dependency>
 			<groupId>org.eclipse.jgit</groupId>
 			<artifactId>org.eclipse.jgit</artifactId>
-			<version>2.0.0.201206130900-r</version>
+			<version>3.0.0.201306101825-r</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

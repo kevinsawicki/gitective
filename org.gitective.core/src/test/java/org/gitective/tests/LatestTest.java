@@ -22,7 +22,7 @@
 package org.gitective.tests;
 
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gitective.core.CommitUtils;
 import org.junit.Test;
 
@@ -39,9 +39,9 @@ public class LatestTest extends GitTestCase {
 	@Test
 	public void latest() throws Exception {
 		RevCommit commit = add("file.txt", "content");
-		assertEquals(commit, CommitUtils.getHead(new FileRepository(testRepo)));
+		assertEquals(commit, CommitUtils.getHead(new FileRepositoryBuilder().setGitDir(testRepo).build()));
 		assertEquals(commit,
-				CommitUtils.getMaster(new FileRepository(testRepo)));
+				CommitUtils.getMaster(new FileRepositoryBuilder().setGitDir(testRepo).build()));
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class LatestTest extends GitTestCase {
 	 * @throws Exception
 	 */
 	public void latestOnEmptyRepository() throws Exception {
-		assertNull(CommitUtils.getHead(new FileRepository(testRepo)));
+		assertNull(CommitUtils.getHead(new FileRepositoryBuilder().setGitDir(testRepo).build()));
 	}
 
 	/**
@@ -62,6 +62,6 @@ public class LatestTest extends GitTestCase {
 	public void byId() throws Exception {
 		RevCommit commit = add("file.txt", "content");
 		assertEquals(commit,
-				CommitUtils.getCommit(new FileRepository(testRepo), commit));
+				CommitUtils.getCommit(new FileRepositoryBuilder().setGitDir(testRepo).build(), commit));
 	}
 }
