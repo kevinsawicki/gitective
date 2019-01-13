@@ -30,7 +30,7 @@ Javadocs are available [here](http://gitective.org/apidocs/index.html).
 gitective supports finding commits through registering filters that first
 select commits and then run matchers against those commits.
 
-The included filters can be used interchangebly for matching and selecting
+The included filters can be used interchangeably for matching and selecting
 commits.  This allows you to collect data on all commits visited as well as the
 commits that match filters.
 
